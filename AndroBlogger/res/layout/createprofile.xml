@@ -25,11 +25,14 @@
 
 <TextView android:id="@+id/TextPassword" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="10px" android:text="Blog password:" android:textColor="#FFFFFF"></TextView>
 <EditText android:id="@+id/Password" android:layout_width="wrap_content" android:layout_height="wrap_content" android:width="300px" android:password="true"></EditText>
-</TableLayout><LinearLayout android:id="@+id/LinearLayout01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_gravity="center" android:gravity="center">
-<Button android:id="@+id/BackToMainActivity" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Back" android:drawableLeft="@drawable/ic_revert" android:width="100px"></Button><Button android:id="@+id/FETCH_BUTTON_ID" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Verify" android:drawableLeft="@drawable/ic_update" android:width="100px"></Button>
-<Button android:id="@+id/Save" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Save" android:drawableLeft="@drawable/ic_save" android:width="100px"></Button>
+</TableLayout><LinearLayout android:id="@+id/LayoutForButtons01" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_gravity="center" android:gravity="center" android:layout_width="fill_parent" android:layout_marginLeft="6px" android:layout_marginRight="6px">
+<Button android:id="@+id/BackToMainActivity" android:layout_height="wrap_content" android:text="Back" android:drawableLeft="@drawable/ic_revert" android:layout_width="wrap_content"></Button><Button android:id="@+id/FETCH_BUTTON_ID" android:layout_height="wrap_content" android:text="Verify" android:drawableLeft="@drawable/ic_update" android:layout_column="1" android:layout_width="wrap_content"></Button><Button android:id="@+id/Save" android:layout_height="wrap_content" android:text="Save" android:drawableLeft="@drawable/ic_save" android:layout_width="wrap_content"></Button>
+
+
+
 
 </LinearLayout>
 </LinearLayout>
+
 </ScrollView>
 

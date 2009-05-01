@@ -11,9 +11,9 @@
 
 <LinearLayout android:id="@+id/LayoutForButtons" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center">
 
-<Button android:id="@+id/BackToViewBlog" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Back" android:drawableLeft="@drawable/ic_revert" android:width="150px"></Button>
+<Button android:id="@+id/BackToViewBlog" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Back" android:drawableLeft="@drawable/ic_revert"></Button>
 
-<Button android:id="@+id/Comments" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Comments" android:width="150px"></Button>
+<Button android:id="@+id/Comments" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Comments"></Button>
 
 
 
@@ -31,7 +31,7 @@
 
 
 
-</LinearLayout><LinearLayout android:id="@+id/LinearLayout02" android:layout_height="wrap_content" android:background="@android:drawable/alert_dark_frame" android:orientation="vertical" android:layout_width="fill_parent" android:padding="20px"><TextView android:id="@+id/PostContent" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Content of post" android:textColor="#FFFFFF"></TextView></LinearLayout>
+</LinearLayout><LinearLayout android:id="@+id/LinearLayout02" android:background="@android:drawable/alert_dark_frame" android:orientation="vertical" android:layout_width="fill_parent" android:padding="20px" android:layout_height="240px"><TextView android:id="@+id/PostContent" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Content of post" android:textColor="#FFFFFF"></TextView></LinearLayout>
 
 
 

@@ -97,31 +97,10 @@ View.OnClickListener{
     	
     	Button publishButton = (Button) findViewById(R.id.Publish);
     	
-    	/*
-    	Spinner profileSpinner = (Spinner)findViewById(R.id.ChoiceProfile);
-        
-    	if(db == null) {
-            db = new DBClient();
-        }
-    	LinkedList<BlogConfig> configs = db.getBlogNames(this);
-    	if(configItemOrder == null) {
-            configItemOrder = new HashMap<Integer,Integer>(configs.size());
-        }
+    	int w = this.getWindow().getWindowManager().getDefaultDisplay().getWidth()-12;
+        ((Button)this.findViewById(R.id.BackToCreateBlogEntry)).setWidth(w/2);
+        ((Button)this.findViewById(R.id.Publish)).setWidth(w/2);
     	
-    	for(int j=0; j<configs.size();j++) {
-            try {
-            	configItemOrder.put(new Integer(j), new Integer(configs.get(j).getId()));
-            } catch (NullPointerException ne) {
-            	Log.d(TAG,"Config items contains a null entry at "+j+"! Default to first config.");
-            	configItemOrder.put(new Integer(j), new Integer(0));
-            }
-        }
-    	Object res = new ArrayAdapter(this,android.R.layout.simple_spinner_item,configs);
-    	ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>)res;
-    	adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        profileSpinner.setAdapter(adapter);
-        profileSpinner.setOnItemSelectedListener(this);
-        */
         
         publishButton.setOnClickListener(this);
         this.findViewById(R.id.BackToCreateBlogEntry).setOnClickListener(new OnClickListener(){

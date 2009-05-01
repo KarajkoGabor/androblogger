@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -38,6 +39,10 @@ public class CreateBlogEntry extends Activity {
                 finish();
        		}
 		});
+		
+    	int w = this.getWindow().getWindowManager().getDefaultDisplay().getWidth()-12;
+        ((Button)this.findViewById(R.id.BackToMainActivities)).setWidth(w/2);
+        ((Button)this.findViewById(R.id.Preview)).setWidth(w/2);
 		
         this.findViewById(R.id.Preview).setOnClickListener(new OnClickListener(){
         	public void onClick(View v){
