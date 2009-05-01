@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class ViewPost extends Activity{
@@ -88,6 +89,9 @@ public class ViewPost extends Activity{
 		TextView postContent=(TextView)(this.findViewById(R.id.PostContent));
 		postContent.setText(((TextContent)currentEntry.getContent()).getContent().getPlainText());
 		
+		int w = this.getWindow().getWindowManager().getDefaultDisplay().getWidth()-12;
+        ((Button)this.findViewById(R.id.BackToViewBlog)).setWidth(w/2);
+        ((Button)this.findViewById(R.id.Comments)).setWidth(w/2);
 		
 		this.findViewById(R.id.BackToViewBlog).setOnClickListener(new OnClickListener(){
 			@Override

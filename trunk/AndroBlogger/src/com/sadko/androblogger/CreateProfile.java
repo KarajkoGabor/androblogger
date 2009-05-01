@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.sadko.androblogger.db.DBClient;
 import com.sadko.androblogger.util.Alert;
@@ -40,6 +41,12 @@ public class CreateProfile extends Activity {
                 createConfigDependentFields(myBlogConfig);
             }
         }
+        int w = this.getWindow().getWindowManager().getDefaultDisplay().getWidth()-12;
+        ((Button)this.findViewById(R.id.BackToMainActivity)).setWidth(w/3);
+        ((Button)this.findViewById(R.id.Save)).setWidth(w/3);
+        ((Button)this.findViewById(R.id.FETCH_BUTTON_ID)).setWidth(w/3);
+        
+        
         this.findViewById(R.id.BackToMainActivity).setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
 				Intent i = new Intent(CreateProfile.this,MainActivity.class);

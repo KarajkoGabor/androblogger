@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
@@ -72,9 +73,11 @@ public class ViewComments extends ListActivity{
         		new int[]{R.id.text1, R.id.text3, R.id.text2/*, R.id.img*/} /*int[] to*/);
         setListAdapter(notes);
 	    
-		this.findViewById(R.id.TopPanel).setBackgroundResource(android.R.drawable.alert_dark_frame);
-        
-		this.findViewById(R.id.BackToViewPost).setOnClickListener(new OnClickListener(){
+        int w = this.getWindow().getWindowManager().getDefaultDisplay().getWidth()-12;
+        ((Button)this.findViewById(R.id.BackToViewPost)).setWidth(w/2);
+        ((Button)this.findViewById(R.id.DeleteComment)).setWidth(w/2);
+		
+        this.findViewById(R.id.BackToViewPost).setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(ViewComments.this,ViewPost.class);

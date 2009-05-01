@@ -13,10 +13,10 @@
 
 
 
-<Button android:id="@+id/BackToMainActivity" android:layout_width="wrap_content" android:layout_height="wrap_content" android:width="150px" android:text="Back" android:drawableLeft="@drawable/ic_revert"></Button>
-<Button android:id="@+id/Publish" android:layout_width="wrap_content" android:layout_height="wrap_content" android:width="150px" android:text="Details"></Button>
+<Button android:id="@+id/BackToMainActivity" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Back" android:drawableLeft="@drawable/ic_revert"></Button>
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Details" android:id="@+id/Details"></Button>
 </LinearLayout><TextView android:id="@+id/BlogTitle" android:layout_height="wrap_content" android:text="Title of blog" android:textColor="#FFFFFF" android:gravity="center" android:layout_gravity="center" android:layout_width="fill_parent" android:background="@android:drawable/alert_dark_frame"></TextView>
-<ListView android:id="@id/android:list" android:layout_width="fill_parent" android:drawSelectorOnTop="false" android:background="@android:drawable/alert_dark_frame" android:padding="15px" android:layout_height="330px"></ListView><TextView android:id="@id/android:empty" android:layout_width="fill_parent" android:layout_height="fill_parent" android:text="No data" android:background="@android:drawable/alert_dark_frame" android:padding="20px"/>
+<ListView android:id="@id/android:list" android:layout_width="fill_parent" android:drawSelectorOnTop="false" android:background="@android:drawable/alert_dark_frame" android:padding="15px" android:layout_height="320px"></ListView><TextView android:id="@id/android:empty" android:layout_width="fill_parent" android:layout_height="fill_parent" android:text="No data" android:background="@android:drawable/alert_dark_frame" android:padding="20px"/>
 
 
 </LinearLayout>

@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -41,33 +42,13 @@ public class ViewBlog extends ListActivity{
 		resultFeed = MainActivity.resultFeed;
 		Log.i(TAG, "ResultFeed obtained from MainActivity");
 		
-		/*Intent i = ViewBlog.this.getIntent();
-        CONFIG_ORDER=i.getIntExtra("ConfigOrder", 0);
-		DBClient db = new DBClient();
-		LinkedList<BlogConfig> configList = db.getBlogNames(ViewBlog.this);
-		config = db.getBlogConfigById(ViewBlog.this, configList.get(CONFIG_ORDER).getId());
-		String username = config.getUsername();
-		String password = config.getPassword();
-		*/
+    	int w = this.getWindow().getWindowManager().getDefaultDisplay().getWidth()-12;
+        ((Button)this.findViewById(R.id.BackToMainActivity)).setWidth(w/2);
+        ((Button)this.findViewById(R.id.Details)).setWidth(w/2);
 		
 		TextView blogTitle=(TextView)ViewBlog.this.findViewById(R.id.BlogTitle);
     	blogTitle.setText(resultFeed.getTitle().getPlainText());
     	
-    	//List<Entry> listOfBlogEntries = null;
-    	//String[] postsTitle;
-        /*for (int j = 0; j < resultFeed.getEntries().size(); j++) {
-    		Entry entry =  resultFeed.getEntries().get(j);
-    		listOfBlogEntries.add(resultFeed.getEntries().get(j)); 
-    		//postsTitle.entry.getTitle().getPlainText());
-    		//System.out.println("\t\tid: "+entry.getId());
-    	}*/
-        //listViewArrayAdapter;
-        //= new ArrayAdapter(this, android.R.layout.simple_list_item_1, new String[] {""});
-		//ListView listView = (ListView)this.findViewById(R.id.ListView01);
-	    //listViewArrayAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1);
-	    
-	    
-	    
 	    List<Map<String, Object>> resourceNames = new ArrayList<Map<String, Object>>();
         Map<String, Object> data;
         for (int j = 0; j < resultFeed.getEntries().size(); j++){
