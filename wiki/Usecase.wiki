@@ -1,4 +1,4 @@
-http://androblogger.googlecode.com/files/use-case1.png
+http://androblogger.googlecode.com/images/use-case1.png
 http://androblogger.googlecode.com/files/use-case2.png
 http://androblogger.googlecode.com/files/use-case3.png
 http://androblogger.googlecode.com/files/use-case4.png
