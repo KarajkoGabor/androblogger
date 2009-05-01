@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="10px" android:scrollbars="vertical">
+<LinearLayout android:id="@+id/LayoutForLogo" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_gravity="center" android:layout_width="fill_parent" android:gravity="center" android:background="@android:drawable/alert_dark_frame"><ImageView android:id="@+id/Logo" android:layout_height="wrap_content" android:src="@drawable/logo" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_margin="5px"></ImageView></LinearLayout>
+
+<LinearLayout android:layout_height="wrap_content" android:orientation="vertical" android:background="@android:drawable/alert_dark_frame" android:id="@+id/LayoutForButtons" android:layout_width="fill_parent" android:layout_gravity="center" android:gravity="center" android:padding="15px"><Button android:id="@+id/CreateProfile" android:layout_height="wrap_content" android:width="300px" android:drawableLeft="@drawable/ic_add_profile" android:layout_width="fill_parent" android:layout_marginTop="15px" android:text="Create new profile"></Button><TextView android:id="@+id/TextView01" android:layout_height="wrap_content" android:textColor="#FFFFFF" android:text="Choice profile:" android:layout_marginLeft="5px" android:layout_marginTop="5px" android:layout_width="fill_parent"></TextView><Spinner android:id="@+id/ChoiceProfileAndViewBlog" android:layout_height="wrap_content" android:minWidth="300px" android:layout_width="fill_parent"></Spinner><Button android:id="@+id/CreateNewPost" android:layout_height="wrap_content" android:width="300px" android:layout_marginTop="10px" android:text="Create new post" android:drawableLeft="@drawable/ic_edit" android:layout_width="fill_parent"></Button><Button android:id="@+id/ViewBlog" android:layout_height="wrap_content" android:layout_marginTop="10px" android:width="300px" android:text="View blog" android:drawableLeft="@drawable/ic_view" android:layout_width="fill_parent"></Button><Button android:id="@+id/Exit" android:layout_height="wrap_content" android:width="300px" android:text="Exit" android:layout_marginTop="10px" android:drawableLeft="@drawable/ic_exit" android:layout_width="fill_parent"></Button></LinearLayout>
+
+
+
+
+
+
+
+
+
+
+</LinearLayout>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, MainActivity</string>
+    <string name="app_name">AndroBlogger</string>
+<string name="service_blogger_description">   Be aware that by granting this permission an application will be allowed to access your Blog</string>
+</resources>
