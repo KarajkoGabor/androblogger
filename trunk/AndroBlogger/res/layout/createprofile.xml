@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/MainLayout"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:padding="10px" android:scrollbarAlwaysDrawHorizontalTrack="true" android:scrollbarAlwaysDrawVerticalTrack="true">
+    android:layout_height="fill_parent">
+<LinearLayout android:id="@+id/MainLayout" 
+	android:orientation="vertical"
+	android:layout_height="fill_parent" 
+	android:layout_width="fill_parent">
 <TableLayout android:id="@+id/ConfigureLayout" android:layout_height="wrap_content" android:background="@android:drawable/alert_dark_frame" android:padding="15px" android:layout_width="fill_parent">
 <TextView android:id="@+id/TextProfileName" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Name of profile:" android:textColor="#FFFFFF"/>
 <EditText android:id="@+id/ProfileName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:width="300px"></EditText>
@@ -29,4 +31,5 @@
 
 </LinearLayout>
 </LinearLayout>
+</ScrollView>
 
