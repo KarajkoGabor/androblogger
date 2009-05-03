@@ -13,8 +13,7 @@
 <TextView android:id="@+id/TextUsername" 
 	android:layout_width="wrap_content" 
 	android:layout_height="wrap_content" 
-	android:text="Blog username:" 
-	android:layout_marginTop="10px" android:textColor="#FFFFFF">
+	android:layout_marginTop="10px" android:textColor="#FFFFFF" android:text="Blog username (email):">
 </TextView>
 
 <EditText android:id="@+id/Username" 
