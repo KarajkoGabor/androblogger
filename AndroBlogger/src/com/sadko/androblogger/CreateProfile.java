@@ -8,9 +8,9 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+//import android.view.View.OnKeyListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import com.sadko.androblogger.db.DBClient;
 import com.sadko.androblogger.util.Alert;
@@ -115,6 +115,17 @@ public class CreateProfile extends Activity {
                 }
         		}
 			});
+        /*this.findViewById(R.id.Username).setOnKeyListener(new OnKeyListener(){
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				
+				event.get
+				EditText profileName = (EditText)CreateProfile.this.findViewById(R.id.ProfileName);
+		        profileName.setText(profileName.getText()+"Profile Name");
+				return true;
+			}
+        	
+        });*/
     }
     
     private void createConfigDependentFields(BlogConfig bcb) {
