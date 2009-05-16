@@ -2,7 +2,11 @@ package com.sadko.androblogger;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -104,7 +108,22 @@ public class CreateProfile extends Activity {
                         if(mState == STATE_INSERT) {
                                 conn.insert(CreateProfile.this,myBlogConfig);
                                 Log.d(TAG,"Blog Config saved to database.");
-                                Alert.showAlert(CreateProfile.this,"Success","Your profile has been successfully saved.");
+                                final Dialog dlg = new AlertDialog.Builder(CreateProfile.this)
+                                	.setIcon(com.sadko.androblogger.R.drawable.ic_dialog_alert)
+                                	.setTitle("Success")
+                                	.setPositiveButton("OK", null)
+                                	.setMessage("Your profile has been successfully saved.")
+                                	.create();
+                                dlg.setOnDismissListener(new OnDismissListener(){
+									@Override
+									public void onDismiss(DialogInterface dialog) {
+										Intent i = new Intent(CreateProfile.this,MainActivity.class);
+			                			i.putExtra("ConfigOrder", CONFIG_ORDER);
+			                            startActivity(i);
+			                            finish();
+									}
+                                });
+                                dlg.show();
                         }/*else if(mState == STATE_EDIT) {
                                 conn.update(this,myBlogConfig);
                                 Log.d(TAG,"Blog Config with id="+myBlogConfig.getId()+"updated in database.");
