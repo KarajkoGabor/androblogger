@@ -414,13 +414,16 @@ public class BloggerAPI implements BlogInterface, OnClickListener,
                         }
                 }; // end Thread
                 fetchGoogleBlogs.start();
-                fetchProgress.setMessage("Started to fetch your blogs...");
+                fetchProgress.setMessage("Started to verify your blogs...");
         } // end Method
         
         private void showFetchStatus() {
                 fetchProgress.dismiss();
                 if(fetchStatus == 5) {
                         Alert.showAlert(parentRef,"Status","Blogs verified OK!");
+                        Button SaveProfile = (Button)(parentRef.findViewById(R.id.Save));
+                        SaveProfile.setEnabled(true);
+                        Log.d(TAG,"Button 'Save' is enable");
                         // activity should finish after ok.
                         // disable the username and password so that user can't change them anymore
                         // since they are only valid for fetched blogs...
