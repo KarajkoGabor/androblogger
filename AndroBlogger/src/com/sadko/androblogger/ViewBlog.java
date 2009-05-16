@@ -8,6 +8,7 @@ import java.util.Map;
 import com.google.gdata.data.Entry;
 import com.google.gdata.data.Feed;
 import com.google.gdata.data.TextContent;
+import com.sadko.androblogger.util.Alert;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -17,17 +18,19 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 public class ViewBlog extends ListActivity{
 	private static int CONFIG_ORDER=0;
-	//private BlogConfig config = null;
 	private final String TAG = "ViewBlog";
 	public static Feed resultFeed = null;
 	public static Entry currentEntry = null;
+	private int selectedItemId=-1;
 	int viewStatus = 0;
 
 	
@@ -64,31 +67,9 @@ public class ViewBlog extends ListActivity{
         }
 
         SimpleAdapter notes = new SimpleAdapter(
-        		this /*Context context*/, 
-        		resourceNames /*List<? extends Map<String, ?>> data*/, 
-        		R.layout.row /*int resource*/, 
-        		new String[]{"line1", "line2"/*, "img"*/} /*String[] from*/, 
-        		new int[]{R.id.text1, R.id.text2/*, R.id.img*/} /*int[] to*/);
+        		this, resourceNames, R.layout.row, new String[]{"line1", "line2"}, new int[]{R.id.text1, R.id.text2});
         setListAdapter(notes);
 	    
-	    /*listViewArrayAdapter.add(new String[] {"1"});
-	    listView.setAdapter(listViewArrayAdapter);
-	    listView.setFocusableInTouchMode(true);
-	    listView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-	    	@Override
-	    	public void onFocusChange(View arg0, boolean arg1) {
-	    		Log.i(TAG, "onFocusChanged() - view=" + arg0);
-	    	}
-	    });
-	    
-	    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView adapterView, View view, int arg2, long arg3) {
-				int selectedPosition = adapterView.getSelectedItemPosition();
-				Log.i(TAG, "Click on position"+selectedPosition);
-			}
-		});
-	    */
 		this.findViewById(R.id.BackToMainActivity).setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
@@ -98,6 +79,34 @@ public class ViewBlog extends ListActivity{
                 finish();
 			}
 	    });
+		ListView currentListView = getListView();
+		currentListView.setOnItemSelectedListener(new OnItemSelectedListener(){
+			@Override
+			public void onItemSelected(AdapterView parent, View v, int position, long id) {
+				Log.d(TAG,"Selected: "+id+" element");
+				selectedItemId=(int)id;
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView parent) {
+				Log.d(TAG,"Selected: -1 element");
+			}			
+		});
+		this.findViewById(R.id.Details).setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				if(selectedItemId>=0){
+					currentEntry = resultFeed.getEntries().get(selectedItemId);
+					Intent i = new Intent(ViewBlog.this,ViewPost.class);
+					i.putExtra("ConfigOrder", CONFIG_ORDER);
+					startActivity(i);
+		        	finish();
+				}
+				else{
+					Alert.showAlert(ViewBlog.this, "Nothing selected", "Please select some post");
+				}
+			}
+		});
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event) { 
@@ -110,28 +119,13 @@ public class ViewBlog extends ListActivity{
     	}
 		return false; 
 	}
-
-	/*@Override
-	public void onItemClick(AdapterView parent, View v, int position, long id) {
-		System.out.println("IT'S WORK!!!");
-	}*/
 	
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		/*System.out.println("\n\tListView: "+l.toString()+", " +
-				"\n\tposition: "+position+", " +
-				"\n\tid: "+id);*/
 		currentEntry = resultFeed.getEntries().get((int)id);
-		/*String postTitle = entry.getTitle().getPlainText();
-		String postContent = ((TextContent) entry.getContent()).getContent().getPlainText();
-		String postTimeMinSek = entry.getPublished().toString().substring(11, 16);
-		String postTimeYearDate = entry.getPublished().toString().substring(0, 10);
-		Alert.showAlert(ViewBlog.this, "Blog post: "+id,"TITLE: "+postTitle+"\nCONTENT: "+postContent+"\n" +
-				"TIME: "+postTimeYearDate+" "+postTimeMinSek);*/
 		Intent i = new Intent(ViewBlog.this,ViewPost.class);
 		i.putExtra("ConfigOrder", CONFIG_ORDER);
         startActivity(i);
         finish();
-		
-		}
+	}
 }
