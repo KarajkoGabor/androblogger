@@ -6,8 +6,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnDismissListener;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,8 +31,7 @@ import com.sadko.androblogger.db.DBClient;
 import com.sadko.androblogger.editor.SpannableBufferHelper;
 import com.sadko.androblogger.util.Alert;
 
-public class PreviewAndPublish extends Activity implements /*AdapterView.OnItemSelectedListener,*/
-View.OnClickListener{
+public class PreviewAndPublish extends Activity implements View.OnClickListener{
 	
 	private static final String TAG = "PreviewAndPublish";
 	private String title;
@@ -119,23 +122,7 @@ View.OnClickListener{
         myEntry.setBlogEntry(content);
         myEntry.setTitle(title);
         myEntry.setCreated(new Date(System.currentTimeMillis()));
-        
-        //this.myEntryBean = db.getBlogEntryById(this.getApplication(),entryid);
-        //int selectedConfig = findListIndexOfConfig(configs,this.publishToConfigID);
-        
 	}
-
-	/*@Override
-	public void onItemSelected(AdapterView parent, View v, int position, long id) {
-		this.myEntry.setPublishedIn(position);
-        publishToConfigID = configItemOrder.get(position);	
-	}
-
-	@Override
-	public void onNothingSelected(AdapterView parent) {
-		// TODO Auto-generated method stub
-	}
-	*/
 	
 	@Override
 	public void onClick(View v) {
@@ -220,9 +207,8 @@ View.OnClickListener{
                         	statusMsg.setData(status);
                         	mHandler.sendMessage(statusMsg);
                         	publishOk = blogapi.createPost(thread_parent, auth_id, postUri, null, 
-                        			myEntry.getTitle(), null, 
-                                        /*myEntryBean.getBlogEntry().toString(),*/entry, 
-                                        bc.getUsername(), bc.getUsername(), myEntry.isDraft());
+                        			myEntry.getTitle(), null, entry, 
+                                    bc.getUsername(), bc.getUsername(), myEntry.isDraft());
                         	} else {
                             publishStatus = 3;      
                         }
@@ -247,12 +233,26 @@ View.OnClickListener{
     private void showPublishedStatus() {
         publishProgress.dismiss();
         if(publishStatus == 5) {
-                Alert.showAlert(this,"Publish status","Progress OK!");
+                final Dialog dlg = new AlertDialog.Builder(PreviewAndPublish.this)
+            	.setIcon(com.sadko.androblogger.R.drawable.ic_dialog_alert)
+            	.setTitle("Publish status")
+            	.setPositiveButton("OK", null)
+            	.setMessage("Progress OK!")
+            	.create();
+                dlg.setOnDismissListener(new OnDismissListener(){
+                	@Override
+                	public void onDismiss(DialogInterface dialog) {
+                		Intent i = new Intent(PreviewAndPublish.this,MainActivity.class);
+            			i.putExtra("ConfigOrder", CONFIG_ORDER);
+                        startActivity(i);
+                        finish();
+                    }
+                });
+                dlg.show();
         } else 
         if((publishStatus==4)&&(atempt<2)){
         		atempt++;
         		this.publishBlogEntry();
-        		//Alert.showAlert(this,"Publish status","Publish failed! (Code "+publishStatus+")");
         } else{
         		atempt=0;
         		Alert.showAlert(this,"Publish status","Publish failed! (Code "+publishStatus+")");
