@@ -1,45 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-<LinearLayout android:id="@+id/MainLayout" 
-	android:orientation="vertical"
-	android:layout_height="fill_parent" 
-	android:layout_width="fill_parent" 
-	android:paddingTop="10px">
-
-<LinearLayout android:id="@+id/LayoutForButtons" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center">
-
-<Button android:id="@+id/BackToViewPost" android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableLeft="@drawable/ic_revert" android:text="Back"></Button>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableLeft="@drawable/ic_delete" android:text="Delete " android:id="@+id/DeleteComment"></Button>
-
-
-
-
-</LinearLayout><LinearLayout android:layout_height="wrap_content" android:orientation="vertical" android:layout_width="fill_parent" android:background="@android:drawable/alert_dark_frame" android:padding="20px" android:id="@+id/LinearLayout02" android:layout_gravity="center"><LinearLayout android:id="@+id/LinearLayout03" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal"><TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Title: "></TextView><TextView android:id="@+id/PostTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Title of post" android:textColor="#FFFFFF" android:width="300px" android:gravity="left"></TextView></LinearLayout>
-
-
-
-
-
-
-
-
-<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Post content: "></TextView><TextView android:id="@+id/PostContent" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Content of post" android:textColor="#FFFFFF"></TextView>
-
-
-
-
-</LinearLayout>
-<ListView android:id="@id/android:list" android:layout_width="fill_parent" android:layout_weight="1" android:drawSelectorOnTop="false" android:background="@android:drawable/alert_dark_frame" android:padding="15px" android:layout_height="250px"></ListView><TextView android:id="@id/android:empty" android:layout_width="fill_parent" android:layout_height="fill_parent" android:text="No data" android:textColor="#FFFFFF" android:background="@android:drawable/alert_dark_frame" android:padding="20px"/>
-
-
-
-
-
-
-
-
-</LinearLayout>
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<LinearLayout android:id="@+id/MainLayout"
+		android:orientation="vertical" android:layout_height="fill_parent"
+		android:layout_width="fill_parent" android:paddingTop="10px">
+		<LinearLayout android:id="@+id/LayoutForButtons"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_gravity="center">
+			<Button android:id="@+id/BackToViewPost" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:drawableLeft="@drawable/ic_revert"
+				android:text="Back">
+			</Button>
+			<Button android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:drawableLeft="@drawable/ic_delete"
+				android:text="Delete " android:id="@+id/DeleteComment">
+			</Button>
+		</LinearLayout>
+		<LinearLayout android:layout_height="wrap_content"
+			android:orientation="vertical" android:layout_width="fill_parent"
+			android:background="@android:drawable/alert_dark_frame"
+			android:padding="20px" android:id="@+id/LinearLayout02"
+			android:layout_gravity="center">
+			<LinearLayout android:id="@+id/LinearLayout03"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:orientation="horizontal">
+				<TextView android:id="@+id/TextView02"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="Title: ">
+				</TextView>
+				<TextView android:id="@+id/PostTitle" android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="Title of post"
+					android:textColor="#FFFFFF" android:width="300px" android:gravity="left">
+				</TextView>
+			</LinearLayout>
+			<TextView android:id="@+id/TextView01" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="Post content: ">
+			</TextView>
+			<ScrollView android:id="@+id/sv" android:layout_width="fill_parent"
+				android:layout_height="75px">
+				<TextView android:id="@+id/PostContent"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="Content of post" android:textColor="#FFFFFF">
+				</TextView>
+			</ScrollView>
+		</LinearLayout>
+		<ListView android:id="@id/android:list" android:layout_width="fill_parent"
+			android:layout_weight="1" android:drawSelectorOnTop="false"
+			android:background="@android:drawable/alert_dark_frame"
+			android:padding="15px" android:layout_height="250px">
+		</ListView>
+		<TextView android:id="@id/android:empty"
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:text="No data" android:textColor="#FFFFFF"
+			android:background="@android:drawable/alert_dark_frame"
+			android:padding="20px" />
+	</LinearLayout>
 </ScrollView>
