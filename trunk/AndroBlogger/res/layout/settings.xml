@@ -24,15 +24,8 @@
 				android:layout_height="wrap_content" android:width="300px"
 				android:password="true">
 			</EditText>
-			<TextView android:id="@+id/TextProfileName"
-				android:layout_width="fill_parent" android:layout_height="wrap_content"
-				android:text="Name of profile:" android:textColor="#FFFFFF"
-				android:layout_marginTop="10px">
-			</TextView>
-			<EditText android:id="@+id/ProfileName"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:width="300px">
-			</EditText>
+			
+			
 		</TableLayout>
 		<LinearLayout android:id="@+id/LayoutForButtons01"
 			android:layout_height="wrap_content" android:orientation="horizontal"
@@ -43,10 +36,9 @@
 				android:layout_height="wrap_content" android:text="Back"
 				android:drawableLeft="@drawable/ic_revert" android:layout_width="wrap_content">
 			</Button>
-			<Button android:id="@+id/FETCH_BUTTON_ID"
-				android:layout_height="wrap_content" android:text="Verify"
-				android:drawableLeft="@drawable/ic_update" android:layout_column="1"
-				android:layout_width="wrap_content">
+			<Button android:id="@+id/Verify" android:layout_height="wrap_content"
+				android:text="Verify" android:drawableLeft="@drawable/ic_update"
+				android:layout_column="1" android:layout_width="wrap_content">
 			</Button>
 			<Button android:id="@+id/Save" android:layout_height="wrap_content"
 				android:text="Save" android:drawableLeft="@drawable/ic_save"
