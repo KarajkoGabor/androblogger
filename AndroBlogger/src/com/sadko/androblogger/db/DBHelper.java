@@ -13,7 +13,7 @@ import android.util.Log;
 public class DBHelper extends SQLiteOpenHelper {
 
 
-        private static final String TAG = "MobiLoggerDBHelper";
+        private static final String TAG = "AndroBloggerDBHelper";
         private static final String CREATE_MEMO_TABLE = 
                                 "CREATE TABLE IF NOT EXISTS MEMO ("+
                                 "id INTEGER PRIMARY KEY AUTOINCREMENT,"+
