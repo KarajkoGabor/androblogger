@@ -25,107 +25,107 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-public class ViewBlog extends ListActivity{
-	private static int CONFIG_ORDER=0;
+public class ViewBlog extends ListActivity {
 	private final String TAG = "ViewBlog";
 	public static Feed resultFeed = null;
 	public static Entry currentEntry = null;
-	private int selectedItemId=-1;
+	private int selectedItemId = -1;
 	int viewStatus = 0;
 
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.viewblog);
-		
-		Intent i = this.getIntent();
-		CONFIG_ORDER=i.getIntExtra("ConfigOrder", 0);
-		
+
 		resultFeed = MainActivity.resultFeed;
 		Log.i(TAG, "ResultFeed obtained from MainActivity");
-		
-    	int w = this.getWindow().getWindowManager().getDefaultDisplay().getWidth()-12;
-        ((Button)this.findViewById(R.id.BackToMainActivity)).setWidth(w/2);
-        ((Button)this.findViewById(R.id.Details)).setWidth(w/2);
-		
-		TextView blogTitle=(TextView)ViewBlog.this.findViewById(R.id.BlogTitle);
-    	blogTitle.setText(resultFeed.getTitle().getPlainText());
-    	
-	    List<Map<String, Object>> resourceNames = new ArrayList<Map<String, Object>>();
-        Map<String, Object> data;
-        for (int j = 0; j < resultFeed.getEntries().size(); j++){
-            data = new HashMap<String, Object>();
-            Entry entry =  resultFeed.getEntries().get(j);
-            try{
-                data.put("line1", entry.getTitle().getPlainText());
-                data.put("line2", ((TextContent) entry.getContent()).getContent().getPlainText());
-                resourceNames.add(data);
-            }
-            catch (Resources.NotFoundException nfe )
-            {}
-        }
 
-        SimpleAdapter notes = new SimpleAdapter(
-        		this, resourceNames, R.layout.row, new String[]{"line1", "line2"}, new int[]{R.id.text1, R.id.text2});
-        setListAdapter(notes);
-	    
-		this.findViewById(R.id.BackToMainActivity).setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View v) {
-				Intent i = new Intent(ViewBlog.this,MainActivity.class);
-				i.putExtra("ConfigOrder", CONFIG_ORDER);
-				startActivity(i);
-                finish();
+		int w = this.getWindow().getWindowManager().getDefaultDisplay()
+				.getWidth() - 12;
+		((Button) this.findViewById(R.id.BackToMainActivity)).setWidth(w / 2);
+		((Button) this.findViewById(R.id.Details)).setWidth(w / 2);
+
+		TextView blogTitle = (TextView) ViewBlog.this
+				.findViewById(R.id.BlogTitle);
+		blogTitle.setText(resultFeed.getTitle().getPlainText());
+
+		List<Map<String, Object>> resourceNames = new ArrayList<Map<String, Object>>();
+		Map<String, Object> data;
+		for (int j = 0; j < resultFeed.getEntries().size(); j++) {
+			data = new HashMap<String, Object>();
+			Entry entry = resultFeed.getEntries().get(j);
+			try {
+				data.put("line1", entry.getTitle().getPlainText());
+				data.put("line2", ((TextContent) entry.getContent())
+						.getContent().getPlainText());
+				resourceNames.add(data);
+			} catch (Resources.NotFoundException nfe) {
 			}
-	    });
+		}
+
+		SimpleAdapter notes = new SimpleAdapter(this, resourceNames,
+				R.layout.row, new String[]{"line1", "line2"}, new int[]{
+						R.id.text1, R.id.text2});
+		setListAdapter(notes);
+
+		this.findViewById(R.id.BackToMainActivity).setOnClickListener(
+				new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Intent i = new Intent(ViewBlog.this, MainActivity.class);
+						startActivity(i);
+						finish();
+					}
+				});
 		ListView currentListView = getListView();
-		currentListView.setOnItemSelectedListener(new OnItemSelectedListener(){
+		currentListView.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@SuppressWarnings("unchecked")
 			@Override
-			public void onItemSelected(AdapterView parent, View v, int position, long id) {
-				Log.d(TAG,"Selected: "+id+" element");
-				selectedItemId=(int)id;
+			public void onItemSelected(AdapterView parent, View v,
+					int position, long id) {
+				Log.d(TAG, "Selected: " + id + " element");
+				selectedItemId = (int) id;
 			}
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public void onNothingSelected(AdapterView parent) {
-				Log.d(TAG,"Selected: -1 element");
-			}			
-		});
-		this.findViewById(R.id.Details).setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View v) {
-				if(selectedItemId>=0){
-					currentEntry = resultFeed.getEntries().get(selectedItemId);
-					Intent i = new Intent(ViewBlog.this,ViewPost.class);
-					i.putExtra("ConfigOrder", CONFIG_ORDER);
-					startActivity(i);
-		        	finish();
-				}
-				else{
-					Alert.showAlert(ViewBlog.this, "Nothing selected", "Please select some post");
-				}
+				Log.d(TAG, "Selected: -1 element");
 			}
 		});
+		this.findViewById(R.id.Details).setOnClickListener(
+				new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						if (selectedItemId >= 0) {
+							currentEntry = resultFeed.getEntries().get(
+									selectedItemId);
+							Intent i = new Intent(ViewBlog.this, ViewPost.class);
+							startActivity(i);
+							finish();
+						} else {
+							Alert.showAlert(ViewBlog.this, "Nothing selected",
+									"Please select some post");
+						}
+					}
+				});
 	}
-	
-	public boolean onKeyDown(int keyCode, KeyEvent event) { 
-    	if(keyCode==KeyEvent.KEYCODE_BACK){
-    		Intent i = new Intent(ViewBlog.this,MainActivity.class);
-    		i.putExtra("ConfigOrder", CONFIG_ORDER);
-            startActivity(i);
-            finish();
-            return true;
-    	}
-		return false; 
+
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			Intent i = new Intent(ViewBlog.this, MainActivity.class);
+			startActivity(i);
+			finish();
+			return true;
+		}
+		return false;
 	}
-	
+
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		currentEntry = resultFeed.getEntries().get((int)id);
-		Intent i = new Intent(ViewBlog.this,ViewPost.class);
-		i.putExtra("ConfigOrder", CONFIG_ORDER);
-        startActivity(i);
-        finish();
+		currentEntry = resultFeed.getEntries().get((int) id);
+		Intent i = new Intent(ViewBlog.this, ViewPost.class);
+		startActivity(i);
+		finish();
 	}
 }

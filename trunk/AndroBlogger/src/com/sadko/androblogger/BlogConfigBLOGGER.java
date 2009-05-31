@@ -24,6 +24,7 @@ public class BlogConfigBLOGGER {
 		return res;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static LinkedList<String> typeConstantTitles() {
 		BlogInterfaceType[] arr = BlogInterfaceType.values();
 		LinkedList res = new LinkedList();
@@ -43,7 +44,6 @@ public class BlogConfigBLOGGER {
 		switch (type) {
 			case BLOGGER :
 				return "Blog uses Blogger API (Google Data API). " + base;
-				// break;
 			default :
 				return "Unknown protocol. " + base;
 		}
@@ -53,7 +53,6 @@ public class BlogConfigBLOGGER {
 		switch (type) {
 			case BLOGGER :
 				return 1;
-				// break;
 			default :
 				return UNKNOWN_CONFIG_TYPE;
 		}
