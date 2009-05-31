@@ -24,8 +24,8 @@
 				android:layout_height="wrap_content" android:width="300px"
 				android:password="true">
 			</EditText>
-			
-			
+
+
 		</TableLayout>
 		<LinearLayout android:id="@+id/LayoutForButtons01"
 			android:layout_height="wrap_content" android:orientation="horizontal"
@@ -34,15 +34,15 @@
 			android:layout_marginRight="6px">
 			<Button android:id="@+id/BackToMainActivity"
 				android:layout_height="wrap_content" android:text="Back"
-				android:drawableLeft="@drawable/ic_revert" android:layout_width="wrap_content">
+				android:layout_width="wrap_content" android:drawableLeft="@drawable/revert">
 			</Button>
 			<Button android:id="@+id/Verify" android:layout_height="wrap_content"
-				android:text="Verify" android:drawableLeft="@drawable/ic_update"
-				android:layout_column="1" android:layout_width="wrap_content">
+				android:text="Verify" android:layout_column="1"
+				android:layout_width="wrap_content" android:drawableLeft="@drawable/update">
 			</Button>
 			<Button android:id="@+id/Save" android:layout_height="wrap_content"
-				android:text="Save" android:drawableLeft="@drawable/ic_save"
-				android:layout_width="wrap_content" android:enabled="false">
+				android:text="Save" android:layout_width="wrap_content"
+				android:enabled="false" android:drawableLeft="@drawable/save">
 			</Button>
 		</LinearLayout>
 	</LinearLayout>
