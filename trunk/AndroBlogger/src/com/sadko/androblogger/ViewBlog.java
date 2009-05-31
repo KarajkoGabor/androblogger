@@ -12,6 +12,7 @@ import com.sadko.androblogger.util.Alert;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,20 +52,29 @@ public class ViewBlog extends ListActivity {
 
 		List<Map<String, Object>> resourceNames = new ArrayList<Map<String, Object>>();
 		Map<String, Object> data;
+		int maxCharTitle = 22;
+		int maxCharContent = 30;
+		if(this.getWindow().getWindowManager().getDefaultDisplay().getOrientation()==ActivityInfo.SCREEN_ORIENTATION_PORTRAIT){
+			maxCharTitle = 40;
+			maxCharContent = 50;
+		}else if(this.getWindow().getWindowManager().getDefaultDisplay().getOrientation()==ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
+			maxCharTitle = 22;
+			maxCharContent = 30;
+		}
 		for (int j = 0; j < resultFeed.getEntries().size(); j++) {
 			data = new HashMap<String, Object>();
 			Entry entry = resultFeed.getEntries().get(j);
 			try {
 				String truncatedTitle = null;
-				if(entry.getTitle().getPlainText().length()>22){
-					truncatedTitle = entry.getTitle().getPlainText().substring(0, 22)+"...";
+				if(entry.getTitle().getPlainText().length()>maxCharTitle){
+					truncatedTitle = entry.getTitle().getPlainText().substring(0, maxCharTitle)+"...";
 				} else{
 					truncatedTitle = entry.getTitle().getPlainText();
 				}
 				data.put("line1", truncatedTitle);
 				String truncatedContent = null;
-				if(((TextContent) entry.getContent()).getContent().getPlainText().length()>30){
-					truncatedContent = ((TextContent) entry.getContent()).getContent().getPlainText().substring(0, 30)+"...";
+				if(((TextContent) entry.getContent()).getContent().getPlainText().length()>maxCharContent){
+					truncatedContent = ((TextContent) entry.getContent()).getContent().getPlainText().substring(0, maxCharContent)+"...";
 				} else{
 					truncatedContent = ((TextContent) entry.getContent()).getContent().getPlainText();
 				}
