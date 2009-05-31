@@ -18,16 +18,14 @@
 			android:id="@+id/LayoutForButtons" android:layout_width="fill_parent"
 			android:layout_gravity="center" android:gravity="center"
 			android:padding="15px">
-			<Button android:layout_height="wrap_content" android:width="300px"
-				android:layout_width="fill_parent" android:layout_marginTop="15px"
-				android:id="@+id/Settings" android:text="Settings" android:drawableLeft="@drawable/ic_settings"></Button>
+			
 			<Button android:id="@+id/CreateNewPost" android:layout_height="wrap_content"
-				android:width="300px" android:layout_marginTop="10px" android:text="Create new post"
-				android:drawableLeft="@drawable/ic_edit" android:layout_width="fill_parent"></Button>
+				android:width="300px" android:text="Create new post"
+				android:drawableLeft="@drawable/ic_edit" android:layout_width="fill_parent" android:layout_marginTop="15px"></Button>
 			<Button android:id="@+id/ViewBlog" android:layout_height="wrap_content"
 				android:layout_marginTop="10px" android:width="300px" android:text="View blog"
 				android:drawableLeft="@drawable/ic_view" android:layout_width="fill_parent"></Button>
-			<Button android:id="@+id/Exit" android:layout_height="wrap_content"
+			<Button android:layout_height="wrap_content" android:width="300px" android:layout_width="fill_parent" android:id="@+id/Settings" android:text="Settings" android:drawableLeft="@drawable/ic_settings" android:layout_marginTop="10px"></Button><Button android:id="@+id/Exit" android:layout_height="wrap_content"
 				android:width="300px" android:text="Exit" android:layout_marginTop="10px"
 				android:drawableLeft="@drawable/ic_exit" android:layout_width="fill_parent"></Button>
 		</LinearLayout>

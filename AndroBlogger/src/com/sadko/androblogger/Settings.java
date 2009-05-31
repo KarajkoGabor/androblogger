@@ -14,6 +14,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnDismissListener;
 import android.database.Cursor;
+import android.database.SQLException;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,8 +34,6 @@ import com.google.gdata.data.Feed;
 import com.google.gdata.data.Link;
 import com.google.gdata.util.ServiceException;
 import com.sadko.androblogger.db.DBAdapter;
-import com.sadko.androblogger.db.DBClient;
-import com.sadko.androblogger.db.DBHelper;
 import com.sadko.androblogger.util.Alert;
 
 public class Settings extends Activity {
@@ -49,9 +50,10 @@ public class Settings extends Activity {
 	private final String NO_POST_URL_FOR_ENTRY = "NO_POST_URL_FOR_ENTRY";
 	private URL feedUrl = null;
 	private DBAdapter mDbHelper;
-	private Long mRowId;
+	private static Cursor setting = null;
 	private ProgressDialog verifyProgress = null;
 	private int verifyStatus = 0;
+	private int attempt = 0;
 
 	final Handler mHandler = new Handler() {
 		@Override
@@ -158,17 +160,41 @@ public class Settings extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
+		mDbHelper = new DBAdapter(this);
+		try {
+			mDbHelper.open();
+		} catch (SQLException e) {
+			Log.e(TAG, "Database has not opened");
+		}
+		setting = mDbHelper.fetchSettindById(1);
+		startManagingCursor(setting);
+		if (setting.getCount() != 0) {
+			try {
+				((EditText) this.findViewById(R.id.Username)).setText(setting
+						.getString(setting
+								.getColumnIndexOrThrow(DBAdapter.KEY_LOGIN)));
+				((EditText) this.findViewById(R.id.Password))
+						.setText(setting.getString(setting
+								.getColumnIndexOrThrow(DBAdapter.KEY_PASSWORD)));
+				((Button) this.findViewById(R.id.Save)).setEnabled(false);
+			} catch (IllegalArgumentException e) {
+				Log.e(TAG, "IllegalArgumentException (DataBase failed)");
+			} catch (Exception e) {
+				Log.e(TAG, "Exception (DataBase failed)");
+			}
+		}
 		((EditText) this.findViewById(R.id.Username))
 				.setOnKeyListener(new OnKeyListener() {
 					@Override
 					public boolean onKey(View v, int keyCode, KeyEvent event) {
 						((Button) Settings.this.findViewById(R.id.Verify))
 								.setEnabled(true);
-						((Button) Settings.this.findViewById(R.id.Save))
-								.setText("Update");
+						if (setting.getCount() != 0) {
+							((Button) Settings.this.findViewById(R.id.Save))
+									.setText("Update");
+						}
 						return false;
 					}
 				});
@@ -178,32 +204,13 @@ public class Settings extends Activity {
 					public boolean onKey(View v, int keyCode, KeyEvent event) {
 						((Button) Settings.this.findViewById(R.id.Verify))
 								.setEnabled(true);
-						/*************************/
-						((Button) Settings.this.findViewById(R.id.Save))
-								.setEnabled(true);
-						/*************************/
+						if (setting.getCount() != 0) {
+							((Button) Settings.this.findViewById(R.id.Save))
+									.setText("Update");
+						}
 						return false;
 					}
 				});
-		mDbHelper = new DBAdapter(this);
-		mDbHelper.open();
-		mRowId = savedInstanceState != null ? savedInstanceState
-				.getLong(DBAdapter.KEY_ROWID) : null;
-		if (mRowId != null) {
-			if (mRowId != 0) {
-				Cursor setting = mDbHelper.fetchSettindById(1);
-				startManagingCursor(setting);
-				((EditText) this.findViewById(R.id.Username)).setText(setting
-						.getString(setting
-								.getColumnIndexOrThrow(DBAdapter.KEY_LOGIN)));
-				((EditText) this.findViewById(R.id.Password))
-						.setText(setting.getString(setting
-								.getColumnIndexOrThrow(DBAdapter.KEY_PASSWORD)));
-				((Button) this.findViewById(R.id.Verify)).setEnabled(false);
-				((Button) this.findViewById(R.id.Save)).setEnabled(false);
-			}
-		}
-
 		int w = this.getWindow().getWindowManager().getDefaultDisplay()
 				.getWidth() - 12;
 		((Button) this.findViewById(R.id.BackToMainActivity)).setWidth(w / 3);
@@ -279,32 +286,50 @@ public class Settings extends Activity {
 								status.putString(MSG_KEY, "2");
 								statusMsg.setData(status);
 								mHandler.sendMessage(statusMsg);
-								try {
-									myVerifyService.setUserCredentials(
-											verifyUsername, verifyPassword);
-								} catch (com.google.gdata.util.AuthenticationException e) {
-									Log.e(TAG, "Authentication exception! "
-											+ e.getMessage());
-									statusMsg = mHandler.obtainMessage();
-									status.putString(STATUS_KEY,
-											STATUS_BAD_AUTH);
-									status.putString(MSG_KEY, "5");
-									statusMsg.setData(status);
-									mHandler.sendMessage(statusMsg);
-									mHandler.post(mFetchResults);
-									return;
+								boolean authFlag = false;
+								attempt = 0;
+								while ((attempt <= MainActivity.AMOUNTOFATTEMPTS)
+										&& (!authFlag)) {
+									try {
+										myVerifyService.setUserCredentials(
+												verifyUsername, verifyPassword);
+										authFlag = true;
+										attempt = 0;
+									} catch (com.google.gdata.util.AuthenticationException e) {
+										Log.e(TAG, "Authentication exception! "
+												+ e.getMessage());
+										statusMsg = mHandler.obtainMessage();
+										status.putString(STATUS_KEY,
+												STATUS_BAD_AUTH);
+										status.putString(MSG_KEY, "5");
+										statusMsg.setData(status);
+										mHandler.sendMessage(statusMsg);
+										mHandler.post(mFetchResults);
+										attempt++;
+										return;
+									}
 								}
 								statusMsg = mHandler.obtainMessage();
 								status.putString(MSG_KEY, "3");
 								statusMsg.setData(status);
 								mHandler.sendMessage(statusMsg);
-								try {
-									resultFeed = myVerifyService.getFeed(
-											feedUrl, Feed.class);
-								} catch (IOException e) {
-									e.printStackTrace();
-								} catch (ServiceException e) {
-									e.printStackTrace();
+								authFlag = false;
+								attempt = 0;
+								while ((attempt <= MainActivity.AMOUNTOFATTEMPTS)
+										&& (!authFlag)) {
+									try {
+										resultFeed = myVerifyService.getFeed(
+												feedUrl, Feed.class);
+										authFlag = true;
+										attempt = 0;
+									} catch (IOException e) {
+										Log.e(TAG, "IOExceprion (getFeed())");
+										attempt++;
+									} catch (ServiceException e) {
+										Log.e(TAG,
+												"ServiceExceprion (getFeed())");
+										attempt++;
+									}
 								}
 								statusMsg = mHandler.obtainMessage();
 
@@ -362,7 +387,6 @@ public class Settings extends Activity {
 									if (!postFound) {
 										ids.append(NO_POST_URL_FOR_ENTRY + "|");
 									}
-
 								}
 								statusMsg = mHandler.obtainMessage();
 								status.putString(RESPONSE_NAMES_KEY, titles
@@ -376,7 +400,17 @@ public class Settings extends Activity {
 								mHandler.post(mFetchResults);
 							}
 						};
-						fetchGoogleBlogs.start();
+						ConnectivityManager cm = (ConnectivityManager) Settings.this
+								.getSystemService(CONNECTIVITY_SERVICE);
+						NetworkInfo netinfo = cm.getActiveNetworkInfo();
+						if (netinfo.getDetailedState() == NetworkInfo.DetailedState.CONNECTED) {
+							fetchGoogleBlogs.start();
+						} else {
+							Alert
+									.showAlert(Settings.this,
+											"Network connection needed",
+											"Please, connect your device to the Internet");
+						}
 						verifyProgress
 								.setMessage("Started to verify your blogs...");
 					}
@@ -410,44 +444,64 @@ public class Settings extends Activity {
 							"You need to have a password for this blog.");
 					return;
 				}
-				Cursor setting = mDbHelper.fetchSettindById(1);
-				startManagingCursor(setting);
-				if (mRowId == null) {
-					mDbHelper.createSetting(usernameStr, passwordStr);
-				} else {
-					mDbHelper.updateSettingById((long) 1, usernameStr,
-							passwordStr);
-				}
-				Log.d(TAG, "Blog Config saved to database.");
 				final Dialog dlg;
-				if (mRowId == null) {
-					dlg = new AlertDialog.Builder(Settings.this)
-							.setIcon(
-									com.sadko.androblogger.R.drawable.ic_dialog_alert)
-							.setTitle("Success")
-							.setPositiveButton("OK", null)
-							.setMessage(
-									"Your profile has been successfully saved.")
-							.create();
-				} else {
-					dlg = new AlertDialog.Builder(Settings.this)
-							.setIcon(
-									com.sadko.androblogger.R.drawable.ic_dialog_alert)
-							.setTitle("Success")
-							.setPositiveButton("OK", null)
-							.setMessage(
-									"Your profile has been successfully updated.")
-							.create();
-				}
-				dlg.setOnDismissListener(new OnDismissListener() {
-					@Override
-					public void onDismiss(DialogInterface dialog) {
-						Intent i = new Intent(Settings.this, MainActivity.class);
-						startActivity(i);
-						finish();
+				if (setting.getCount() == 0) {
+					try {
+						mDbHelper.createSetting(usernameStr, passwordStr);
+						Log.d(TAG, "Blog config saved to database.");
+						dlg = new AlertDialog.Builder(Settings.this)
+								.setIcon(
+										com.sadko.androblogger.R.drawable.ic_dialog_alert)
+								.setTitle("Success")
+								.setPositiveButton("OK", null)
+								.setMessage(
+										"Your profile has been successfully saved.")
+								.create();
+						dlg.setOnDismissListener(new OnDismissListener() {
+							@Override
+							public void onDismiss(DialogInterface dialog) {
+								Intent i = new Intent(Settings.this,
+										MainActivity.class);
+								startActivity(i);
+								finish();
+							}
+						});
+						dlg.show();
+					} catch (SQLException e) {
+						Log
+								.e(TAG,
+										"SQLException (createSetting(username, password))");
 					}
-				});
-				dlg.show();
+				} else {
+					try {
+						mDbHelper.updateSettingById((long) 1, usernameStr,
+								passwordStr);
+						Log.d(TAG, "Blog config updated.");
+						dlg = new AlertDialog.Builder(Settings.this)
+								.setIcon(
+										com.sadko.androblogger.R.drawable.ic_dialog_alert)
+								.setTitle("Success")
+								.setPositiveButton("OK", null)
+								.setMessage(
+										"Your profile has been successfully updated.")
+								.create();
+						dlg.setOnDismissListener(new OnDismissListener() {
+							@Override
+							public void onDismiss(DialogInterface dialog) {
+								Intent i = new Intent(Settings.this,
+										MainActivity.class);
+								startActivity(i);
+								finish();
+							}
+						});
+						dlg.show();
+					} catch (SQLException e) {
+						Log
+								.e(TAG,
+										"updateSettingById (updateSettingById(rowId, username, password))");
+					}
+				}
+
 			}
 		});
 	}

@@ -22,7 +22,8 @@
 			</TextView>
 			<EditText android:id="@+id/TextPostContent"
 				android:layout_height="wrap_content" android:width="300px"
-				android:lines="10" android:layout_width="fill_parent">
+				android:lines="10" android:layout_width="fill_parent"
+				android:gravity="top">
 			</EditText>
 		</LinearLayout>
 		<LinearLayout android:id="@+id/LayoutForButtons"

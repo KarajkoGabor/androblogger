@@ -1,14 +1,12 @@
 package com.sadko.androblogger;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedList;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
+import android.database.SQLException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -16,30 +14,23 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import com.google.gdata.data.Feed;
 import com.google.gdata.util.ServiceException;
 import com.sadko.androblogger.db.DBAdapter;
-import com.sadko.androblogger.db.DBClient;
 import com.sadko.androblogger.util.Alert;
 
-public class MainActivity extends Activity
-		/*implements
-			AdapterView.OnItemSelectedListener */{
-	private static final int BLOGCONFIG_REQUEST = 4;
+public class MainActivity extends Activity {
+	// private static final int BLOGCONFIG_REQUEST = 4;
 	final static String TAG = "MainActivity";
-	//private static int CONFIG_ORDER = 0;
 	private ProgressDialog viewProgress = null;
 	private final String MSG_KEY = "value";
 	public static Feed resultFeed = null;
-	//private LinkedList<BlogConfig> configs = null;
 	private DBAdapter mDbHelper;
-	private Long mRowId;
+	private static Cursor setting = null;
 	int viewStatus = 0;
-	//private BlogConfig config = null;
+	public static final int AMOUNTOFATTEMPTS = 5;
+	private int attempt = 0;
 
 	final Handler mHandler = new Handler() {
 		@Override
@@ -71,28 +62,19 @@ public class MainActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		mDbHelper = new DBAdapter(this);
-        mDbHelper.open();
-        mRowId = savedInstanceState != null ? savedInstanceState.getLong(DBAdapter.KEY_ROWID):null;
-
-		/*Intent i = this.getIntent();
-		if (i.hasExtra("ConfigOrder")) {
-			CONFIG_ORDER = i.getIntExtra("ConfigOrder", 0);
-		} else {
-			CONFIG_ORDER = 0;
-		}*/
+		try {
+			mDbHelper.open();
+		} catch (SQLException e) {
+			Log.e(TAG, "Database has not opened");
+		}
+		setting = mDbHelper.fetchSettindById(1);
+		startManagingCursor(setting);
 
 		this.findViewById(R.id.Settings).setOnClickListener(
 				new OnClickListener() {
 					public void onClick(View v) {
-
 						Intent i = new Intent(MainActivity.this, Settings.class);
-						//i.setAction(Intent.ACTION_INSERT);
-						//i.putExtra("ConfigOrder", CONFIG_ORDER);
-						Uri cURI = null;
-						cURI = Uri
-								.parse("content://com/sadko/androblogger/blogconfig");
-						i.setData(cURI);
-						startActivityForResult(i, BLOGCONFIG_REQUEST);
+						startActivity(i);
 						finish();
 					}
 				});
@@ -100,57 +82,32 @@ public class MainActivity extends Activity
 		this.findViewById(R.id.CreateNewPost).setOnClickListener(
 				new OnClickListener() {
 					public void onClick(View v) {
-						if (mRowId!=null) {
+						if (setting.getCount() != 0) {
 							Intent i = new Intent(MainActivity.this,
 									CreateBlogEntry.class);
 							String[] s = {"", ""};
-							//i.putExtra("ConfigOrder", CONFIG_ORDER);
 							i.putExtra("PostTitleAndContent", s);
 							startActivity(i);
 							finish();
 						} else {
-							Alert.showAlert(MainActivity.this,
-									"Profile is not created",
-									"Please, input 'login/password' in settings");
+							Alert
+									.showAlert(MainActivity.this,
+											"Profile is not created",
+											"Please, input 'login/password' in settings");
 						}
 					}
 				});
 
-		/*Spinner profileSpinner = (Spinner) this
-				.findViewById(R.id.ChoiceProfileAndViewBlog);*/
-		/*DBClient db = new DBClient();
-		configs = db.getBlogNames(MainActivity.this);
-		if (configs != null) {
-			HashMap<Integer, Integer> configItemOrder = new HashMap<Integer, Integer>(
-					configs.size());
-			for (int j = 0; j < configs.size(); j++) {
-				try {
-					configItemOrder.put(new Integer(j), new Integer(configs
-							.get(j).getId()));
-				} catch (NullPointerException ne) {
-					Log.d(TAG, "Config items contains a null entry at " + j
-							+ "! Default to first config.");
-					configItemOrder.put(new Integer(j), new Integer(0));
-				}
-			}
-			Object res = new ArrayAdapter(MainActivity.this,
-					android.R.layout.simple_spinner_item, configs);
-			ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) res;
-			adapter
-					.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			profileSpinner.setAdapter(adapter);
-			profileSpinner.setOnItemSelectedListener(MainActivity.this);
-			profileSpinner.setSelection(CONFIG_ORDER);
-		}*/
 		this.findViewById(R.id.ViewBlog).setOnClickListener(
 				new OnClickListener() {
 					public void onClick(View v) {
-						if (mRowId!=null) {
+						if (setting.getCount() != 0) {
 							viewBlogPosts();
 						} else {
-							Alert.showAlert(MainActivity.this,
-									"Profile is not created",
-									"Please, input 'login/password' in settings");
+							Alert
+									.showAlert(MainActivity.this,
+											"Profile is not created",
+											"Please, input 'login/password' in settings");
 						}
 
 					}
@@ -178,30 +135,35 @@ public class MainActivity extends Activity
 				statusMsg.setData(status);
 				mHandler.sendMessage(statusMsg);
 				boolean viewOk = false;
-				/*DBClient db = new DBClient();
-				LinkedList<BlogConfig> configList = db
-						.getBlogNames(MainActivity.this);
-				*/
-				/*config = db.getBlogConfigById(MainActivity.this, configList
-						.get(CONFIG_ORDER).getId());
-				*/
-				Cursor setting = mDbHelper.fetchSettindById(1);
-	            startManagingCursor(setting);
-	            String username = setting.getString(setting.getColumnIndexOrThrow(DBAdapter.KEY_LOGIN));
-	            String password = setting.getString(setting.getColumnIndexOrThrow(DBAdapter.KEY_PASSWORD));
+				String username = setting.getString(setting
+						.getColumnIndexOrThrow(DBAdapter.KEY_LOGIN));
+				String password = setting.getString(setting
+						.getColumnIndexOrThrow(DBAdapter.KEY_PASSWORD));
 				BlogInterface blogapi = null;
 				BlogConfigBLOGGER.BlogInterfaceType typeEnum = BlogConfigBLOGGER
 						.getInterfaceTypeByNumber(1);
 				blogapi = BlogInterfaceFactory.getInstance(typeEnum);
 				Log.d(TAG, "Using interface type: " + typeEnum);
-				//blogapi.setInstanceConfig(config.getPostConfig());
 				CharSequence postconfig = "";
 				blogapi.setInstanceConfig(postconfig);
 				status.putString(MSG_KEY, "2");
 				statusMsg = mHandler.obtainMessage();
 				statusMsg.setData(status);
 				mHandler.sendMessage(statusMsg);
-				String auth_id = blogapi.getAuthId(username, password);
+				String auth_id = null;
+				boolean authFlag = false;
+				attempt = 0;
+				while ((attempt <= MainActivity.AMOUNTOFATTEMPTS)
+						&& (!authFlag)) {
+					try {
+						auth_id = blogapi.getAuthId(username, password);
+						authFlag = true;
+						attempt = 0;
+					} catch (com.google.gdata.util.AuthenticationException e) {
+						Log.e(TAG, "AuthenticationException " + e.getMessage());
+						attempt++;
+					}
+				}
 				viewStatus = 1;
 				Log.d(TAG, "Got auth token:" + auth_id);
 				viewStatus = 2;
@@ -210,14 +172,28 @@ public class MainActivity extends Activity
 					statusMsg = mHandler.obtainMessage();
 					statusMsg.setData(status);
 					mHandler.sendMessage(statusMsg);
-					try {
-						resultFeed = blogapi.getAllPosts(username, password);
-						Log.i(TAG, "Blog entries successfully received");
-						viewOk = true;
-					} catch (ServiceException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
+					authFlag = false;
+					attempt = 0;
+					while ((attempt <= MainActivity.AMOUNTOFATTEMPTS)
+							&& (!authFlag)) {
+						try {
+							resultFeed = blogapi
+									.getAllPosts(username, password);
+							Log.i(TAG, "Blog entries successfully received");
+							viewOk = true;
+							authFlag = true;
+							attempt = 0;
+						} catch (ServiceException e) {
+							attempt++;
+							Log
+									.e(TAG,
+											"ServiceException (getAllPosts(username, password))");
+						} catch (IOException e) {
+							attempt++;
+							Log
+									.e(TAG,
+											"Exception (getAllPosts(username, password))");
+						}
 					}
 				} else {
 					viewStatus = 3;
@@ -237,7 +213,6 @@ public class MainActivity extends Activity
 
 				if ((resultFeed != null) && (viewOk)) {
 					Intent i = new Intent(MainActivity.this, ViewBlog.class);
-					//i.putExtra("ConfigOrder", CONFIG_ORDER);
 					startActivity(i);
 					finish();
 				}
@@ -246,18 +221,6 @@ public class MainActivity extends Activity
 		viewThread.start();
 		viewProgress.setMessage("Viewing in progress...");
 	}
-
-	/*@Override
-	public void onItemSelected(AdapterView<?> parent, View v, int position,
-			long id) {
-		// TODO Auto-generated method stub
-		CONFIG_ORDER = position;
-	}
-
-	@Override
-	public void onNothingSelected(AdapterView<?> arg0) {
-		// TODO Auto-generated method stub
-	}*/
 
 	private void showViewStatus() {
 		viewProgress.dismiss();
