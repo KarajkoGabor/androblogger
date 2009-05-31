@@ -11,6 +11,7 @@ import com.sadko.androblogger.util.Alert;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -86,9 +87,6 @@ public class ViewPost extends Activity {
 
 		TextView postAuthor = (TextView) (this.findViewById(R.id.PostAuthor));
 		postAuthor.setText(currentEntry.getAuthors().get(0).getName());
-
-		TextView postID = (TextView) (this.findViewById(R.id.PostID));
-		postID.setText(currentEntry.getId().split("post-")[1]);
 
 		TextView postPublishDate = (TextView) (this
 				.findViewById(R.id.PostPublishDate));
@@ -258,8 +256,23 @@ public class ViewPost extends Activity {
 	private void showViewStatus() {
 		viewProgress.dismiss();
 		if (attempt > MainActivity.AMOUNTOFATTEMPTS) {
-			Alert.showAlert(this, "View status", "View failed! (Code "
-					+ viewStatus + ")\nTry again.");
+			/*
+			 * Alert.showAlert(this, "Viewing failed", "Error code " +
+			 * viewStatus); }
+			 */
+			Alert.showAlert(this, "Viewing failed", "Error code " + viewStatus,
+					"Try again", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+							viewPostComments();
+						}
+					}, "Cancel", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.cancel();
+						}
+					});
 		}
 	}
 }

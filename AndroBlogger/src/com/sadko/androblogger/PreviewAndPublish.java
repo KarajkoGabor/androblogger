@@ -181,7 +181,8 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 				String auth_id = null;
 				boolean authFlag = false;
 				attempt = 0;
-				while ((attempt <= MainActivity.AMOUNTOFATTEMPTS) && (!authFlag)) {
+				while ((attempt <= MainActivity.AMOUNTOFATTEMPTS)
+						&& (!authFlag)) {
 					try {
 						auth_id = blogapi
 								.getAuthId(
@@ -210,7 +211,8 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 					String postUri = null;
 					authFlag = false;
 					attempt = 0;
-					while ((attempt <= MainActivity.AMOUNTOFATTEMPTS) && (!authFlag)) {
+					while ((attempt <= MainActivity.AMOUNTOFATTEMPTS)
+							&& (!authFlag)) {
 						try {
 							postUri = blogapi.getPostUrl();
 							authFlag = true;
@@ -236,7 +238,8 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 					mHandler.sendMessage(statusMsg);
 					authFlag = false;
 					attempt = 0;
-					while ((attempt <= MainActivity.AMOUNTOFATTEMPTS) && (!authFlag)) {
+					while ((attempt <= MainActivity.AMOUNTOFATTEMPTS)
+							&& (!authFlag)) {
 						try {
 							publishOk = blogapi
 									.createPost(
@@ -310,8 +313,24 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 			dlg.show();
 		} else {
 			attempt = 0;
-			Alert.showAlert(this, "Publish status", "Publish failed! (Code "
-					+ publishStatus + ")");
+			/*
+			 * Alert.showAlert(this, "Publishing failed", "Error code " +
+			 * publishStatus + ")");
+			 */
+			Alert.showAlert(this, "Publishing failed", "Error code "
+					+ publishStatus, "Try again",
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+							publishBlogEntry();
+						}
+					}, "Cancel", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.cancel();
+						}
+					});
 		}
 	}
 }

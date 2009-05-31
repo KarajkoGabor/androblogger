@@ -13,7 +13,8 @@
 				android:drawableLeft="@drawable/ic_revert">
 			</Button>
 			<Button android:id="@+id/Comments" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="Comments" android:drawableLeft="@drawable/comments">
+				android:layout_height="wrap_content" android:text="Comments"
+				android:drawableLeft="@drawable/comments">
 			</Button>
 		</LinearLayout>
 		<LinearLayout android:id="@+id/LinearLayout02"
@@ -43,22 +44,11 @@
 					android:textColor="#FFFFFF" android:text="Author">
 				</TextView>
 			</LinearLayout>
-			<LinearLayout android:id="@+id/LinearLayout01"
-				android:layout_width="wrap_content" android:layout_height="wrap_content">
-				<TextView android:id="@+id/TextView02"
-					android:layout_width="wrap_content" android:layout_height="wrap_content"
-					android:text="ID: ">
-				</TextView>
-				<TextView android:id="@+id/PostID" android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:textColor="#FFFFFF"
-					android:text="ID of post">
-				</TextView>
-			</LinearLayout>
+			
 			<LinearLayout android:id="@+id/LinearLayout04"
 				android:layout_width="wrap_content" android:layout_height="wrap_content">
 				<TextView android:id="@+id/TextView02"
-					android:layout_width="wrap_content" android:layout_height="wrap_content"
-					android:text="Publish: ">
+					android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Published: ">
 				</TextView>
 				<TextView android:id="@+id/PostPublishDate"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -68,8 +58,7 @@
 			<LinearLayout android:id="@+id/LinearLayout05"
 				android:layout_width="wrap_content" android:layout_height="wrap_content">
 				<TextView android:id="@+id/TextView02"
-					android:layout_width="wrap_content" android:layout_height="wrap_content"
-					android:text="Update: ">
+					android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Updated: ">
 				</TextView>
 				<TextView android:id="@+id/PostUpdateDate"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -80,9 +69,8 @@
 		<LinearLayout android:id="@+id/LinearLayout02"
 			android:background="@android:drawable/alert_dark_frame"
 			android:orientation="vertical" android:layout_width="fill_parent"
-			android:padding="20px" android:layout_height="240px">
-			<ScrollView android:id="@+id/sv" android:layout_width="fill_parent"
-				android:layout_height="200px">
+			android:padding="20px" android:layout_height="260px">
+			<ScrollView android:id="@+id/sv" android:layout_width="fill_parent" android:layout_height="200px">
 				<TextView android:id="@+id/PostContent"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:text="Content of post" android:textColor="#FFFFFF">
