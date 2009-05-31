@@ -55,9 +55,22 @@ public class ViewBlog extends ListActivity {
 			data = new HashMap<String, Object>();
 			Entry entry = resultFeed.getEntries().get(j);
 			try {
-				data.put("line1", entry.getTitle().getPlainText());
-				data.put("line2", ((TextContent) entry.getContent())
-						.getContent().getPlainText());
+				String truncatedTitle = null;
+				if(entry.getTitle().getPlainText().length()>22){
+					truncatedTitle = entry.getTitle().getPlainText().substring(0, 22)+"...";
+				} else{
+					truncatedTitle = entry.getTitle().getPlainText();
+				}
+				data.put("line1", truncatedTitle);
+				String truncatedContent = null;
+				if(((TextContent) entry.getContent()).getContent().getPlainText().length()>30){
+					truncatedContent = ((TextContent) entry.getContent()).getContent().getPlainText().substring(0, 30)+"...";
+				} else{
+					truncatedContent = ((TextContent) entry.getContent()).getContent().getPlainText();
+				}
+				
+				data.put("line2", truncatedContent);
+				
 				data.put("line3", entry.getUpdated().toStringRfc822()
 						.substring(
 								0,
@@ -65,6 +78,7 @@ public class ViewBlog extends ListActivity {
 										.length() - 5));
 				resourceNames.add(data);
 			} catch (Resources.NotFoundException nfe) {
+				Log.e(TAG, "NotFoundException "+nfe.getMessage());
 			}
 		}
 
