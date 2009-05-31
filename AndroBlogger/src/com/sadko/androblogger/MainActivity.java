@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -218,7 +220,15 @@ public class MainActivity extends Activity {
 				}
 			}
 		};
-		viewThread.start();
+		ConnectivityManager cm = (ConnectivityManager) MainActivity.this
+				.getSystemService(CONNECTIVITY_SERVICE);
+		NetworkInfo netinfo = cm.getActiveNetworkInfo();
+		if (netinfo.getDetailedState() == NetworkInfo.DetailedState.CONNECTED) {
+			viewThread.start();
+		} else {
+			Alert.showAlert(MainActivity.this, "Network connection needed",
+					"Please, connect your device to the Internet");
+		}
 		viewProgress.setMessage("Viewing in progress...");
 	}
 

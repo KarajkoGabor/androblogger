@@ -10,11 +10,11 @@
 			android:layout_gravity="center">
 			<Button android:id="@+id/BackToMainActivity"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:text="Back" android:drawableLeft="@drawable/ic_revert">
+				android:text="Back" android:drawableLeft="@drawable/revert">
 			</Button>
 			<Button android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="Details"
-				android:id="@+id/Details" android:drawableLeft="@drawable/details">
+				android:layout_height="wrap_content" android:text="Refresh"
+				android:id="@+id/RefreshPostsList" android:drawableLeft="@drawable/refresh">
 			</Button>
 		</LinearLayout>
 		<TextView android:id="@+id/BlogTitle" android:layout_height="wrap_content"

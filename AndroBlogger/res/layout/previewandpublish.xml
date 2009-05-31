@@ -31,11 +31,11 @@
 			android:layout_gravity="center">
 			<Button android:id="@+id/BackToCreateBlogEntry"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:text="Back" android:drawableLeft="@drawable/ic_revert">
+				android:text="Back" android:drawableLeft="@drawable/revert">
 			</Button>
 			<Button android:id="@+id/Publish" android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="Publish"
-				android:drawableLeft="@drawable/ic_send">
+				android:drawableLeft="@drawable/send">
 			</Button>
 		</LinearLayout>
 	</LinearLayout>
