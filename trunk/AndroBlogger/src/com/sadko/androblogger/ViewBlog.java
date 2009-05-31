@@ -58,14 +58,19 @@ public class ViewBlog extends ListActivity {
 				data.put("line1", entry.getTitle().getPlainText());
 				data.put("line2", ((TextContent) entry.getContent())
 						.getContent().getPlainText());
+				data.put("line3", entry.getUpdated().toStringRfc822()
+						.substring(
+								0,
+								entry.getUpdated().toStringRfc822()
+										.length() - 5));
 				resourceNames.add(data);
 			} catch (Resources.NotFoundException nfe) {
 			}
 		}
 
 		SimpleAdapter notes = new SimpleAdapter(this, resourceNames,
-				R.layout.row, new String[]{"line1", "line2"}, new int[]{
-						R.id.text1, R.id.text2});
+				R.layout.row, new String[]{"line1", "line2", "line3"}, new int[]{
+						R.id.text1, R.id.text2, R.id.text3});
 		setListAdapter(notes);
 
 		this.findViewById(R.id.BackToMainActivity).setOnClickListener(

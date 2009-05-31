@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -21,7 +22,6 @@ import com.sadko.androblogger.db.DBAdapter;
 import com.sadko.androblogger.util.Alert;
 
 public class MainActivity extends Activity {
-	// private static final int BLOGCONFIG_REQUEST = 4;
 	final static String TAG = "MainActivity";
 	private ProgressDialog viewProgress = null;
 	private final String MSG_KEY = "value";
@@ -225,8 +225,23 @@ public class MainActivity extends Activity {
 	private void showViewStatus() {
 		viewProgress.dismiss();
 		if (viewStatus != 5) {
-			Alert.showAlert(this, "View status", "View failed! (Code "
-					+ viewStatus + ")\nTry again.");
+			/*
+			 * Alert.showAlert(this, "Viewing failed", "Error code " +
+			 * viewStatus + "\nTry again.");
+			 */
+			Alert.showAlert(this, "Viewing failed", "Error code " + viewStatus,
+					"Try again", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+							viewBlogPosts();
+						}
+					}, "Cancel", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.cancel();
+						}
+					});
 		}
 	}
 }

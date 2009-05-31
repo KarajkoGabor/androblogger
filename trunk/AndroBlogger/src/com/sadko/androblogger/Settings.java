@@ -115,7 +115,7 @@ public class Settings extends Activity {
 		private void showVerifyStatus() {
 			verifyProgress.dismiss();
 			if (verifyStatus == 5) {
-				Alert.showAlert(Settings.this, "Status", "Blogs verified OK!");
+				Alert.showAlert(Settings.this, "Success", "Blogs verified OK!");
 				Button SaveProfile = (Button) (Settings.this
 						.findViewById(R.id.Save));
 				SaveProfile.setEnabled(true);
@@ -136,24 +136,23 @@ public class Settings extends Activity {
 					verifyButton.setEnabled(false);
 				}
 			} else if (verifyStatus == 6) {
-				Alert.showAlert(Settings.this, "Status",
+				Alert.showAlert(Settings.this, "Authentication failed",
 						"Can't find any blogs for this user (null answer).");
 			} else if (verifyStatus == 7) {
-				Alert.showAlert(Settings.this, "Status",
+				Alert.showAlert(Settings.this, "Authentication failed",
 						"Can't find any blogs for this user.");
 			} else if (verifyStatus == 8) {
-				Alert.showAlert(Settings.this, "Status",
+				Alert.showAlert(Settings.this, "Authentication failed",
 						"Can't extract blog names from respose.");
 			} else if (verifyStatus == 9) {
-				Alert.showAlert(Settings.this, "Status",
+				Alert.showAlert(Settings.this, "Authentication failed",
 						"Can't extract blog ids from response.");
 			} else if (verifyStatus == 10) {
-				Alert
-						.showAlert(Settings.this, "Status",
-								"Authentication failed. Did you enter the username and password correctly?");
+				Alert.showAlert(Settings.this, "Authentication failed",
+						"Did you enter the username and password correctly?");
 			} else {
-				Alert.showAlert(Settings.this, "Status",
-						"Fetch of blogs failed! (Code " + verifyStatus + ")");
+				Alert.showAlert(Settings.this, "Authentication failed",
+						"Error code " + verifyStatus);
 			}
 		}
 	};
