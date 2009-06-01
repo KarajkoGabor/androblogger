@@ -44,7 +44,6 @@
 					android:textColor="#FFFFFF" android:text="Author">
 				</TextView>
 			</LinearLayout>
-
 			<LinearLayout android:id="@+id/LinearLayout04"
 				android:layout_width="wrap_content" android:layout_height="wrap_content">
 				<TextView android:id="@+id/TextView02"
@@ -69,26 +68,10 @@
 			</LinearLayout>
 		</LinearLayout>
 		<LinearLayout android:id="@+id/LinearLayout02"
-			android:background="@android:drawable/alert_dark_frame"
 			android:orientation="vertical" android:layout_width="fill_parent"
-			android:padding="20px" android:layout_height="260px">
-			<ScrollView android:id="@+id/sv" android:layout_width="fill_parent"
-				android:layout_height="200px">
-				<TextView android:id="@+id/PostContent"
-					android:layout_width="wrap_content" android:layout_height="wrap_content"
-					android:text="Content of post" android:textColor="#FFFFFF">
-				</TextView>
-			</ScrollView>
+			android:layout_height="260px" android:background="@android:drawable/alert_dark_frame">
+			<WebView android:id="@+id/webview" android:layout_width="fill_parent"
+				android:layout_height="fill_parent" />
 		</LinearLayout>
-
-
-
-
-
-
-
-
-
-
 	</LinearLayout>
 </ScrollView>

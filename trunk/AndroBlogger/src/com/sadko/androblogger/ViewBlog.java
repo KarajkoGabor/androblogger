@@ -8,7 +8,6 @@ import java.util.Map;
 
 import com.google.gdata.data.Entry;
 import com.google.gdata.data.Feed;
-import com.google.gdata.data.TextContent;
 import com.google.gdata.util.ServiceException;
 import com.sadko.androblogger.db.DBAdapter;
 import com.sadko.androblogger.util.Alert;
@@ -100,15 +99,15 @@ public class ViewBlog extends ListActivity {
 		List<Map<String, Object>> resourceNames = new ArrayList<Map<String, Object>>();
 		Map<String, Object> data;
 		int maxCharTitle = 22;
-		int maxCharContent = 30;
+		//int maxCharContent = 30;
 		if (this.getWindow().getWindowManager().getDefaultDisplay()
 				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
 			maxCharTitle = 40;
-			maxCharContent = 50;
+			//maxCharContent = 50;
 		} else if (this.getWindow().getWindowManager().getDefaultDisplay()
 				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
 			maxCharTitle = 22;
-			maxCharContent = 30;
+			//maxCharContent = 30;
 		}
 		for (int j = 0; j < resultFeed.getEntries().size(); j++) {
 			data = new HashMap<String, Object>();
@@ -123,19 +122,17 @@ public class ViewBlog extends ListActivity {
 					truncatedTitle = entry.getTitle().getPlainText();
 				}
 				data.put("line1", truncatedTitle);
-				String truncatedContent = null;
-				if (((TextContent) entry.getContent()).getContent()
-						.getPlainText().length() > maxCharContent) {
-					truncatedContent = ((TextContent) entry.getContent())
-							.getContent().getPlainText().substring(0,
-									maxCharContent)
-							+ "...";
-				} else {
-					truncatedContent = ((TextContent) entry.getContent())
-							.getContent().getPlainText();
-				}
-
-				data.put("line2", truncatedContent);
+				/*
+				 * String truncatedContent = null; if (((TextContent)
+				 * entry.getContent()).getContent() .getPlainText().length() >
+				 * maxCharContent) { truncatedContent = ((TextContent)
+				 * entry.getContent()) .getContent().getPlainText().substring(0,
+				 * maxCharContent) + "..."; } else { truncatedContent =
+				 * ((TextContent) entry.getContent())
+				 * .getContent().getPlainText(); }
+				 * 
+				 * data.put("line2", truncatedContent);
+				 */
 
 				data.put("line3",
 						entry.getUpdated().toStringRfc822()
@@ -150,8 +147,8 @@ public class ViewBlog extends ListActivity {
 		}
 
 		SimpleAdapter notes = new SimpleAdapter(this, resourceNames,
-				R.layout.row, new String[]{"line1", "line2", "line3"},
-				new int[]{R.id.text1, R.id.text2, R.id.text3});
+				R.layout.row, new String[]{"line1",/* "line2", */"line3"},
+				new int[]{R.id.text1,/* R.id.text2, */R.id.text3});
 		setListAdapter(notes);
 
 		this.findViewById(R.id.BackToMainActivity).setOnClickListener(
@@ -171,41 +168,11 @@ public class ViewBlog extends ListActivity {
 					}
 
 				});
-		// ListView currentListView = getListView();
-		/*
-		 * currentListView.setOnItemSelectedListener(new
-		 * OnItemSelectedListener() {
-		 * 
-		 * @SuppressWarnings("unchecked")
-		 * 
-		 * @Override public void onItemSelected(AdapterView parent, View v, int
-		 * position, long id) { Log.d(TAG, "Selected: " + id + " element");
-		 * selectedItemId = (int) id; }
-		 * 
-		 * @SuppressWarnings("unchecked")
-		 * 
-		 * @Override public void onNothingSelected(AdapterView parent) {
-		 * Log.d(TAG, "Selected: -1 element"); } });
-		 */
-		/*
-		 * this.findViewById(R.id.Details).setOnClickListener( new
-		 * OnClickListener() {
-		 * 
-		 * @Override public void onClick(View v) { if (selectedItemId >= 0) {
-		 * currentEntry = resultFeed.getEntries().get( selectedItemId); Intent i
-		 * = new Intent(ViewBlog.this, ViewPost.class); startActivity(i);
-		 * finish(); } else { Alert.showAlert(ViewBlog.this, "Nothing selected",
-		 * "Please select some post"); } } });
-		 */
 	}
 
 	private void showViewStatus() {
 		viewProgress.dismiss();
 		if (viewStatus != 5) {
-			/*
-			 * Alert.showAlert(this, "Viewing failed", "Error code " +
-			 * viewStatus + "\nTry again.");
-			 */
 			Alert.showAlert(this, "Viewing failed", "Error code " + viewStatus,
 					"Try again", new DialogInterface.OnClickListener() {
 						@Override
@@ -279,8 +246,8 @@ public class ViewBlog extends ListActivity {
 					while ((attempt <= MainActivity.AMOUNTOFATTEMPTS)
 							&& (!authFlag)) {
 						try {
-							MainActivity.resultFeed = blogapi
-									.getAllPosts(username, password);
+							MainActivity.resultFeed = blogapi.getAllPosts(
+									username, password);
 							Log.i(TAG, "Blog entries successfully received");
 							viewOk = true;
 							authFlag = true;

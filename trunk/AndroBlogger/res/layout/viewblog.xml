@@ -22,6 +22,7 @@
 			android:gravity="center" android:layout_gravity="center"
 			android:layout_width="fill_parent" android:background="@android:drawable/alert_dark_frame">
 		</TextView>
+		
 		<ListView android:id="@id/android:list" android:layout_width="fill_parent"
 			android:drawSelectorOnTop="false" android:background="@android:drawable/alert_dark_frame"
 			android:padding="15px" android:layout_height="320px">
