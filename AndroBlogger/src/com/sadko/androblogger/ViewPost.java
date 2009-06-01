@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.google.gdata.data.Entry;
 import com.google.gdata.data.Feed;
-import com.google.gdata.data.TextContent;
+import com.google.gdata.data.HtmlTextConstruct;
 import com.google.gdata.util.ServiceException;
 import com.sadko.androblogger.db.DBAdapter;
 import com.sadko.androblogger.util.Alert;
@@ -25,6 +25,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -39,6 +41,7 @@ public class ViewPost extends Activity {
 	private DBAdapter mDbHelper;
 	private static Cursor setting = null;
 	private static boolean viewOk = false;
+	WebView webview;
 
 	final Handler mHandler = new Handler() {
 		@Override
@@ -106,9 +109,14 @@ public class ViewPost extends Activity {
 								currentEntry.getUpdated().toStringRfc822()
 										.length() - 5));
 
-		TextView postContent = (TextView) (this.findViewById(R.id.PostContent));
-		postContent.setText(((TextContent) currentEntry.getContent())
-				.getContent().getPlainText());
+		webview = (WebView) findViewById(R.id.webview);
+		webview.loadData(((HtmlTextConstruct) currentEntry.getTextContent()
+				.getContent()).getHtml(), "text/html", "UTF-8");
+		WebSettings websettings = webview.getSettings();
+		websettings.setJavaScriptEnabled(true);
+		websettings.setJavaScriptCanOpenWindowsAutomatically(true);
+		webview.setClickable(true);
+		websettings.setLightTouchEnabled(true);
 
 		int w = this.getWindow().getWindowManager().getDefaultDisplay()
 				.getWidth() - 12;
@@ -256,10 +264,6 @@ public class ViewPost extends Activity {
 	private void showViewStatus() {
 		viewProgress.dismiss();
 		if (attempt > MainActivity.AMOUNTOFATTEMPTS) {
-			/*
-			 * Alert.showAlert(this, "Viewing failed", "Error code " +
-			 * viewStatus); }
-			 */
 			Alert.showAlert(this, "Viewing failed", "Error code " + viewStatus,
 					"Try again", new DialogInterface.OnClickListener() {
 						@Override
