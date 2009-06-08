@@ -1,35 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.sadko.androblogger"
-      android:versionCode="1" android:versionName="0.9.2">
-    <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <activity android:name=".MainActivity"
-                  android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".Settings"
-        		  android:label="Settings (login/password)">
-        </activity>
-        <activity android:name=".CreateBlogEntry"
-        		  android:label="Create a new blog entry">
-        </activity>
-        <activity android:name=".PreviewAndPublish"
-        		  android:label="Preview and publish blog entry">
-        </activity>
-        <activity android:name=".ViewBlog"
-        		  android:label="View blog entry">
-        </activity>
-        <activity android:name=".ViewPost"
-        		  android:label="View post">
-        </activity>
-        <activity android:name=".ViewComments"
-        		  android:label="View comments">
-        </activity>
-    </application>
-    <uses-permission android:name="android.permission.service.blogger"/>
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	package="com.sadko.androblogger" android:versionCode="1"
+	android:versionName="0.9.3">
+	<application android:label="@string/app_name" android:icon="@drawable/iconandroblogger">
+		<activity android:name=".MainActivity" android:label="@string/app_name">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".Settings" android:label="Settings (login/password)">
+		</activity>
+		<activity android:name=".CreateBlogEntry" android:label="Create new post">
+		</activity>
+		<activity android:name=".PreviewAndPublish" android:label="Preview and publish post">
+		</activity>
+		<activity android:name=".ViewBlog" android:label="View blog">
+		</activity>
+		<activity android:name=".ViewPost" android:label="View post">
+		</activity>
+		<activity android:name=".ViewComments" android:label="View comments">
+		</activity>
+	</application>
+	<uses-permission android:name="android.permission.service.blogger" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest> 

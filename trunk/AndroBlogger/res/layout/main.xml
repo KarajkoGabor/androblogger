@@ -10,8 +10,8 @@
 			android:layout_gravity="center" android:layout_width="fill_parent"
 			android:gravity="center" android:background="@android:drawable/alert_dark_frame">
 			<ImageView android:id="@+id/Logo" android:layout_height="wrap_content"
-				android:src="@drawable/logo" android:layout_gravity="center"
-				android:layout_width="wrap_content" android:layout_margin="5px"></ImageView>
+				android:layout_gravity="center"
+				android:layout_width="wrap_content" android:layout_margin="5px" android:src="@drawable/logoandroblogger"></ImageView>
 		</LinearLayout>
 		<LinearLayout android:layout_height="wrap_content"
 			android:orientation="vertical" android:background="@android:drawable/alert_dark_frame"
