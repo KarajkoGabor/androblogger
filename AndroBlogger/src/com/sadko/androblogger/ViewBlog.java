@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
+import com.google.gdata.data.DateTime;
 import com.google.gdata.data.Entry;
 import com.google.gdata.data.Feed;
 import com.google.gdata.util.ServiceException;
@@ -99,47 +101,42 @@ public class ViewBlog extends ListActivity {
 		List<Map<String, Object>> resourceNames = new ArrayList<Map<String, Object>>();
 		Map<String, Object> data;
 		int maxCharTitle = 22;
-		//int maxCharContent = 30;
 		if (this.getWindow().getWindowManager().getDefaultDisplay()
 				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
 			maxCharTitle = 40;
-			//maxCharContent = 50;
 		} else if (this.getWindow().getWindowManager().getDefaultDisplay()
 				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
 			maxCharTitle = 22;
-			//maxCharContent = 30;
 		}
+		Entry entry = null;
+		String nontruncatedTitle = null;
+		String truncatedTitle = null;
+		DateTime dateTime = null;
+		String dateAndTime = null;
+		String date = null;
+		String time = null;
 		for (int j = 0; j < resultFeed.getEntries().size(); j++) {
 			data = new HashMap<String, Object>();
-			Entry entry = resultFeed.getEntries().get(j);
+			entry = resultFeed.getEntries().get(j);
 			try {
-				String truncatedTitle = null;
-				if (entry.getTitle().getPlainText().length() > maxCharTitle) {
-					truncatedTitle = entry.getTitle().getPlainText().substring(
-							0, maxCharTitle)
+				nontruncatedTitle = entry.getTitle().getPlainText();
+				if (nontruncatedTitle.length() == 0) {
+					truncatedTitle = "<Empty title>";
+				} else if (nontruncatedTitle.length() > maxCharTitle) {
+					truncatedTitle = nontruncatedTitle.substring(0,
+							maxCharTitle)
 							+ "...";
 				} else {
-					truncatedTitle = entry.getTitle().getPlainText();
+					truncatedTitle = nontruncatedTitle;
 				}
 				data.put("line1", truncatedTitle);
-				/*
-				 * String truncatedContent = null; if (((TextContent)
-				 * entry.getContent()).getContent() .getPlainText().length() >
-				 * maxCharContent) { truncatedContent = ((TextContent)
-				 * entry.getContent()) .getContent().getPlainText().substring(0,
-				 * maxCharContent) + "..."; } else { truncatedContent =
-				 * ((TextContent) entry.getContent())
-				 * .getContent().getPlainText(); }
-				 * 
-				 * data.put("line2", truncatedContent);
-				 */
-
-				data.put("line3",
-						entry.getUpdated().toStringRfc822()
-								.substring(
-										0,
-										entry.getUpdated().toStringRfc822()
-												.length() - 5));
+				dateTime = entry.getPublished();
+				dateTime
+						.setTzShift(TimeZone.getDefault().getRawOffset() / 60000);
+				dateAndTime = dateTime.toString();
+				date = dateAndTime.substring(0, 10);
+				time = dateAndTime.substring(11, 19);
+				data.put("line3", date + " " + time);
 				resourceNames.add(data);
 			} catch (Resources.NotFoundException nfe) {
 				Log.e(TAG, "NotFoundException " + nfe.getMessage());
@@ -147,8 +144,8 @@ public class ViewBlog extends ListActivity {
 		}
 
 		SimpleAdapter notes = new SimpleAdapter(this, resourceNames,
-				R.layout.row, new String[]{"line1",/* "line2", */"line3"},
-				new int[]{R.id.text1,/* R.id.text2, */R.id.text3});
+				R.layout.row, new String[]{"line1", "line3"}, new int[]{
+						R.id.text1, R.id.text3});
 		setListAdapter(notes);
 
 		this.findViewById(R.id.BackToMainActivity).setOnClickListener(

@@ -45,7 +45,7 @@ public class ViewComments extends ListActivity {
 	private static boolean viewOk = false;
 	private ProgressDialog viewProgress = null;
 	int viewStatus = 0;
-	
+
 	final Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -64,7 +64,7 @@ public class ViewComments extends ListActivity {
 			}
 		}
 	};
-	
+
 	final Runnable mViewResults = new Runnable() {
 		public void run() {
 			showViewStatus();
@@ -84,7 +84,7 @@ public class ViewComments extends ListActivity {
 		}
 		setting = mDbHelper.fetchSettindById(1);
 		startManagingCursor(setting);
-		
+
 		currentEntry = ViewPost.currentEntry;
 		Log.i(TAG, "CurrentEntry obtained from ViewPost");
 
@@ -92,12 +92,11 @@ public class ViewComments extends ListActivity {
 		Log.i(TAG, "ResultCommentFeed obtained from ViewPost");
 
 		TextView postTitle = (TextView) (this.findViewById(R.id.PostTitle));
-		postTitle.setText(currentEntry.getTitle().getPlainText());
-
-		TextView postContent = (TextView) (this.findViewById(R.id.PostContent));
-		postContent.setText(((TextContent) currentEntry.getContent())
-				.getContent().getPlainText());
-
+		if (currentEntry.getTitle().getPlainText().length() != 0) {
+			postTitle.setText(currentEntry.getTitle().getPlainText());
+		} else {
+			postTitle.setText("<Empty title>");
+		}
 		List<Map<String, Object>> resourceNames = new ArrayList<Map<String, Object>>();
 		Map<String, Object> data;
 		for (int j = resultCommentFeed.getEntries().size(); j > 0; j--) {
@@ -124,8 +123,8 @@ public class ViewComments extends ListActivity {
 
 		int w = this.getWindow().getWindowManager().getDefaultDisplay()
 				.getWidth() - 12;
-		((Button) this.findViewById(R.id.BackToViewPost)).setWidth(w/2);
-		((Button) this.findViewById(R.id.RefreshCommentsList)).setWidth(w/2);
+		((Button) this.findViewById(R.id.BackToViewPost)).setWidth(w / 2);
+		((Button) this.findViewById(R.id.RefreshCommentsList)).setWidth(w / 2);
 
 		this.findViewById(R.id.RefreshCommentsList).setOnClickListener(
 				new OnClickListener() {
@@ -134,7 +133,7 @@ public class ViewComments extends ListActivity {
 						viewPostComments();
 					}
 				});
-		
+
 		this.findViewById(R.id.BackToViewPost).setOnClickListener(
 				new OnClickListener() {
 					@Override
@@ -202,8 +201,9 @@ public class ViewComments extends ListActivity {
 					while ((attempt <= MainActivity.AMOUNTOFATTEMPTS)
 							&& (!authFlag)) {
 						try {
-							ViewPost.resultCommentFeed = blogapi.getAllPostComments(
-									username, password, postID);
+							ViewPost.resultCommentFeed = blogapi
+									.getAllPostComments(username, password,
+											postID);
 							Log.i(TAG, "Post comments successfully received");
 							viewOk = true;
 							authFlag = true;
@@ -253,7 +253,7 @@ public class ViewComments extends ListActivity {
 		}
 		viewProgress.setMessage("Viewing in progress...");
 	}
-	
+
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			Intent i = new Intent(ViewComments.this, ViewPost.class);
@@ -263,7 +263,7 @@ public class ViewComments extends ListActivity {
 		}
 		return false;
 	}
-	
+
 	private void showViewStatus() {
 		viewProgress.dismiss();
 		if (attempt > MainActivity.AMOUNTOFATTEMPTS) {

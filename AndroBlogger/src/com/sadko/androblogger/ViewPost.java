@@ -1,7 +1,9 @@
 package com.sadko.androblogger;
 
 import java.io.IOException;
+import java.util.TimeZone;
 
+import com.google.gdata.data.DateTime;
 import com.google.gdata.data.Entry;
 import com.google.gdata.data.Feed;
 import com.google.gdata.data.HtmlTextConstruct;
@@ -86,28 +88,39 @@ public class ViewPost extends Activity {
 		Log.i(TAG, "CurrentEntry obtained from ViewBlog");
 
 		TextView postTitle = (TextView) (this.findViewById(R.id.PostTitle));
-		postTitle.setText(currentEntry.getTitle().getPlainText());
-
+		if (currentEntry.getTitle().getPlainText().length() != 0) {
+			postTitle.setText(currentEntry.getTitle().getPlainText());
+		} else {
+			postTitle.setText("<Empty title>");
+		}
 		TextView postAuthor = (TextView) (this.findViewById(R.id.PostAuthor));
-		postAuthor.setText(currentEntry.getAuthors().get(0).getName());
+		if (currentEntry.getAuthors().get(0).getName().length() != 0) {
+			postAuthor.setText(currentEntry.getAuthors().get(0).getName());
+		} else {
+			postAuthor.setText("<No author>");
+		}
 
+		DateTime dateTime = null;
+		String dateAndTime = null;
+		String date = null;
+		String time = null;
 		TextView postPublishDate = (TextView) (this
 				.findViewById(R.id.PostPublishDate));
-		postPublishDate
-				.setText(currentEntry.getPublished().toStringRfc822()
-						.substring(
-								0,
-								currentEntry.getPublished().toStringRfc822()
-										.length() - 5));
+		dateTime = currentEntry.getPublished();
+		dateTime.setTzShift(TimeZone.getDefault().getRawOffset() / 60000);
+		dateAndTime = dateTime.toString();
+		date = dateAndTime.substring(0, 10);
+		time = dateAndTime.substring(11, 19);
+		postPublishDate.setText(date + " " + time);
 
 		TextView postUpdateDate = (TextView) (this
 				.findViewById(R.id.PostUpdateDate));
-		postUpdateDate
-				.setText(currentEntry.getUpdated().toStringRfc822()
-						.substring(
-								0,
-								currentEntry.getUpdated().toStringRfc822()
-										.length() - 5));
+		dateTime = currentEntry.getUpdated();
+		dateTime.setTzShift(TimeZone.getDefault().getRawOffset() / 60000);
+		dateAndTime = dateTime.toString();
+		date = dateAndTime.substring(0, 10);
+		time = dateAndTime.substring(11, 19);
+		postUpdateDate.setText(date + " " + time);
 
 		webview = (WebView) findViewById(R.id.webview);
 		webview.loadData(((HtmlTextConstruct) currentEntry.getTextContent()
