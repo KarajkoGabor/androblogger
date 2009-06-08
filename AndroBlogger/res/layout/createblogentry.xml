@@ -33,10 +33,11 @@
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:text="Back" android:drawableLeft="@drawable/revert">
 			</Button>
-			<Button android:id="@+id/Preview" android:layout_width="wrap_content"
+			<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ClearAll" android:drawableLeft="@drawable/clear" android:text="Clear all"></Button><Button android:id="@+id/Preview" android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="Preview"
 				android:drawableLeft="@drawable/preview">
 			</Button>
-		</LinearLayout>
+		
+</LinearLayout>
 	</LinearLayout>
 </ScrollView>

@@ -30,6 +30,7 @@ import android.widget.EditText;
 import com.google.gdata.util.ServiceException;
 import com.sadko.androblogger.db.BlogEntry;
 import com.sadko.androblogger.db.DBAdapter;
+import com.sadko.androblogger.db.DBTextAdapter;
 import com.sadko.androblogger.editor.SpannableBufferHelper;
 import com.sadko.androblogger.util.Alert;
 
@@ -45,6 +46,8 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 	private int attempt = 0;
 	private DBAdapter mDbHelper;
 	private static Cursor setting = null;
+	private DBTextAdapter mDbTextHelper;
+	private static Cursor post = null;
 
 	final Handler mHandler = new Handler() {
 		@Override
@@ -85,16 +88,28 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 		}
 		setting = mDbHelper.fetchSettindById(1);
 		startManagingCursor(setting);
-		Intent i = this.getIntent();
-		if (i == null) {
-			Alert.showAlert(this, "Intent data missing!",
-					"The intent used to launch this Activity was null!");
-			this.finish();
+		mDbTextHelper = new DBTextAdapter(this);
+		try {
+			mDbTextHelper.open();
+		} catch (SQLException e) {
+			Log.e(TAG, "Database has not opened");
 		}
-		String[] titleAndContent = i.getStringArrayExtra("PostTitleAndContent");
-		title = titleAndContent[0];
-		content = titleAndContent[1];
-		Log.i(TAG, "Title of post: " + title + ". Content of post: " + content);
+		post = mDbTextHelper.fetchPostdById(1);
+		startManagingCursor(post);
+		if (post.getCount() != 0) {
+			try {
+				title = post.getString(post
+						.getColumnIndexOrThrow(DBTextAdapter.KEY_TITLE));
+				content = post.getString(post
+						.getColumnIndexOrThrow(DBTextAdapter.KEY_CONTENT));
+				Log.i(TAG, "Title of post: " + title + ". Content of post: "
+						+ content);
+			} catch (IllegalArgumentException e) {
+				Log.e(TAG, "IllegalArgumentException (DataBase failed)");
+			} catch (Exception e) {
+				Log.e(TAG, "Exception (DataBase failed)");
+			}
+		}
 		EditText textTitle = (EditText) this.findViewById(R.id.PreviewTitle);
 		textTitle.setText(title);
 		textTitle.setTextColor(Color.BLACK);
@@ -119,10 +134,6 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 					public void onClick(View v) {
 						Intent i = new Intent(PreviewAndPublish.this,
 								CreateBlogEntry.class);
-						String[] titleAndContent = new String[2];
-						titleAndContent[0] = title;
-						titleAndContent[1] = content;
-						i.putExtra("PostTitleAndContent", titleAndContent);
 						startActivity(i);
 						finish();
 					}
@@ -141,10 +152,6 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			Intent i = new Intent(PreviewAndPublish.this, CreateBlogEntry.class);
-			String[] titleAndContent = new String[2];
-			titleAndContent[0] = title;
-			titleAndContent[1] = content;
-			i.putExtra("PostTitleAndContent", titleAndContent);
 			startActivity(i);
 			finish();
 			return true;
@@ -297,6 +304,13 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 	private void showPublishedStatus() {
 		publishProgress.dismiss();
 		if (publishStatus == 5) {
+			try {
+				mDbTextHelper.updatePostById((long) 1, "", "");
+			} catch (SQLException e) {
+				Log.e(TAG, "SQLException: "+e.getMessage());
+			} catch (Exception e) {
+				Log.e(TAG, "Exception: "+e.getMessage());
+			}
 			final Dialog dlg = new AlertDialog.Builder(PreviewAndPublish.this)
 					.setIcon(com.sadko.androblogger.R.drawable.ic_dialog_alert)
 					.setTitle("Publish status").setPositiveButton("OK", null)

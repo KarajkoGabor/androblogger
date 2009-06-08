@@ -2,6 +2,8 @@ package com.sadko.androblogger;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.SQLException;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -10,27 +12,78 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.sadko.androblogger.db.DBTextAdapter;
 import com.sadko.androblogger.util.Alert;
 
 public class CreateBlogEntry extends Activity {
 	private static final String TAG = "CreateBlogEntry";
+	private DBTextAdapter mDbTextHelper;
+	private static Cursor post = null;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.createblogentry);
-		Intent i = this.getIntent();
-		if ((i.getStringArrayExtra("PostTitleAndContent")[0].length() != 0)
-				&& (i.getStringArrayExtra("PostTitleAndContent")[1].length() != 0)) {
-			EditText postTitle = (EditText) findViewById(com.sadko.androblogger.R.id.TextPostTitle);
-			EditText postContent = (EditText) findViewById(com.sadko.androblogger.R.id.TextPostContent);
-			postTitle.setText(i.getStringArrayExtra("PostTitleAndContent")[0]);
-			postContent
-					.setText(i.getStringArrayExtra("PostTitleAndContent")[1]);
-			Log.i(TAG, "Fields 'Title' and 'Content' were filled ");
+		mDbTextHelper = new DBTextAdapter(this);
+		try {
+			mDbTextHelper.open();
+		} catch (SQLException e) {
+			Log.e(TAG, "Database has not opened");
+		}
+		post = mDbTextHelper.fetchPostdById(1);
+		startManagingCursor(post);
+		if (post.getCount() != 0) {
+			try {
+				((EditText) this.findViewById(R.id.TextPostTitle))
+						.setText(post
+								.getString(post
+										.getColumnIndexOrThrow(DBTextAdapter.KEY_TITLE)));
+				((EditText) this.findViewById(R.id.TextPostContent))
+						.setText(post
+								.getString(post
+										.getColumnIndexOrThrow(DBTextAdapter.KEY_CONTENT)));
+			} catch (IllegalArgumentException e) {
+				Log.e(TAG, "IllegalArgumentException (DataBase failed)");
+			} catch (Exception e) {
+				Log.e(TAG, "Exception (DataBase failed)");
+			}
 		}
 		this.findViewById(R.id.BackToMainActivities).setOnClickListener(
 				new OnClickListener() {
 					public void onClick(View v) {
+						EditText postTitle = (EditText) findViewById(com.sadko.androblogger.R.id.TextPostTitle);
+						EditText postContent = (EditText) findViewById(com.sadko.androblogger.R.id.TextPostContent);
+						String strTitle = "";
+						String strContent = "";
+						if (post.getCount() == 0) {
+							try {
+								/*********************************************************************/
+								strTitle = postTitle.getText().toString();
+								strContent = postContent.getText().toString();
+								mDbTextHelper.createPost(strTitle, strContent);
+								/*********************************************************************/
+								Log.d(TAG, "Post saved to database.");
+							} catch (SQLException e) {
+								Log
+										.e(TAG,
+												"SQLException (createPost(title, content))");
+							} catch (Exception e) {
+								Log.e(TAG, "Exception: " + e.getMessage());
+							}
+						} else {
+							try {
+								/*********************************************************************/
+								strTitle = postTitle.getText().toString();
+								strContent = postContent.getText().toString();
+								mDbTextHelper.updatePostById((long) 1, strTitle,
+										strContent);
+								/*********************************************************************/
+								Log.d(TAG, "Post updated in database.");
+							} catch (SQLException e) {
+								Log
+										.e(TAG,
+												"SQLException (updatePostById(rowId, title, content))");
+							}
+						}
 						Intent i = new Intent(CreateBlogEntry.this,
 								MainActivity.class);
 						startActivity(i);
@@ -39,9 +92,10 @@ public class CreateBlogEntry extends Activity {
 				});
 
 		int w = this.getWindow().getWindowManager().getDefaultDisplay()
-				.getWidth() - 12;
-		((Button) this.findViewById(R.id.BackToMainActivities)).setWidth(w / 2);
-		((Button) this.findViewById(R.id.Preview)).setWidth(w / 2);
+				.getWidth() - 8;
+		((Button) this.findViewById(R.id.BackToMainActivities)).setWidth(w / 3);
+		((Button) this.findViewById(R.id.ClearAll)).setWidth(w / 3);
+		((Button) this.findViewById(R.id.Preview)).setWidth(w / 3);
 
 		this.findViewById(R.id.Preview).setOnClickListener(
 				new OnClickListener() {
@@ -66,16 +120,223 @@ public class CreateBlogEntry extends Activity {
 							titleAndContent[0] = postTitle.getText().toString();
 							titleAndContent[1] = postContent.getText()
 									.toString();
+							String strTitle = "";
+							String strContent = "";
+							if (post.getCount() == 0) {
+								try {
+									/*********************************************************************/
+									strTitle = postTitle.getText().toString();
+									strContent = postContent.getText()
+											.toString();
+									mDbTextHelper.createPost(strTitle, strContent);
+									/*********************************************************************/
+									Log.d(TAG, "Post saved to database.");
+								} catch (SQLException e) {
+									Log
+											.e(TAG,
+													"SQLException (createPost(title, content))");
+								} catch (Exception e) {
+									Log.e(TAG, "Exception: " + e.getMessage());
+								}
+							} else {
+								try {
+									/*********************************************************************/
+									strTitle = postTitle.getText().toString();
+									strContent = postContent.getText()
+											.toString();
+									mDbTextHelper.updatePostById((long) 1,
+											strTitle, strContent);
+									/*********************************************************************/
+									Log.d(TAG, "Post updated in database.");
+								} catch (SQLException e) {
+									Log
+											.e(TAG,
+													"SQLException (updatePostById(rowId, title, content))");
+								}
+							}
 							i.putExtra("PostTitleAndContent", titleAndContent);
 							startActivity(i);
 							finish();
 						}
 					}
 				});
+		this.findViewById(R.id.ClearAll).setOnClickListener(
+				new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						EditText postTitle = (EditText) findViewById(com.sadko.androblogger.R.id.TextPostTitle);
+						EditText postContent = (EditText) findViewById(com.sadko.androblogger.R.id.TextPostContent);
+						postTitle.setText("");
+						postContent.setText("");
+					}
+				});
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Log.i(TAG, "Method 'onPause()' launched");
+		mDbTextHelper = new DBTextAdapter(this);
+		try {
+			mDbTextHelper.open();
+		} catch (SQLException e) {
+			Log.e(TAG, "Database has not opened");
+		}
+		post = mDbTextHelper.fetchPostdById(1);
+		startManagingCursor(post);
+		EditText postTitle = (EditText) findViewById(com.sadko.androblogger.R.id.TextPostTitle);
+		EditText postContent = (EditText) findViewById(com.sadko.androblogger.R.id.TextPostContent);
+		String strTitle = "";
+		String strContent = "";
+		if (post.getCount() == 0) {
+			try {
+				/*********************************************************************/
+				strTitle = postTitle.getText().toString();
+				strContent = postContent.getText().toString();
+				mDbTextHelper.createPost(strTitle, strContent);
+				/*********************************************************************/
+				Log.d(TAG, "Post saved to database.");
+			} catch (SQLException e) {
+				Log.e(TAG, "SQLException (createPost(title, content))");
+			} catch (Exception e) {
+				Log.e(TAG, "Exception: " + e.getMessage());
+			}
+		} else {
+			try {
+				/*********************************************************************/
+				strTitle = postTitle.getText().toString();
+				strContent = postContent.getText().toString();
+				mDbTextHelper.updatePostById((long) 1, strTitle, strContent);
+				/*********************************************************************/
+				Log.d(TAG, "Post updated in database.");
+			} catch (SQLException e) {
+				Log.e(TAG,
+						"SQLException (updatePostById(rowId, title, content))");
+			}
+		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.i(TAG, "Method 'onDestroy()' launched");
+		mDbTextHelper = new DBTextAdapter(this);
+		try {
+			mDbTextHelper.open();
+		} catch (SQLException e) {
+			Log.e(TAG, "Database has not opened");
+		}
+		post = mDbTextHelper.fetchPostdById(1);
+		startManagingCursor(post);
+		EditText postTitle = (EditText) findViewById(com.sadko.androblogger.R.id.TextPostTitle);
+		EditText postContent = (EditText) findViewById(com.sadko.androblogger.R.id.TextPostContent);
+		String strTitle = "";
+		String strContent = "";
+		if (post.getCount() == 0) {
+			try {
+				/*********************************************************************/
+				strTitle = postTitle.getText().toString();
+				strContent = postContent.getText().toString();
+				mDbTextHelper.createPost(strTitle, strContent);
+				/*********************************************************************/
+				Log.d(TAG, "Post saved to database.");
+			} catch (SQLException e) {
+				Log.e(TAG, "SQLException (createPost(title, content))");
+			} catch (Exception e) {
+				Log.e(TAG, "Exception: " + e.getMessage());
+			}
+		} else {
+			try {
+				/*********************************************************************/
+				strTitle = postTitle.getText().toString();
+				strContent = postContent.getText().toString();
+				mDbTextHelper.updatePostById((long) 1, strTitle, strContent);
+				/*********************************************************************/
+				Log.d(TAG, "Post updated in database.");
+			} catch (SQLException e) {
+				Log.e(TAG,
+						"SQLException (updatePostById(rowId, title, content))");
+			}
+		}
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		Log.i(TAG, "Method 'onStop()' launched");
+		mDbTextHelper = new DBTextAdapter(this);
+		try {
+			mDbTextHelper.open();
+		} catch (SQLException e) {
+			Log.e(TAG, "Database has not opened");
+		}
+		post = mDbTextHelper.fetchPostdById(1);
+		startManagingCursor(post);
+		EditText postTitle = (EditText) findViewById(com.sadko.androblogger.R.id.TextPostTitle);
+		EditText postContent = (EditText) findViewById(com.sadko.androblogger.R.id.TextPostContent);
+		String strTitle = "";
+		String strContent = "";
+		if (post.getCount() == 0) {
+			try {
+				/*********************************************************************/
+				strTitle = postTitle.getText().toString();
+				strContent = postContent.getText().toString();
+				mDbTextHelper.createPost(strTitle, strContent);
+				/*********************************************************************/
+				Log.d(TAG, "Post saved to database.");
+			} catch (SQLException e) {
+				Log.e(TAG, "SQLException (createPost(title, content))");
+			} catch (Exception e) {
+				Log.e(TAG, "Exception: " + e.getMessage());
+			}
+		} else {
+			try {
+				/*********************************************************************/
+				strTitle = postTitle.getText().toString();
+				strContent = postContent.getText().toString();
+				mDbTextHelper.updatePostById((long) 1, strTitle, strContent);
+				/*********************************************************************/
+				Log.d(TAG, "Post updated in database.");
+			} catch (SQLException e) {
+				Log.e(TAG,
+						"SQLException (updatePostById(rowId, title, content))");
+			}
+		}
 	}
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			EditText postTitle = (EditText) findViewById(com.sadko.androblogger.R.id.TextPostTitle);
+			EditText postContent = (EditText) findViewById(com.sadko.androblogger.R.id.TextPostContent);
+			String strTitle = "";
+			String strContent = "";
+			if (post.getCount() == 0) {
+				try {
+					/*********************************************************************/
+					strTitle = postTitle.getText().toString();
+					strContent = postContent.getText().toString();
+					mDbTextHelper.createPost(strTitle, strContent);
+					/*********************************************************************/
+					Log.d(TAG, "Post saved to database.");
+				} catch (SQLException e) {
+					Log.e(TAG, "SQLException (createPost(title, content))");
+				} catch (Exception e) {
+					Log.e(TAG, "Exception: " + e.getMessage());
+				}
+			} else {
+				try {
+					/*********************************************************************/
+					strTitle = postTitle.getText().toString();
+					strContent = postContent.getText().toString();
+					mDbTextHelper.updatePostById((long) 1, strTitle, strContent);
+					/*********************************************************************/
+					Log.d(TAG, "Post updated in database.");
+				} catch (SQLException e) {
+					Log
+							.e(TAG,
+									"SQLException (updatePostById(rowId, title, content))");
+				}
+			}
 			Intent i = new Intent(CreateBlogEntry.this, MainActivity.class);
 			startActivity(i);
 			finish();
