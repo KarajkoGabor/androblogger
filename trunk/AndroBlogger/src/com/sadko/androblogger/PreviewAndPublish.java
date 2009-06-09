@@ -10,6 +10,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.graphics.Color;
@@ -120,6 +121,14 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 		textContent.setTextColor(Color.BLACK);
 		textContent.setEnabled(false);
 
+		if (this.getWindow().getWindowManager().getDefaultDisplay()
+				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+			((EditText)this.findViewById(R.id.PreviewContent)).setHeight(105);
+		} else if (this.getWindow().getWindowManager().getDefaultDisplay()
+				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+			((EditText)this.findViewById(R.id.PreviewContent)).setHeight(265);
+		}
+		
 		Button publishButton = (Button) findViewById(R.id.Publish);
 
 		int w = this.getWindow().getWindowManager().getDefaultDisplay()

@@ -15,6 +15,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.net.ConnectivityManager;
@@ -30,7 +31,9 @@ import android.view.View.OnClickListener;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.LinearLayout.LayoutParams;
 
 public class ViewPost extends Activity {
 	private final String TAG = "ViewPost";
@@ -87,12 +90,27 @@ public class ViewPost extends Activity {
 		currentEntry = ViewBlog.currentEntry;
 		Log.i(TAG, "CurrentEntry obtained from ViewBlog");
 
-		TextView postTitle = (TextView) (this.findViewById(R.id.PostTitle));
-		if (currentEntry.getTitle().getPlainText().length() != 0) {
-			postTitle.setText(currentEntry.getTitle().getPlainText());
-		} else {
-			postTitle.setText("<Empty title>");
+		int maxCharTitle = 30;
+		if (this.getWindow().getWindowManager().getDefaultDisplay()
+				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+			maxCharTitle = 80;
+		} else if (this.getWindow().getWindowManager().getDefaultDisplay()
+				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+			maxCharTitle = 30;
 		}
+		String nontruncatedTitle = null;
+		String truncatedTitle = null;
+		nontruncatedTitle = currentEntry.getTitle().getPlainText();
+		if (nontruncatedTitle.length() == 0) {
+			truncatedTitle = "<Empty title>";
+		} else if (nontruncatedTitle.length() > maxCharTitle) {
+			truncatedTitle = nontruncatedTitle.substring(0, maxCharTitle)
+					+ "...";
+		} else {
+			truncatedTitle = nontruncatedTitle;
+		}
+		TextView postTitle = (TextView) (this.findViewById(R.id.PostTitle));
+		postTitle.setText(truncatedTitle);
 		TextView postAuthor = (TextView) (this.findViewById(R.id.PostAuthor));
 		if (currentEntry.getAuthors().get(0).getName().length() != 0) {
 			postAuthor.setText(currentEntry.getAuthors().get(0).getName());
@@ -135,6 +153,24 @@ public class ViewPost extends Activity {
 				.getWidth() - 12;
 		((Button) this.findViewById(R.id.BackToViewBlog)).setWidth(w / 2);
 		((Button) this.findViewById(R.id.Comments)).setWidth(w / 2);
+
+		if (this.getWindow().getWindowManager().getDefaultDisplay()
+				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+			((LinearLayout) this.findViewById(R.id.LayoutForHeadline))
+					.setPadding(0, 0, 0, 0);
+			((LinearLayout) this.findViewById(R.id.LayoutForHeadline))
+					.setBackgroundDrawable(null);
+			((LinearLayout) this.findViewById(R.id.LayoutForHeadline))
+					.removeAllViews();
+			((LinearLayout) this.findViewById(R.id.LayoutForWebWiew))
+					.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+							210));
+		} else if (this.getWindow().getWindowManager().getDefaultDisplay()
+				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+			((LinearLayout) this.findViewById(R.id.LayoutForWebWiew))
+					.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+							260));
+		}
 
 		this.findViewById(R.id.BackToViewBlog).setOnClickListener(
 				new OnClickListener() {

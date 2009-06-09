@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.net.ConnectivityManager;
@@ -17,6 +18,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
 
 import com.google.gdata.data.Feed;
 import com.google.gdata.util.ServiceException;
@@ -71,6 +73,18 @@ public class MainActivity extends Activity {
 		}
 		setting = mDbHelper.fetchSettindById(1);
 		startManagingCursor(setting);
+
+		if (this.getWindow().getWindowManager().getDefaultDisplay()
+				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+			((LinearLayout) this.findViewById(R.id.LayoutForLogo)).setPadding(
+					0, 0, 0, 0);
+			((LinearLayout) this.findViewById(R.id.LayoutForLogo))
+					.setBackgroundDrawable(null);
+			((LinearLayout) this.findViewById(R.id.LayoutForLogo))
+					.removeAllViews();
+		} else if (this.getWindow().getWindowManager().getDefaultDisplay()
+				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+		}
 
 		this.findViewById(R.id.Settings).setOnClickListener(
 				new OnClickListener() {
