@@ -17,7 +17,7 @@
 				android:drawableLeft="@drawable/comments">
 			</Button>
 		</LinearLayout>
-		<LinearLayout android:id="@+id/LinearLayout02"
+		<LinearLayout android:id="@+id/LayoutForHeadline"
 			android:layout_height="wrap_content" android:orientation="vertical"
 			android:layout_width="fill_parent" android:background="@android:drawable/alert_dark_frame"
 			android:layout_gravity="center" android:padding="20px">
@@ -67,7 +67,7 @@
 				</TextView>
 			</LinearLayout>
 		</LinearLayout>
-		<LinearLayout android:id="@+id/LinearLayout02"
+		<LinearLayout android:id="@+id/LayoutForWebWiew"
 			android:orientation="vertical" android:layout_width="fill_parent"
 			android:layout_height="260px" android:background="@android:drawable/alert_dark_frame">
 			<WebView android:id="@+id/webview" android:layout_width="fill_parent"

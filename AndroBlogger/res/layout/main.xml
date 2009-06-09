@@ -10,15 +10,14 @@
 			android:layout_gravity="center" android:layout_width="fill_parent"
 			android:gravity="center" android:background="@android:drawable/alert_dark_frame">
 			<ImageView android:id="@+id/Logo" android:layout_height="wrap_content"
-				android:layout_gravity="center"
-				android:layout_width="wrap_content" android:layout_margin="5px" android:src="@drawable/logoandroblogger"></ImageView>
+				android:layout_gravity="center" android:layout_width="wrap_content"
+				android:layout_margin="5px" android:src="@drawable/androblogger"></ImageView>
 		</LinearLayout>
 		<LinearLayout android:layout_height="wrap_content"
 			android:orientation="vertical" android:background="@android:drawable/alert_dark_frame"
 			android:id="@+id/LayoutForButtons" android:layout_width="fill_parent"
 			android:layout_gravity="center" android:gravity="center"
 			android:padding="15px">
-
 			<Button android:id="@+id/CreateNewPost" android:layout_height="wrap_content"
 				android:width="300px" android:text="Create new post"
 				android:layout_width="fill_parent" android:layout_marginTop="15px"
@@ -35,5 +34,4 @@
 				android:layout_width="fill_parent" android:drawableLeft="@drawable/exit"></Button>
 		</LinearLayout>
 	</LinearLayout>
-
 </ScrollView>

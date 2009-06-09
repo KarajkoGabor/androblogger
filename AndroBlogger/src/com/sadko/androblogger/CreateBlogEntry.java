@@ -2,6 +2,7 @@ package com.sadko.androblogger;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.os.Bundle;
@@ -47,6 +48,13 @@ public class CreateBlogEntry extends Activity {
 				Log.e(TAG, "Exception (DataBase failed)");
 			}
 		}
+		if (this.getWindow().getWindowManager().getDefaultDisplay()
+				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+			((EditText) this.findViewById(R.id.TextPostContent)).setHeight(105);
+		} else if (this.getWindow().getWindowManager().getDefaultDisplay()
+				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+			((EditText) this.findViewById(R.id.TextPostContent)).setHeight(265);
+		}
 		this.findViewById(R.id.BackToMainActivities).setOnClickListener(
 				new OnClickListener() {
 					public void onClick(View v) {
@@ -74,8 +82,8 @@ public class CreateBlogEntry extends Activity {
 								/*********************************************************************/
 								strTitle = postTitle.getText().toString();
 								strContent = postContent.getText().toString();
-								mDbTextHelper.updatePostById((long) 1, strTitle,
-										strContent);
+								mDbTextHelper.updatePostById((long) 1,
+										strTitle, strContent);
 								/*********************************************************************/
 								Log.d(TAG, "Post updated in database.");
 							} catch (SQLException e) {
@@ -128,7 +136,8 @@ public class CreateBlogEntry extends Activity {
 									strTitle = postTitle.getText().toString();
 									strContent = postContent.getText()
 											.toString();
-									mDbTextHelper.createPost(strTitle, strContent);
+									mDbTextHelper.createPost(strTitle,
+											strContent);
 									/*********************************************************************/
 									Log.d(TAG, "Post saved to database.");
 								} catch (SQLException e) {
@@ -328,7 +337,8 @@ public class CreateBlogEntry extends Activity {
 					/*********************************************************************/
 					strTitle = postTitle.getText().toString();
 					strContent = postContent.getText().toString();
-					mDbTextHelper.updatePostById((long) 1, strTitle, strContent);
+					mDbTextHelper
+							.updatePostById((long) 1, strTitle, strContent);
 					/*********************************************************************/
 					Log.d(TAG, "Post updated in database.");
 				} catch (SQLException e) {

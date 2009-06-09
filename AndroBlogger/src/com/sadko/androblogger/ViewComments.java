@@ -17,6 +17,7 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -31,8 +32,10 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.LinearLayout.LayoutParams;
 
 public class ViewComments extends ListActivity {
 	private final String TAG = "ViewComments";
@@ -91,11 +94,44 @@ public class ViewComments extends ListActivity {
 		resultCommentFeed = ViewPost.resultCommentFeed;
 		Log.i(TAG, "ResultCommentFeed obtained from ViewPost");
 
-		TextView postTitle = (TextView) (this.findViewById(R.id.PostTitle));
-		if (currentEntry.getTitle().getPlainText().length() != 0) {
-			postTitle.setText(currentEntry.getTitle().getPlainText());
+		int w = this.getWindow().getWindowManager().getDefaultDisplay()
+				.getWidth() - 12;
+		((Button) this.findViewById(R.id.BackToViewPost)).setWidth(w / 2);
+		((Button) this.findViewById(R.id.RefreshCommentsList)).setWidth(w / 2);
+
+		int maxCharTitle = 30;
+		if (this.getWindow().getWindowManager().getDefaultDisplay()
+				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+			maxCharTitle = 40;
+		} else if (this.getWindow().getWindowManager().getDefaultDisplay()
+				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+			maxCharTitle = 30;
+		}
+		String nontruncatedTitle = null;
+		String truncatedTitle = null;
+		nontruncatedTitle = currentEntry.getTitle().getPlainText();
+		if (nontruncatedTitle.length() == 0) {
+			truncatedTitle = "Title: <Empty title>";
+		} else if (nontruncatedTitle.length() > maxCharTitle) {
+			truncatedTitle = "Title: "
+					+ nontruncatedTitle.substring(0, maxCharTitle) + "...";
 		} else {
-			postTitle.setText("<Empty title>");
+			truncatedTitle = "Title: " + nontruncatedTitle;
+		}
+		TextView postTitle = (TextView) (this.findViewById(R.id.PostTitle));
+		postTitle.setText(truncatedTitle);
+
+		if (this.getWindow().getWindowManager().getDefaultDisplay()
+				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+			((LinearLayout) this.findViewById(R.id.LayoutForHeadline))
+					.setPadding(0, 0, 0, 0);
+			((LinearLayout) this.findViewById(R.id.LayoutForHeadline))
+					.setBackgroundDrawable(null);
+			((LinearLayout) this.findViewById(R.id.LayoutForHeadline))
+					.removeAllViews();
+			((LinearLayout) this.findViewById(R.id.LayoutForComments))
+					.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+							210));
 		}
 		List<Map<String, Object>> resourceNames = new ArrayList<Map<String, Object>>();
 		Map<String, Object> data;
@@ -120,11 +156,6 @@ public class ViewComments extends ListActivity {
 				R.layout.commentrow, new String[]{"line1", "line3", "line2"},
 				new int[]{R.id.text1, R.id.text3, R.id.text2});
 		setListAdapter(notes);
-
-		int w = this.getWindow().getWindowManager().getDefaultDisplay()
-				.getWidth() - 12;
-		((Button) this.findViewById(R.id.BackToViewPost)).setWidth(w / 2);
-		((Button) this.findViewById(R.id.RefreshCommentsList)).setWidth(w / 2);
 
 		this.findViewById(R.id.RefreshCommentsList).setOnClickListener(
 				new OnClickListener() {

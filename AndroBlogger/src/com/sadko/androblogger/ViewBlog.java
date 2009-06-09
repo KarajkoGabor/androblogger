@@ -33,9 +33,11 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.LinearLayout.LayoutParams;
 
 public class ViewBlog extends ListActivity {
 	private final String TAG = "ViewBlog";
@@ -104,6 +106,15 @@ public class ViewBlog extends ListActivity {
 		if (this.getWindow().getWindowManager().getDefaultDisplay()
 				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
 			maxCharTitle = 40;
+			((LinearLayout) this.findViewById(R.id.LayoutForHeadline))
+					.setPadding(0, 0, 0, 0);
+			((LinearLayout) this.findViewById(R.id.LayoutForHeadline))
+					.setBackgroundDrawable(null);
+			((LinearLayout) this.findViewById(R.id.LayoutForHeadline))
+					.removeAllViews();
+			((LinearLayout) this.findViewById(R.id.LayoutForList))
+					.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+							210));
 		} else if (this.getWindow().getWindowManager().getDefaultDisplay()
 				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
 			maxCharTitle = 22;
