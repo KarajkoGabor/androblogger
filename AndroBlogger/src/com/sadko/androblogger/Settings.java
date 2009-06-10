@@ -15,8 +15,6 @@ import android.content.Intent;
 import android.content.DialogInterface.OnDismissListener;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -306,6 +304,10 @@ public class Settings extends Activity {
 										mHandler.post(mFetchResults);
 										attempt++;
 										return;
+									} catch (Exception e) {
+										Log.e(TAG, "Exception: " + e.getMessage());
+										Alert.showAlert(Settings.this, "Network connection failed", "Please, check network settings of your device");
+										finish();
 									}
 								}
 								statusMsg = mHandler.obtainMessage();
@@ -328,6 +330,10 @@ public class Settings extends Activity {
 										Log.e(TAG,
 												"ServiceExceprion (getFeed())");
 										attempt++;
+									} catch (Exception e) {
+										Log.e(TAG, "Exception: " + e.getMessage());
+										Alert.showAlert(Settings.this, "Network connection failed", "Please, check network settings of your device");
+										finish();
 									}
 								}
 								statusMsg = mHandler.obtainMessage();
@@ -399,25 +405,7 @@ public class Settings extends Activity {
 								mHandler.post(mFetchResults);
 							}
 						};
-						try {
-							ConnectivityManager cm = (ConnectivityManager) Settings.this
-									.getSystemService(CONNECTIVITY_SERVICE);
-							NetworkInfo netinfo = cm.getActiveNetworkInfo();
-							if (netinfo.getDetailedState() == NetworkInfo.DetailedState.CONNECTED) {
-								fetchGoogleBlogs.start();
-							} else {
-								Alert.showAlert(Settings.this, "Network connection needed",
-										"Please, connect your device to the Internet");
-							}
-						} catch (NullPointerException e) {
-							Log.e(TAG, "NullPointerException: " + e.getMessage());
-							Alert.showAlert(Settings.this, "Network connection failed", "Please, check network settings of your device");
-							finish();
-						} catch (Exception e) {
-							Log.e(TAG, "Exception: " + e.getMessage());
-							Alert.showAlert(Settings.this, "Network connection failed", "Please, check network settings of your device");
-							finish();
-						}
+						fetchGoogleBlogs.start();
 						verifyProgress
 								.setMessage("Started to verify your blogs...");
 					}

@@ -14,8 +14,6 @@ import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -213,6 +211,10 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 					} catch (com.google.gdata.util.AuthenticationException e) {
 						attempt++;
 						Log.e(TAG, "AuthenticationException " + e.getMessage());
+					} catch (Exception e) {
+						Log.e(TAG, "Exception: " + e.getMessage());
+						Alert.showAlert(PreviewAndPublish.this, "Network connection failed", "Please, check network settings of your device");
+						finish();
 					}
 
 				}
@@ -239,6 +241,10 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 						} catch (IOException e) {
 							Log.e(TAG, "IOException " + e.getMessage());
 							attempt++;
+						} catch (Exception e) {
+							Log.e(TAG, "Exception: " + e.getMessage());
+							Alert.showAlert(PreviewAndPublish.this, "Network connection failed", "Please, check network settings of your device");
+							finish();
 						}
 					}
 					SpannableBufferHelper helper = new SpannableBufferHelper();
@@ -278,6 +284,10 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 						} catch (ServiceException e) {
 							Log.e(TAG, "ServiceException " + e.getMessage());
 							attempt++;
+						} catch (Exception e) {
+							Log.e(TAG, "Exception: " + e.getMessage());
+							Alert.showAlert(PreviewAndPublish.this, "Network connection failed", "Please, check network settings of your device");
+							finish();
 						}
 					}
 				} else {
@@ -297,25 +307,7 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 				mHandler.post(mPublishResults);
 			}
 		};
-		try {
-			ConnectivityManager cm = (ConnectivityManager) PreviewAndPublish.this
-					.getSystemService(CONNECTIVITY_SERVICE);
-			NetworkInfo netinfo = cm.getActiveNetworkInfo();
-			if (netinfo.getDetailedState() == NetworkInfo.DetailedState.CONNECTED) {
-				publish.start();
-			} else {
-				Alert.showAlert(PreviewAndPublish.this, "Network connection needed",
-						"Please, connect your device to the Internet");
-			}
-		} catch (NullPointerException e) {
-			Log.e(TAG, "NullPointerException: " + e.getMessage());
-			Alert.showAlert(PreviewAndPublish.this, "Network connection failed", "Please, check network settings of your device");
-			finish();
-		} catch (Exception e) {
-			Log.e(TAG, "Exception: " + e.getMessage());
-			Alert.showAlert(PreviewAndPublish.this, "Network connection failed", "Please, check network settings of your device");
-			finish();
-		}
+		publish.start();
 		publishProgress.setMessage("Publishing in progress...");
 	}
 	private void showPublishedStatus() {
@@ -344,10 +336,6 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 			dlg.show();
 		} else {
 			attempt = 0;
-			/*
-			 * Alert.showAlert(this, "Publishing failed", "Error code " +
-			 * publishStatus + ")");
-			 */
 			Alert.showAlert(this, "Publishing failed", "Error code "
 					+ publishStatus, "Try again",
 					new DialogInterface.OnClickListener() {

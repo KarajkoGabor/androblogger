@@ -18,8 +18,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -233,6 +231,10 @@ public class ViewPost extends Activity {
 					} catch (com.google.gdata.util.AuthenticationException e) {
 						Log.e(TAG, "AuthenticationException " + e.getMessage());
 						attempt++;
+					} catch (Exception e) {
+						Log.e(TAG, "Exception: " + e.getMessage());
+						Alert.showAlert(ViewPost.this, "Network connection failed", "Please, check network settings of your device");
+						finish();
 					}
 				}
 				viewStatus = 1;
@@ -262,6 +264,10 @@ public class ViewPost extends Activity {
 							e.printStackTrace();
 							attempt++;
 							Log.e(TAG, "IOException " + e.getMessage());
+						} catch (Exception e) {
+							Log.e(TAG, "Exception: " + e.getMessage());
+							Alert.showAlert(ViewPost.this, "Network connection failed", "Please, check network settings of your device");
+							finish();
 						}
 					}
 
@@ -288,15 +294,7 @@ public class ViewPost extends Activity {
 				}
 			}
 		};
-		ConnectivityManager cm = (ConnectivityManager) ViewPost.this
-				.getSystemService(CONNECTIVITY_SERVICE);
-		NetworkInfo netinfo = cm.getActiveNetworkInfo();
-		if (netinfo.getDetailedState() == NetworkInfo.DetailedState.CONNECTED) {
-			viewThread.start();
-		} else {
-			Alert.showAlert(ViewPost.this, "Network connection needed",
-					"Please, connect your device to the Internet");
-		}
+		viewThread.start();
 		viewProgress.setMessage("Viewing in progress...");
 	}
 
