@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -180,7 +178,12 @@ public class MainActivity extends Activity {
 					} catch (com.google.gdata.util.AuthenticationException e) {
 						Log.e(TAG, "AuthenticationException " + e.getMessage());
 						attempt++;
+					} catch (Exception e) {
+						Log.e(TAG, "Exception: " + e.getMessage());
+						Alert.showAlert(MainActivity.this, "Network connection failed", "Please, check network settings of your device");
+						finish();
 					}
+					
 				}
 				viewStatus = 1;
 				Log.d(TAG, "Got auth token:" + auth_id);
@@ -211,6 +214,10 @@ public class MainActivity extends Activity {
 							Log
 									.e(TAG,
 											"Exception (getAllPosts(username, password))");
+						} catch (Exception e) {
+							Log.e(TAG, "Exception: " + e.getMessage());
+							Alert.showAlert(MainActivity.this, "Network connection failed", "Please, check network settings of your device");
+							finish();
 						}
 					}
 				} else {
@@ -236,25 +243,7 @@ public class MainActivity extends Activity {
 				}
 			}
 		};
-		try {
-			ConnectivityManager cm = (ConnectivityManager) MainActivity.this
-					.getSystemService(CONNECTIVITY_SERVICE);
-			NetworkInfo netinfo = cm.getActiveNetworkInfo();
-			if (netinfo.getDetailedState() == NetworkInfo.DetailedState.CONNECTED) {
-				viewThread.start();
-			} else {
-				Alert.showAlert(MainActivity.this, "Network connection needed",
-						"Please, connect your device to the Internet");
-			}
-		} catch (NullPointerException e) {
-			Log.e(TAG, "NullPointerException: " + e.getMessage());
-			Alert.showAlert(MainActivity.this, "Network connection failed", "Please, check network settings of your device");
-			finish();
-		} catch (Exception e) {
-			Log.e(TAG, "Exception: " + e.getMessage());
-			Alert.showAlert(MainActivity.this, "Network connection failed", "Please, check network settings of your device");
-			finish();
-		}
+		viewThread.start();
 		viewProgress.setMessage("Viewing in progress...");
 	}
 
