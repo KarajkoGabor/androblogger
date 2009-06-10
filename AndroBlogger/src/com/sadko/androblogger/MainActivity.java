@@ -16,6 +16,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
@@ -267,5 +269,16 @@ public class MainActivity extends Activity {
 						}
 					});
 		}
+	}
+	
+	public boolean onCreateOptionsMenu (Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		MenuItem item = menu.add("About");
+		item.setIcon(R.drawable.info);
+		return true;
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+		return super.onOptionsItemSelected(item);
 	}
 }
