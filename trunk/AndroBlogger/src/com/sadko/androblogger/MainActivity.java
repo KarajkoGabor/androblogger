@@ -35,7 +35,7 @@ public class MainActivity extends Activity {
 	private DBAdapter mDbHelper;
 	private static Cursor setting = null;
 	int viewStatus = 0;
-	public static final int AMOUNTOFATTEMPTS = 5;
+	public static final int AMOUNTOFATTEMPTS = 7;
 	private int attempt = 0;
 
 	final Handler mHandler = new Handler() {
@@ -236,14 +236,35 @@ public class MainActivity extends Activity {
 				}
 			}
 		};
-		ConnectivityManager cm = (ConnectivityManager) MainActivity.this
-				.getSystemService(CONNECTIVITY_SERVICE);
-		NetworkInfo netinfo = cm.getActiveNetworkInfo();
-		if (netinfo.getDetailedState() == NetworkInfo.DetailedState.CONNECTED) {
-			viewThread.start();
-		} else {
-			Alert.showAlert(MainActivity.this, "Network connection needed",
-					"Please, connect your device to the Internet");
+		try {
+			ConnectivityManager cm = (ConnectivityManager) MainActivity.this
+					.getSystemService(CONNECTIVITY_SERVICE);
+			NetworkInfo netinfo = cm.getActiveNetworkInfo();
+			if (netinfo.getDetailedState() == NetworkInfo.DetailedState.CONNECTED) {
+				viewThread.start();
+			} else {
+				Alert.showAlert(MainActivity.this, "Network connection needed",
+						"Please, connect your device to the Internet");
+			}
+		} catch (NullPointerException e) {
+			Log.e(TAG, "NullPointerException: " + e.getMessage());
+			Alert.showAlert(MainActivity.this, "Network connection failed", "Please, check network settings of your device");
+			finish();
+		} catch (Exception e) {
+			Log.e(TAG, "Exception: " + e.getMessage());
+			Alert.showAlert(MainActivity.this, "Network connection failed", "Please, check network settings of your device", "Try again",
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+							viewBlogPosts();
+						}
+					}, "Cancel", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.cancel();
+						}
+					});
 		}
 		viewProgress.setMessage("Viewing in progress...");
 	}
@@ -270,14 +291,14 @@ public class MainActivity extends Activity {
 					});
 		}
 	}
-	
-	public boolean onCreateOptionsMenu (Menu menu) {
+
+	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		MenuItem item = menu.add("About");
 		item.setIcon(R.drawable.info);
 		return true;
 	}
-	
+
 	public boolean onOptionsItemSelected(MenuItem item) {
 		return super.onOptionsItemSelected(item);
 	}

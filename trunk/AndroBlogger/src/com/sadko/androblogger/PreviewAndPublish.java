@@ -297,17 +297,25 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 				mHandler.post(mPublishResults);
 			}
 		};
-		ConnectivityManager cm = (ConnectivityManager) PreviewAndPublish.this
-				.getSystemService(CONNECTIVITY_SERVICE);
-		NetworkInfo netinfo = cm.getActiveNetworkInfo();
-		if (netinfo.getDetailedState() == NetworkInfo.DetailedState.CONNECTED) {
-			publish.start();
-		} else {
-			Alert.showAlert(PreviewAndPublish.this,
-					"Network connection needed",
-					"Please, connect your device to the Internet");
+		try {
+			ConnectivityManager cm = (ConnectivityManager) PreviewAndPublish.this
+					.getSystemService(CONNECTIVITY_SERVICE);
+			NetworkInfo netinfo = cm.getActiveNetworkInfo();
+			if (netinfo.getDetailedState() == NetworkInfo.DetailedState.CONNECTED) {
+				publish.start();
+			} else {
+				Alert.showAlert(PreviewAndPublish.this, "Network connection needed",
+						"Please, connect your device to the Internet");
+			}
+		} catch (NullPointerException e) {
+			Log.e(TAG, "NullPointerException: " + e.getMessage());
+			Alert.showAlert(PreviewAndPublish.this, "Network connection failed", "Please, check network settings of your device");
+			finish();
+		} catch (Exception e) {
+			Log.e(TAG, "Exception: " + e.getMessage());
+			Alert.showAlert(PreviewAndPublish.this, "Network connection failed", "Please, check network settings of your device");
+			finish();
 		}
-
 		publishProgress.setMessage("Publishing in progress...");
 	}
 	private void showPublishedStatus() {
