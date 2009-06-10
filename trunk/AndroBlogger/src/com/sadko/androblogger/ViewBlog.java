@@ -141,7 +141,7 @@ public class ViewBlog extends ListActivity {
 					truncatedTitle = nontruncatedTitle;
 				}
 				data.put("line1", truncatedTitle);
-				dateTime = entry.getPublished();
+				dateTime = entry.getUpdated();
 				dateTime
 						.setTzShift(TimeZone.getDefault().getRawOffset() / 60000);
 				dateAndTime = dateTime.toString();
