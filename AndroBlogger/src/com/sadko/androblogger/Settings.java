@@ -399,16 +399,24 @@ public class Settings extends Activity {
 								mHandler.post(mFetchResults);
 							}
 						};
-						ConnectivityManager cm = (ConnectivityManager) Settings.this
-								.getSystemService(CONNECTIVITY_SERVICE);
-						NetworkInfo netinfo = cm.getActiveNetworkInfo();
-						if (netinfo.getDetailedState() == NetworkInfo.DetailedState.CONNECTED) {
-							fetchGoogleBlogs.start();
-						} else {
-							Alert
-									.showAlert(Settings.this,
-											"Network connection needed",
-											"Please, connect your device to the Internet");
+						try {
+							ConnectivityManager cm = (ConnectivityManager) Settings.this
+									.getSystemService(CONNECTIVITY_SERVICE);
+							NetworkInfo netinfo = cm.getActiveNetworkInfo();
+							if (netinfo.getDetailedState() == NetworkInfo.DetailedState.CONNECTED) {
+								fetchGoogleBlogs.start();
+							} else {
+								Alert.showAlert(Settings.this, "Network connection needed",
+										"Please, connect your device to the Internet");
+							}
+						} catch (NullPointerException e) {
+							Log.e(TAG, "NullPointerException: " + e.getMessage());
+							Alert.showAlert(Settings.this, "Network connection failed", "Please, check network settings of your device");
+							finish();
+						} catch (Exception e) {
+							Log.e(TAG, "Exception: " + e.getMessage());
+							Alert.showAlert(Settings.this, "Network connection failed", "Please, check network settings of your device");
+							finish();
 						}
 						verifyProgress
 								.setMessage("Started to verify your blogs...");
