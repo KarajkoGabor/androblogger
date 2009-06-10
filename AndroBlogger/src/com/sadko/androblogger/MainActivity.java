@@ -252,19 +252,8 @@ public class MainActivity extends Activity {
 			finish();
 		} catch (Exception e) {
 			Log.e(TAG, "Exception: " + e.getMessage());
-			Alert.showAlert(MainActivity.this, "Network connection failed", "Please, check network settings of your device", "Try again",
-					new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
-							viewBlogPosts();
-						}
-					}, "Cancel", new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.cancel();
-						}
-					});
+			Alert.showAlert(MainActivity.this, "Network connection failed", "Please, check network settings of your device");
+			finish();
 		}
 		viewProgress.setMessage("Viewing in progress...");
 	}
