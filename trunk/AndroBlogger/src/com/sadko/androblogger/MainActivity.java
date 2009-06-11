@@ -65,15 +65,6 @@ public class MainActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		mDbHelper = new DBAdapter(this);
-		try {
-			mDbHelper.open();
-		} catch (SQLException e) {
-			Log.e(TAG, "Database has not opened");
-		}
-		setting = mDbHelper.fetchSettindById(1);
-		startManagingCursor(setting);
-
 		if (this.getWindow().getWindowManager().getDefaultDisplay()
 				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
 			((LinearLayout) this.findViewById(R.id.LayoutForLogo)).setPadding(
@@ -98,14 +89,24 @@ public class MainActivity extends Activity {
 		this.findViewById(R.id.CreateNewPost).setOnClickListener(
 				new OnClickListener() {
 					public void onClick(View v) {
+						mDbHelper = new DBAdapter(MainActivity.this);
+						try {
+							mDbHelper.open();
+						} catch (SQLException e) {
+							Log.e(TAG, "Database has not opened");
+						}
+						setting = mDbHelper.fetchSettindById(1);
+						startManagingCursor(setting);
 						if (setting.getCount() != 0) {
 							Intent i = new Intent(MainActivity.this,
 									CreateBlogEntry.class);
-							String[] s = {"", ""};
-							i.putExtra("PostTitleAndContent", s);
+							mDbHelper.close();
+							setting.close();
 							startActivity(i);
 							finish();
 						} else {
+							mDbHelper.close();
+							setting.close();
 							Alert
 									.showAlert(MainActivity.this,
 											"Profile is not created",
@@ -117,9 +118,21 @@ public class MainActivity extends Activity {
 		this.findViewById(R.id.ViewBlog).setOnClickListener(
 				new OnClickListener() {
 					public void onClick(View v) {
+						mDbHelper = new DBAdapter(MainActivity.this);
+						try {
+							mDbHelper.open();
+						} catch (SQLException e) {
+							Log.e(TAG, "Database has not opened");
+						}
+						setting = mDbHelper.fetchSettindById(1);
+						startManagingCursor(setting);
 						if (setting.getCount() != 0) {
+							mDbHelper.close();
+							setting.close();
 							viewBlogPosts();
 						} else {
+							mDbHelper.close();
+							setting.close();
 							Alert
 									.showAlert(MainActivity.this,
 											"Profile is not created",
@@ -151,10 +164,20 @@ public class MainActivity extends Activity {
 				statusMsg.setData(status);
 				mHandler.sendMessage(statusMsg);
 				boolean viewOk = false;
+				mDbHelper = new DBAdapter(MainActivity.this);
+				try {
+					mDbHelper.open();
+				} catch (SQLException e) {
+					Log.e(TAG, "Database has not opened");
+				}
+				setting = mDbHelper.fetchSettindById(1);
+				startManagingCursor(setting);
 				String username = setting.getString(setting
 						.getColumnIndexOrThrow(DBAdapter.KEY_LOGIN));
 				String password = setting.getString(setting
 						.getColumnIndexOrThrow(DBAdapter.KEY_PASSWORD));
+				mDbHelper.close();
+				setting.close();
 				BlogInterface blogapi = null;
 				BlogConfigBLOGGER.BlogInterfaceType typeEnum = BlogConfigBLOGGER
 						.getInterfaceTypeByNumber(1);
@@ -180,10 +203,13 @@ public class MainActivity extends Activity {
 						attempt++;
 					} catch (Exception e) {
 						Log.e(TAG, "Exception: " + e.getMessage());
-						Alert.showAlert(MainActivity.this, "Network connection failed", "Please, check network settings of your device");
+						Alert
+								.showAlert(MainActivity.this,
+										"Network connection failed",
+										"Please, check network settings of your device");
 						finish();
 					}
-					
+
 				}
 				viewStatus = 1;
 				Log.d(TAG, "Got auth token:" + auth_id);
@@ -216,7 +242,10 @@ public class MainActivity extends Activity {
 											"Exception (getAllPosts(username, password))");
 						} catch (Exception e) {
 							Log.e(TAG, "Exception: " + e.getMessage());
-							Alert.showAlert(MainActivity.this, "Network connection failed", "Please, check network settings of your device");
+							Alert
+									.showAlert(MainActivity.this,
+											"Network connection failed",
+											"Please, check network settings of your device");
 							finish();
 						}
 					}
@@ -250,10 +279,6 @@ public class MainActivity extends Activity {
 	private void showViewStatus() {
 		viewProgress.dismiss();
 		if (viewStatus != 5) {
-			/*
-			 * Alert.showAlert(this, "Viewing failed", "Error code " +
-			 * viewStatus + "\nTry again.");
-			 */
 			Alert.showAlert(this, "Viewing failed", "Error code " + viewStatus,
 					"Try again", new DialogInterface.OnClickListener() {
 						@Override
