@@ -1,4 +1,8 @@
+
 http://androblogger.googlecode.com/files/14.png
-http://androblogger.googlecode.com/files/use-case2.jpg
-http://androblogger.googlecode.com/files/use-case3.jpg
-http://androblogger.googlecode.com/files/use-case4.jpg
+With this program on your Android device you can view your blog on Blogger.com
+http://androblogger.googlecode.com/files/17.png
+You can also create new posts
+http://androblogger.googlecode.com/8.png
+And view comments
+http://androblogger.googlecode.com/files/19.png
