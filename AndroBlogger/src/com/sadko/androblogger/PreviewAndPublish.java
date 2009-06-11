@@ -79,14 +79,6 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.previewandpublish);
-		mDbHelper = new DBAdapter(this);
-		try {
-			mDbHelper.open();
-		} catch (SQLException e) {
-			Log.e(TAG, "Database has not opened");
-		}
-		setting = mDbHelper.fetchSettindById(1);
-		startManagingCursor(setting);
 		mDbTextHelper = new DBTextAdapter(this);
 		try {
 			mDbTextHelper.open();
@@ -109,6 +101,8 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 				Log.e(TAG, "Exception (DataBase failed)");
 			}
 		}
+		mDbTextHelper.close();
+		post.close();
 		EditText textTitle = (EditText) this.findViewById(R.id.PreviewTitle);
 		textTitle.setText(title);
 		textTitle.setTextColor(Color.BLACK);
@@ -121,12 +115,12 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 
 		if (this.getWindow().getWindowManager().getDefaultDisplay()
 				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-			((EditText)this.findViewById(R.id.PreviewContent)).setHeight(105);
+			((EditText) this.findViewById(R.id.PreviewContent)).setHeight(105);
 		} else if (this.getWindow().getWindowManager().getDefaultDisplay()
 				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-			((EditText)this.findViewById(R.id.PreviewContent)).setHeight(265);
+			((EditText) this.findViewById(R.id.PreviewContent)).setHeight(265);
 		}
-		
+
 		Button publishButton = (Button) findViewById(R.id.Publish);
 
 		int w = this.getWindow().getWindowManager().getDefaultDisplay()
@@ -198,6 +192,14 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 				while ((attempt <= MainActivity.AMOUNTOFATTEMPTS)
 						&& (!authFlag)) {
 					try {
+						mDbHelper = new DBAdapter(PreviewAndPublish.this);
+						try {
+							mDbHelper.open();
+						} catch (SQLException e) {
+							Log.e(TAG, "Database has not opened");
+						}
+						setting = mDbHelper.fetchSettindById(1);
+						startManagingCursor(setting);
 						auth_id = blogapi
 								.getAuthId(
 										setting
@@ -206,14 +208,21 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 										setting
 												.getString(setting
 														.getColumnIndexOrThrow(DBAdapter.KEY_PASSWORD)));
+						mDbHelper.close();
+						setting.close();
 						authFlag = true;
 						attempt = 0;
 					} catch (com.google.gdata.util.AuthenticationException e) {
 						attempt++;
 						Log.e(TAG, "AuthenticationException " + e.getMessage());
+					} catch (SQLException e) {
+						Log.e(TAG, "SQLException: " + e.getMessage());
 					} catch (Exception e) {
 						Log.e(TAG, "Exception: " + e.getMessage());
-						Alert.showAlert(PreviewAndPublish.this, "Network connection failed", "Please, check network settings of your device");
+						Alert
+								.showAlert(PreviewAndPublish.this,
+										"Network connection failed",
+										"Please, check network settings of your device");
 						finish();
 					}
 
@@ -243,7 +252,10 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 							attempt++;
 						} catch (Exception e) {
 							Log.e(TAG, "Exception: " + e.getMessage());
-							Alert.showAlert(PreviewAndPublish.this, "Network connection failed", "Please, check network settings of your device");
+							Alert
+									.showAlert(PreviewAndPublish.this,
+											"Network connection failed",
+											"Please, check network settings of your device");
 							finish();
 						}
 					}
@@ -263,6 +275,14 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 					while ((attempt <= MainActivity.AMOUNTOFATTEMPTS)
 							&& (!authFlag)) {
 						try {
+							mDbHelper = new DBAdapter(PreviewAndPublish.this);
+							try {
+								mDbHelper.open();
+							} catch (SQLException e) {
+								Log.e(TAG, "Database has not opened");
+							}
+							setting = mDbHelper.fetchSettindById(1);
+							startManagingCursor(setting);
 							publishOk = blogapi
 									.createPost(
 											thread_parent,
@@ -279,19 +299,30 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 													.getString(setting
 															.getColumnIndexOrThrow(DBAdapter.KEY_PASSWORD)),
 											myEntry.isDraft());
+							mDbHelper.close();
+							setting.close();
 							authFlag = true;
 							attempt = 0;
 						} catch (ServiceException e) {
 							Log.e(TAG, "ServiceException " + e.getMessage());
 							attempt++;
+						} catch (SQLException e) {
+							Log.e(TAG, "SQLException: " + e.getMessage());
 						} catch (Exception e) {
 							Log.e(TAG, "Exception: " + e.getMessage());
-							Alert.showAlert(PreviewAndPublish.this, "Network connection failed", "Please, check network settings of your device");
+							Alert
+									.showAlert(PreviewAndPublish.this,
+											"Network connection failed",
+											"Please, check network settings of your device");
+							mDbHelper.close();
+							setting.close();
 							finish();
 						}
 					}
 				} else {
 					publishStatus = 3;
+					mDbHelper.close();
+					setting.close();
 				}
 				status.putString(MSG_KEY, "5");
 				statusMsg = mHandler.obtainMessage();
@@ -314,11 +345,21 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 		publishProgress.dismiss();
 		if (publishStatus == 5) {
 			try {
+				mDbTextHelper = new DBTextAdapter(this);
+				try {
+					mDbTextHelper.open();
+				} catch (SQLException e) {
+					Log.e(TAG, "Database has not opened");
+				}
+				post = mDbTextHelper.fetchPostdById(1);
+				startManagingCursor(post);
 				mDbTextHelper.updatePostById((long) 1, "", "");
+				mDbTextHelper.close();
+				post.close();
 			} catch (SQLException e) {
-				Log.e(TAG, "SQLException: "+e.getMessage());
+				Log.e(TAG, "SQLException: " + e.getMessage());
 			} catch (Exception e) {
-				Log.e(TAG, "Exception: "+e.getMessage());
+				Log.e(TAG, "Exception: " + e.getMessage());
 			}
 			final Dialog dlg = new AlertDialog.Builder(PreviewAndPublish.this)
 					.setIcon(com.sadko.androblogger.R.drawable.ic_dialog_alert)
@@ -335,6 +376,8 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 			});
 			dlg.show();
 		} else {
+			mDbTextHelper.close();
+			post.close();
 			attempt = 0;
 			Alert.showAlert(this, "Publishing failed", "Error code "
 					+ publishStatus, "Try again",

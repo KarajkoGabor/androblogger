@@ -192,6 +192,8 @@ public class ViewComments extends ListActivity {
 						.getColumnIndexOrThrow(DBAdapter.KEY_LOGIN));
 				String password = setting.getString(setting
 						.getColumnIndexOrThrow(DBAdapter.KEY_PASSWORD));
+				mDbHelper.close();
+				setting.close();
 				String postID = currentEntry.getId().split("post-")[1];
 				BlogInterface blogapi = null;
 				BlogConfigBLOGGER.BlogInterfaceType typeEnum = BlogConfigBLOGGER
@@ -217,7 +219,10 @@ public class ViewComments extends ListActivity {
 						attempt++;
 					} catch (Exception e) {
 						Log.e(TAG, "Exception: " + e.getMessage());
-						Alert.showAlert(ViewComments.this, "Network connection failed", "Please, check network settings of your device");
+						Alert
+								.showAlert(ViewComments.this,
+										"Network connection failed",
+										"Please, check network settings of your device");
 						finish();
 					}
 				}
@@ -251,7 +256,10 @@ public class ViewComments extends ListActivity {
 							Log.e(TAG, "IOException " + e.getMessage());
 						} catch (Exception e) {
 							Log.e(TAG, "Exception: " + e.getMessage());
-							Alert.showAlert(ViewComments.this, "Network connection failed", "Please, check network settings of your device");
+							Alert
+									.showAlert(ViewComments.this,
+											"Network connection failed",
+											"Please, check network settings of your device");
 							finish();
 						}
 					}

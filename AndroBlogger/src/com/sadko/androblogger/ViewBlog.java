@@ -214,6 +214,8 @@ public class ViewBlog extends ListActivity {
 						.getColumnIndexOrThrow(DBAdapter.KEY_LOGIN));
 				String password = setting.getString(setting
 						.getColumnIndexOrThrow(DBAdapter.KEY_PASSWORD));
+				mDbHelper.close();
+				setting.close();
 				BlogInterface blogapi = null;
 				BlogConfigBLOGGER.BlogInterfaceType typeEnum = BlogConfigBLOGGER
 						.getInterfaceTypeByNumber(1);
@@ -239,7 +241,10 @@ public class ViewBlog extends ListActivity {
 						attempt++;
 					} catch (Exception e) {
 						Log.e(TAG, "Exception: " + e.getMessage());
-						Alert.showAlert(ViewBlog.this, "Network connection failed", "Please, check network settings of your device");
+						Alert
+								.showAlert(ViewBlog.this,
+										"Network connection failed",
+										"Please, check network settings of your device");
 						finish();
 					}
 				}
@@ -274,7 +279,10 @@ public class ViewBlog extends ListActivity {
 											"Exception (getAllPosts(username, password))");
 						} catch (Exception e) {
 							Log.e(TAG, "Exception: " + e.getMessage());
-							Alert.showAlert(ViewBlog.this, "Network connection failed", "Please, check network settings of your device");
+							Alert
+									.showAlert(ViewBlog.this,
+											"Network connection failed",
+											"Please, check network settings of your device");
 							finish();
 						}
 					}

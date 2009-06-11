@@ -182,16 +182,28 @@ public class Settings extends Activity {
 				Log.e(TAG, "Exception (DataBase failed)");
 			}
 		}
+		mDbHelper.close();
+		setting.close();
 		((EditText) this.findViewById(R.id.Username))
 				.setOnKeyListener(new OnKeyListener() {
 					@Override
 					public boolean onKey(View v, int keyCode, KeyEvent event) {
 						((Button) Settings.this.findViewById(R.id.Verify))
 								.setEnabled(true);
+						mDbHelper = new DBAdapter(Settings.this);
+						try {
+							mDbHelper.open();
+						} catch (SQLException e) {
+							Log.e(TAG, "Database has not opened");
+						}
+						setting = mDbHelper.fetchSettindById(1);
+						startManagingCursor(setting);
 						if (setting.getCount() != 0) {
 							((Button) Settings.this.findViewById(R.id.Save))
 									.setText("Update");
 						}
+						mDbHelper.close();
+						setting.close();
 						return false;
 					}
 				});
@@ -201,10 +213,20 @@ public class Settings extends Activity {
 					public boolean onKey(View v, int keyCode, KeyEvent event) {
 						((Button) Settings.this.findViewById(R.id.Verify))
 								.setEnabled(true);
+						mDbHelper = new DBAdapter(Settings.this);
+						try {
+							mDbHelper.open();
+						} catch (SQLException e) {
+							Log.e(TAG, "Database has not opened");
+						}
+						setting = mDbHelper.fetchSettindById(1);
+						startManagingCursor(setting);
 						if (setting.getCount() != 0) {
 							((Button) Settings.this.findViewById(R.id.Save))
 									.setText("Update");
 						}
+						mDbHelper.close();
+						setting.close();
 						return false;
 					}
 				});
@@ -305,8 +327,13 @@ public class Settings extends Activity {
 										attempt++;
 										return;
 									} catch (Exception e) {
-										Log.e(TAG, "Exception: " + e.getMessage());
-										Alert.showAlert(Settings.this, "Network connection failed", "Please, check network settings of your device");
+										Log.e(TAG, "Exception: "
+												+ e.getMessage());
+										Alert
+												.showAlert(
+														Settings.this,
+														"Network connection failed",
+														"Please, check network settings of your device");
 										finish();
 									}
 								}
@@ -331,8 +358,13 @@ public class Settings extends Activity {
 												"ServiceExceprion (getFeed())");
 										attempt++;
 									} catch (Exception e) {
-										Log.e(TAG, "Exception: " + e.getMessage());
-										Alert.showAlert(Settings.this, "Network connection failed", "Please, check network settings of your device");
+										Log.e(TAG, "Exception: "
+												+ e.getMessage());
+										Alert
+												.showAlert(
+														Settings.this,
+														"Network connection failed",
+														"Please, check network settings of your device");
 										finish();
 									}
 								}
@@ -440,9 +472,19 @@ public class Settings extends Activity {
 					return;
 				}
 				final Dialog dlg;
+				mDbHelper = new DBAdapter(Settings.this);
+				try {
+					mDbHelper.open();
+				} catch (SQLException e) {
+					Log.e(TAG, "Database has not opened");
+				}
+				setting = mDbHelper.fetchSettindById(1);
+				startManagingCursor(setting);
 				if (setting.getCount() == 0) {
 					try {
 						mDbHelper.createSetting(usernameStr, passwordStr);
+						mDbHelper.close();
+						setting.close();
 						Log.d(TAG, "Blog config saved to database.");
 						dlg = new AlertDialog.Builder(Settings.this)
 								.setIcon(
@@ -471,6 +513,8 @@ public class Settings extends Activity {
 					try {
 						mDbHelper.updateSettingById((long) 1, usernameStr,
 								passwordStr);
+						mDbHelper.close();
+						setting.close();
 						Log.d(TAG, "Blog config updated.");
 						dlg = new AlertDialog.Builder(Settings.this)
 								.setIcon(
@@ -496,7 +540,6 @@ public class Settings extends Activity {
 										"updateSettingById (updateSettingById(rowId, username, password))");
 					}
 				}
-
 			}
 		});
 	}
@@ -504,6 +547,8 @@ public class Settings extends Activity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			Intent i = new Intent(Settings.this, MainActivity.class);
+			mDbHelper.close();
+			setting.close();
 			startActivity(i);
 			finish();
 			return true;
