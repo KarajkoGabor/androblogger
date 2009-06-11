@@ -298,7 +298,7 @@ public class MainActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		MenuItem item = menu.add("About");
-		item.setIcon(R.drawable.info);
+		item.setIcon(android.R.drawable.ic_menu_info_details);
 		return true;
 	}
 
