@@ -123,6 +123,7 @@ public class Settings extends Activity {
 						.findViewById(R.id.Password);
 				Button verifyButton = (Button) Settings.this
 						.findViewById(R.id.Verify);
+				((Button) Settings.this.findViewById(R.id.Save)).setEnabled(true);
 				if (username != null) {
 					username.setEnabled(false);
 				}
@@ -135,21 +136,27 @@ public class Settings extends Activity {
 			} else if (verifyStatus == 6) {
 				Alert.showAlert(Settings.this, "Authentication failed",
 						"Can't find any blogs for this user (null answer).");
+				((Button) Settings.this.findViewById(R.id.Save)).setEnabled(false);
 			} else if (verifyStatus == 7) {
 				Alert.showAlert(Settings.this, "Authentication failed",
 						"Can't find any blogs for this user.");
+				((Button) Settings.this.findViewById(R.id.Save)).setEnabled(false);
 			} else if (verifyStatus == 8) {
 				Alert.showAlert(Settings.this, "Authentication failed",
 						"Can't extract blog names from respose.");
+				((Button) Settings.this.findViewById(R.id.Save)).setEnabled(false);
 			} else if (verifyStatus == 9) {
 				Alert.showAlert(Settings.this, "Authentication failed",
 						"Can't extract blog ids from response.");
+				((Button) Settings.this.findViewById(R.id.Save)).setEnabled(false);
 			} else if (verifyStatus == 10) {
 				Alert.showAlert(Settings.this, "Authentication failed",
 						"Did you enter the username and password correctly?");
+				((Button) Settings.this.findViewById(R.id.Save)).setEnabled(false);
 			} else {
 				Alert.showAlert(Settings.this, "Authentication failed",
 						"Error code " + verifyStatus);
+				((Button) Settings.this.findViewById(R.id.Save)).setEnabled(false);
 			}
 		}
 	};
@@ -174,7 +181,7 @@ public class Settings extends Activity {
 				((EditText) this.findViewById(R.id.Password))
 						.setText(setting.getString(setting
 								.getColumnIndexOrThrow(DBAdapter.KEY_PASSWORD)));
-				((Button) this.findViewById(R.id.Save)).setEnabled(false);
+				// ((Button) this.findViewById(R.id.Save)).setEnabled(false);
 			} catch (IllegalArgumentException e) {
 				// Log.e(TAG, "IllegalArgumentException (DataBase failed)");
 			} catch (Exception e) {
@@ -456,14 +463,10 @@ public class Settings extends Activity {
 				String usernameStr = textUsername.getText().toString();
 				String passwordStr = textPassword.getText().toString();
 				if (usernameStr.length() < 1) {
-					Alert.showAlert(Settings.this, "Empty username",
-							"You need to have a username for this blog.");
-					return;
+					usernameStr = "";
 				}
 				if (passwordStr.length() < 1) {
-					Alert.showAlert(Settings.this, "Empty password",
-							"You need to have a password for this blog.");
-					return;
+					passwordStr = "";
 				}
 				final Dialog dlg;
 				mDbHelper = new DBAdapter(Settings.this);

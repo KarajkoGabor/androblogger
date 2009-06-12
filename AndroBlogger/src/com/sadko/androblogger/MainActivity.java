@@ -97,12 +97,26 @@ public class MainActivity extends Activity {
 						setting = mDbHelper.fetchSettindById(1);
 						startManagingCursor(setting);
 						if (setting.getCount() != 0) {
-							Intent i = new Intent(MainActivity.this,
-									CreateBlogEntry.class);
-							mDbHelper.close();
-							setting.close();
-							startActivity(i);
-							finish();
+							if ((setting
+									.getString(setting
+											.getColumnIndexOrThrow(DBAdapter.KEY_LOGIN)).length() == 0)
+									&& (setting
+											.getString(setting
+													.getColumnIndexOrThrow(DBAdapter.KEY_PASSWORD)).length() == 0)) {
+								mDbHelper.close();
+								setting.close();
+								Alert
+								.showAlert(MainActivity.this,
+										"Profile is not created",
+										"Please, input 'login/password' in settings");
+							} else {
+								Intent i = new Intent(MainActivity.this,
+										CreateBlogEntry.class);
+								mDbHelper.close();
+								setting.close();
+								startActivity(i);
+								finish();
+							}
 						} else {
 							mDbHelper.close();
 							setting.close();
@@ -126,9 +140,23 @@ public class MainActivity extends Activity {
 						setting = mDbHelper.fetchSettindById(1);
 						startManagingCursor(setting);
 						if (setting.getCount() != 0) {
-							mDbHelper.close();
-							setting.close();
-							viewBlogPosts();
+							if ((setting
+									.getString(setting
+											.getColumnIndexOrThrow(DBAdapter.KEY_LOGIN)).length() == 0)
+									&& (setting
+											.getString(setting
+													.getColumnIndexOrThrow(DBAdapter.KEY_PASSWORD)).length() == 0)) {
+								mDbHelper.close();
+								setting.close();
+								Alert
+								.showAlert(MainActivity.this,
+										"Profile is not created",
+										"Please, input 'login/password' in settings");
+							} else {
+								mDbHelper.close();
+								setting.close();
+								viewBlogPosts();
+							}
 						} else {
 							mDbHelper.close();
 							setting.close();

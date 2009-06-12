@@ -42,7 +42,7 @@
 			</Button>
 			<Button android:id="@+id/Save" android:layout_height="wrap_content"
 				android:text="Save" android:layout_width="wrap_content"
-				android:enabled="false" android:drawableLeft="@drawable/save">
+				android:drawableLeft="@drawable/save">
 			</Button>
 		</LinearLayout>
 	</LinearLayout>
