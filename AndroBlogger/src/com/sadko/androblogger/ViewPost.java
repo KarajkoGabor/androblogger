@@ -21,8 +21,7 @@ import android.database.SQLException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
-import android.util.Log;
+import android.os.Message; //import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,7 +33,7 @@ import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
 
 public class ViewPost extends Activity {
-	private final String TAG = "ViewPost";
+	// private final String TAG = "ViewPost";
 	private final String MSG_KEY = "value";
 	private ProgressDialog viewProgress = null;
 	int viewStatus = 0;
@@ -80,13 +79,13 @@ public class ViewPost extends Activity {
 		try {
 			mDbHelper.open();
 		} catch (SQLException e) {
-			Log.e(TAG, "Database has not opened");
+			// Log.e(TAG, "Database has not opened");
 		}
 		setting = mDbHelper.fetchSettindById(1);
 		startManagingCursor(setting);
 
 		currentEntry = ViewBlog.currentEntry;
-		Log.i(TAG, "CurrentEntry obtained from ViewBlog");
+		// Log.i(TAG, "CurrentEntry obtained from ViewBlog");
 
 		int maxCharTitle = 30;
 		if (this.getWindow().getWindowManager().getDefaultDisplay()
@@ -215,7 +214,7 @@ public class ViewPost extends Activity {
 				BlogConfigBLOGGER.BlogInterfaceType typeEnum = BlogConfigBLOGGER
 						.getInterfaceTypeByNumber(1);
 				blogapi = BlogInterfaceFactory.getInstance(typeEnum);
-				Log.d(TAG, "Using interface type: " + typeEnum);
+				// Log.d(TAG, "Using interface type: " + typeEnum);
 				blogapi.setInstanceConfig("");
 				status.putString(MSG_KEY, "2");
 				statusMsg = mHandler.obtainMessage();
@@ -231,10 +230,11 @@ public class ViewPost extends Activity {
 						authFlag = true;
 						attempt = 0;
 					} catch (com.google.gdata.util.AuthenticationException e) {
-						Log.e(TAG, "AuthenticationException " + e.getMessage());
+						// Log.e(TAG, "AuthenticationException " +
+						// e.getMessage());
 						attempt++;
 					} catch (Exception e) {
-						Log.e(TAG, "Exception: " + e.getMessage());
+						// Log.e(TAG, "Exception: " + e.getMessage());
 						Alert
 								.showAlert(ViewPost.this,
 										"Network connection failed",
@@ -243,7 +243,7 @@ public class ViewPost extends Activity {
 					}
 				}
 				viewStatus = 1;
-				Log.d(TAG, "Got auth token:" + auth_id);
+				// Log.d(TAG, "Got auth token:" + auth_id);
 				viewStatus = 2;
 				if (auth_id != null) {
 					status.putString(MSG_KEY, "3");
@@ -257,20 +257,21 @@ public class ViewPost extends Activity {
 						try {
 							resultCommentFeed = blogapi.getAllPostComments(
 									username, password, postID);
-							Log.i(TAG, "Post comments successfully received");
+							// Log.i(TAG,
+							// "Post comments successfully received");
 							viewOk = true;
 							authFlag = true;
 							attempt = 0;
 						} catch (ServiceException e) {
 							e.printStackTrace();
 							attempt++;
-							Log.e(TAG, "ServiceException " + e.getMessage());
+							// Log.e(TAG, "ServiceException " + e.getMessage());
 						} catch (IOException e) {
 							e.printStackTrace();
 							attempt++;
-							Log.e(TAG, "IOException " + e.getMessage());
+							// Log.e(TAG, "IOException " + e.getMessage());
 						} catch (Exception e) {
-							Log.e(TAG, "Exception: " + e.getMessage());
+							// Log.e(TAG, "Exception: " + e.getMessage());
 							Alert
 									.showAlert(ViewPost.this,
 											"Network connection failed",
@@ -287,10 +288,10 @@ public class ViewPost extends Activity {
 				statusMsg.setData(status);
 				mHandler.sendMessage(statusMsg);
 				if (viewOk) {
-					Log.d(TAG, "Success!");
+					// Log.d(TAG, "Success!");
 					viewStatus = 5;
 				} else {
-					Log.d(TAG, "Viewing of comments failed!");
+					// Log.d(TAG, "Viewing of comments failed!");
 					viewStatus = 4;
 				}
 				mHandler.post(mViewResults);

@@ -4,8 +4,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import android.app.Activity;
-import android.util.Log;
+import android.app.Activity; //import android.util.Log;
 
 import com.google.gdata.client.GoogleService;
 import com.google.gdata.data.Entry;
@@ -19,7 +18,7 @@ public class BloggerAPI implements BlogInterface {
 	private static GoogleService myService;
 	private final String APPNAME = "AndroBlogger";
 	private final String SERVICENAME = "blogger";
-	private final String TAG = "GoogleBloggerAPI";
+	// private final String TAG = "BloggerAPI";
 	private static String feedUri;
 	private static final String FEED_URI_BASE = "https://www.blogger.com/feeds";
 	private static final String POSTS_FEED_URI_SUFFIX = "/posts/default";
@@ -29,7 +28,7 @@ public class BloggerAPI implements BlogInterface {
 		try {
 			new URL("http://www.blogger.com/feeds/default/blogs");
 		} catch (MalformedURLException e) {
-			Log.e(TAG, "The default blog feed url is malformed!");
+			// Log.e(TAG, "The default blog feed url is malformed!");
 		}
 	}
 
@@ -42,16 +41,10 @@ public class BloggerAPI implements BlogInterface {
 		entry.setContent(new PlainTextConstruct(content));
 		if (myService == null) {
 			getAuthId(this.userid, this.password);
-			Log
-					.d(
-							TAG,
-							"GoogleService is null while creating post. Are you calling this from outside the PreviewDialog? ");
+			// Log.d(TAG,"GoogleService is null while creating post. Are you calling this from outside the PreviewDialog? ");
 		}
 		if (myService == null) {
-			Log
-					.e(
-							TAG,
-							"The GoogleService is null while creating post. Are you calling this from outside the PreviewDialog?");
+			// Log.e(TAG,"The GoogleService is null while creating post. Are you calling this from outside the PreviewDialog?");
 			return false;
 		}
 		try {
@@ -62,15 +55,15 @@ public class BloggerAPI implements BlogInterface {
 				return false;
 			}
 		} catch (MalformedURLException mfue) {
-			Log.e(TAG, "Malformed post URL used: " + postUrl);
+			// Log.e(TAG, "Malformed post URL used: " + postUrl);
 			return false;
 		} catch (IOException ioe) {
-			Log.e(TAG, "IOException when inserting post. Message:"
-					+ ioe.getMessage());
+			// Log.e(TAG, "IOException when inserting post. Message:"+
+			// ioe.getMessage());
 			return false;
 		} catch (ServiceException se) {
-			Log.e(TAG, "ServiceException when inserting post. Message:"
-					+ se.getMessage());
+			// Log.e(TAG, "ServiceException when inserting post. Message:"+
+			// se.getMessage());
 			return false;
 		}
 	}
@@ -79,10 +72,7 @@ public class BloggerAPI implements BlogInterface {
 			throws ServiceException, IOException {
 		if (myService == null) {
 			getAuthId(username, password);
-			Log
-					.d(
-							TAG,
-							"GoogleService is null while creating post. Are you calling this from outside the PreviewDialog? ");
+			// Log.d(TAG,"GoogleService is null while creating post. Are you calling this from outside the PreviewDialog? ");
 		}
 		String blogId = getBlogId(myService);
 		feedUri = FEED_URI_BASE + "/" + blogId;
@@ -96,10 +86,7 @@ public class BloggerAPI implements BlogInterface {
 			String postID) throws ServiceException, IOException {
 		if (myService == null) {
 			getAuthId(username, password);
-			Log
-					.d(
-							TAG,
-							"GoogleService is null while creating post. Are you calling this from outside the PreviewDialog? ");
+			// Log.d(TAG,"GoogleService is null while creating post. Are you calling this from outside the PreviewDialog? ");
 		}
 		String commentsFeedUri = feedUri + "/" + postID
 				+ COMMENTS_FEED_URI_SUFFIX;
@@ -143,11 +130,11 @@ public class BloggerAPI implements BlogInterface {
 				myService.setUserCredentials(this.userid, this.password);
 				connected = true;
 			} catch (com.google.gdata.util.AuthenticationException e) {
-				Log.e(TAG, "Authentication failed for user " + this.userid
-						+ ".");
+				// Log.e(TAG, "Authentication failed for user " + this.userid+
+				// ".");
 			}
 		} else {
-			Log.e(TAG, "Unable to create GoogleService!");
+			// Log.e(TAG, "Unable to create GoogleService!");
 		}
 	}
 
@@ -159,10 +146,7 @@ public class BloggerAPI implements BlogInterface {
 		if (config != null) {
 			config.toString();
 		} else {
-			Log
-					.e(TAG,
-							"Trying to set a null installce config when configuring Google Blogger API!");
+			// Log.e(TAG,"Trying to set a null installce config when configuring Google Blogger API!");
 		}
-
 	}
 }

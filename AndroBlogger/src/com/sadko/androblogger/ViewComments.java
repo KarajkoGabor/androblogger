@@ -24,8 +24,7 @@ import android.database.SQLException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
-import android.util.Log;
+import android.os.Message; //import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,7 +35,7 @@ import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
 
 public class ViewComments extends ListActivity {
-	private final String TAG = "ViewComments";
+	// private final String TAG = "ViewComments";
 	private final String MSG_KEY = "value";
 	public static Entry currentEntry = null;
 	public static Feed resultCommentFeed = null;
@@ -81,16 +80,16 @@ public class ViewComments extends ListActivity {
 		try {
 			mDbHelper.open();
 		} catch (SQLException e) {
-			Log.e(TAG, "Database has not opened");
+			// Log.e(TAG, "Database has not opened");
 		}
 		setting = mDbHelper.fetchSettindById(1);
 		startManagingCursor(setting);
 
 		currentEntry = ViewPost.currentEntry;
-		Log.i(TAG, "CurrentEntry obtained from ViewPost");
+		// Log.i(TAG, "CurrentEntry obtained from ViewPost");
 
 		resultCommentFeed = ViewPost.resultCommentFeed;
-		Log.i(TAG, "ResultCommentFeed obtained from ViewPost");
+		// Log.i(TAG, "ResultCommentFeed obtained from ViewPost");
 
 		int w = this.getWindow().getWindowManager().getDefaultDisplay()
 				.getWidth() - 12;
@@ -199,7 +198,7 @@ public class ViewComments extends ListActivity {
 				BlogConfigBLOGGER.BlogInterfaceType typeEnum = BlogConfigBLOGGER
 						.getInterfaceTypeByNumber(1);
 				blogapi = BlogInterfaceFactory.getInstance(typeEnum);
-				Log.d(TAG, "Using interface type: " + typeEnum);
+				// Log.d(TAG, "Using interface type: " + typeEnum);
 				blogapi.setInstanceConfig("");
 				status.putString(MSG_KEY, "2");
 				statusMsg = mHandler.obtainMessage();
@@ -215,10 +214,11 @@ public class ViewComments extends ListActivity {
 						authFlag = true;
 						attempt = 0;
 					} catch (com.google.gdata.util.AuthenticationException e) {
-						Log.e(TAG, "AuthenticationException " + e.getMessage());
+						// Log.e(TAG, "AuthenticationException " +
+						// e.getMessage());
 						attempt++;
 					} catch (Exception e) {
-						Log.e(TAG, "Exception: " + e.getMessage());
+						// Log.e(TAG, "Exception: " + e.getMessage());
 						Alert
 								.showAlert(ViewComments.this,
 										"Network connection failed",
@@ -227,7 +227,7 @@ public class ViewComments extends ListActivity {
 					}
 				}
 				viewStatus = 1;
-				Log.d(TAG, "Got auth token:" + auth_id);
+				// Log.d(TAG, "Got auth token:" + auth_id);
 				viewStatus = 2;
 				if (auth_id != null) {
 					status.putString(MSG_KEY, "3");
@@ -242,20 +242,21 @@ public class ViewComments extends ListActivity {
 							ViewPost.resultCommentFeed = blogapi
 									.getAllPostComments(username, password,
 											postID);
-							Log.i(TAG, "Post comments successfully received");
+							// Log.i(TAG,
+							// "Post comments successfully received");
 							viewOk = true;
 							authFlag = true;
 							attempt = 0;
 						} catch (ServiceException e) {
 							e.printStackTrace();
 							attempt++;
-							Log.e(TAG, "ServiceException " + e.getMessage());
+							// Log.e(TAG, "ServiceException " + e.getMessage());
 						} catch (IOException e) {
 							e.printStackTrace();
 							attempt++;
-							Log.e(TAG, "IOException " + e.getMessage());
+							// Log.e(TAG, "IOException " + e.getMessage());
 						} catch (Exception e) {
-							Log.e(TAG, "Exception: " + e.getMessage());
+							// Log.e(TAG, "Exception: " + e.getMessage());
 							Alert
 									.showAlert(ViewComments.this,
 											"Network connection failed",
@@ -272,10 +273,10 @@ public class ViewComments extends ListActivity {
 				statusMsg.setData(status);
 				mHandler.sendMessage(statusMsg);
 				if (viewOk) {
-					Log.d(TAG, "Success!");
+					// Log.d(TAG, "Success!");
 					viewStatus = 5;
 				} else {
-					Log.d(TAG, "Viewing of comments failed!");
+					// Log.d(TAG, "Viewing of comments failed!");
 					viewStatus = 4;
 				}
 				mHandler.post(mViewResults);
@@ -304,10 +305,6 @@ public class ViewComments extends ListActivity {
 	private void showViewStatus() {
 		viewProgress.dismiss();
 		if (attempt > MainActivity.AMOUNTOFATTEMPTS) {
-			/*
-			 * Alert.showAlert(this, "Viewing failed", "Error code " +
-			 * viewStatus); }
-			 */
 			Alert.showAlert(this, "Viewing failed", "Error code " + viewStatus,
 					"Try again", new DialogInterface.OnClickListener() {
 						@Override

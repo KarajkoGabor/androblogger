@@ -5,18 +5,17 @@ import java.util.StringTokenizer;
 import com.google.gdata.util.common.util.Base64;
 import com.google.gdata.util.common.util.Base64DecoderException;
 
-import android.content.Context;
-import android.graphics.Typeface;
+import android.content.Context; //import android.graphics.Typeface;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.CharacterStyle;
 import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
-import android.util.Log;
+//import android.util.Log;
 
 public class SpannableBufferHelper {
 
-	private final String TAG = "SpannableBufferHelper";
+	// private final String TAG = "SpannableBufferHelper";
 	private final int URL_SPAN_TYPE = 65534;
 	private final int HTML_SPAN_TYPE = 65533;
 	private final int IMG_SPAN_TYPE = 65532;
@@ -24,49 +23,47 @@ public class SpannableBufferHelper {
 	private Context c = null;
 
 	public void debugWriteBuffer(String title, Spannable seq) {
-		Log.d(TAG, title);
+		// Log.d(TAG, title);
 		SpannableStringBuilder ssb = new SpannableStringBuilder(seq);
 		Object[] spans = ssb.getSpans(0, ssb.length(), StyleSpan.class);
 		Object[] urls = ssb.getSpans(0, ssb.length(), URLSpan.class);
 		Object[] htmls = ssb.getSpans(0, ssb.length(), HTMLEmbedSpan.class);
 		Object[] allobjs = ssb.getSpans(0, ssb.length(), Object.class);
 		Object[] imgs = ssb.getSpans(0, ssb.length(), ImageEmbedSpan.class);
-		Log.d(TAG, "Total number of spans in buffer: " + allobjs.length);
+		// Log.d(TAG, "Total number of spans in buffer: " + allobjs.length);
 		for (int i = 0; i < allobjs.length; i++) {
-			String onespan = allobjs[i].getClass().getName();
-			Log.d(TAG, "Name #" + i + ":" + onespan);
+			// String onespan = allobjs[i].getClass().getName();
+			// Log.d(TAG, "Name #" + i + ":" + onespan);
 		}
 		for (int i = 0; i < spans.length; i++) {
-			StyleSpan current = (StyleSpan) (spans[i]);
-			boolean isBold = current.getStyle() == Typeface.BOLD;
-			boolean isItalic = current.getStyle() == Typeface.ITALIC;
-			Log.d(TAG, "Spans[" + i + "], SpanStart="
-					+ ssb.getSpanStart(current) + "SpanEnd="
-					+ ssb.getSpanEnd(current) + " flags:"
-					+ ssb.getSpanFlags(current) + " Bold:" + isBold
-					+ " Italic: " + isItalic);
+			// StyleSpan current = (StyleSpan) (spans[i]);
+			// boolean isBold = current.getStyle() == Typeface.BOLD;
+			// boolean isItalic = current.getStyle() == Typeface.ITALIC;
+			// Log.d(TAG, "Spans[" + i + "], SpanStart="+
+			// ssb.getSpanStart(current) + "SpanEnd="+ ssb.getSpanEnd(current) +
+			// " flags:"+ ssb.getSpanFlags(current) + " Bold:" + isBold+
+			// " Italic: " + isItalic);
 		}
 		for (int i = 0; i < urls.length; i++) {
-			URLSpan current = (URLSpan) (urls[i]);
-			Log.d(TAG, "Urls[" + i + "], SpanStart="
-					+ ssb.getSpanStart(current) + "SpanEnd="
-					+ ssb.getSpanEnd(current) + " flags:"
-					+ ssb.getSpanFlags(current) + " URL:" + current.getURL());
+			// URLSpan current = (URLSpan) (urls[i]);
+			// Log.d(TAG, "Urls[" + i + "], SpanStart="+
+			// ssb.getSpanStart(current) + "SpanEnd="+ ssb.getSpanEnd(current) +
+			// " flags:"+ ssb.getSpanFlags(current) + " URL:" +
+			// current.getURL());
 		}
 		for (int i = 0; i < htmls.length; i++) {
-			HTMLEmbedSpan current = (HTMLEmbedSpan) (htmls[i]);
-			Log.d(TAG, "HTML[" + i + "], SpanStart="
-					+ ssb.getSpanStart(current) + "SpanEnd="
-					+ ssb.getSpanEnd(current) + " flags:"
-					+ ssb.getSpanFlags(current) + " Markup:"
-					+ current.getHtml());
+			// HTMLEmbedSpan current = (HTMLEmbedSpan) (htmls[i]);
+			// Log.d(TAG, "HTML[" + i + "], SpanStart="+
+			// ssb.getSpanStart(current) + "SpanEnd="+ ssb.getSpanEnd(current) +
+			// " flags:"+ ssb.getSpanFlags(current) + " Markup:"+
+			// current.getHtml());
 		}
 		for (int i = 0; i < imgs.length; i++) {
-			ImageEmbedSpan current = (ImageEmbedSpan) (imgs[i]);
-			Log.d(TAG, "Images[" + i + "], SpanStart="
-					+ ssb.getSpanStart(current) + "SpanEnd="
-					+ ssb.getSpanEnd(current) + " flags:"
-					+ ssb.getSpanFlags(current) + " Src:" + current.getSrc());
+			// ImageEmbedSpan current = (ImageEmbedSpan) (imgs[i]);
+			// Log.d(TAG, "Images[" + i + "], SpanStart="+
+			// ssb.getSpanStart(current) + "SpanEnd="+ ssb.getSpanEnd(current) +
+			// " flags:"+ ssb.getSpanFlags(current) + " Src:" +
+			// current.getSrc());
 		}
 		int next = 0;
 		int total = 0;
@@ -81,15 +78,11 @@ public class SpannableBufferHelper {
 				try {
 					curTran = (StyleSpan) spans[iteration++];
 				} catch (ArrayIndexOutOfBoundsException ae) {
-					Log
-							.d(TAG,
-									"More transitions while looking at buffer than returned by getSpans!");
+					// Log.d(TAG,"More transitions while looking at buffer than returned by getSpans!");
 				} catch (ClassCastException ce) {
-					Log
-							.d(TAG,
-									"Getspans returned an object which is not a StyleSpan!");
+					// Log.d(TAG,"Getspans returned an object which is not a StyleSpan!");
 				}
-				Log.d(TAG, "Transition at index:" + total);
+				// Log.d(TAG, "Transition at index:" + total);
 				next = ssb.nextSpanTransition(total, ssb.length() - total,
 						StyleSpan.class);
 				total += next;
@@ -98,7 +91,7 @@ public class SpannableBufferHelper {
 				}
 			}
 		} else {
-			Log.d(TAG, "Buffer is null.");
+			// Log.d(TAG, "Buffer is null.");
 		}
 	}
 
@@ -110,25 +103,25 @@ public class SpannableBufferHelper {
 		Object[] imgs = ssb.getSpans(0, ssb.length(), ImageEmbedSpan.class);
 		for (int i = 0; i < spans.length; i++) {
 			StyleSpan current = (StyleSpan) (spans[i]);
-			insertMarkupAndFixSpans(current.getStyle(),
-					ssb.getSpanStart(current), ssb.getSpanEnd(current), ssb);
+			insertMarkupAndFixSpans(current.getStyle(), ssb
+					.getSpanStart(current), ssb.getSpanEnd(current), ssb);
 		}
 		for (int i = 0; i < urls.length; i++) {
 			URLSpan current = (URLSpan) (urls[i]);
-			insertLinksAndFixSpans(current.getURL(),
-					ssb.getSpanStart(current), ssb.getSpanEnd(current), ssb);
+			insertLinksAndFixSpans(current.getURL(), ssb.getSpanStart(current),
+					ssb.getSpanEnd(current), ssb);
 		}
 		for (int i = 0; i < htmls.length; i++) {
 			HTMLEmbedSpan current = (HTMLEmbedSpan) (htmls[i]);
-			insertHTMLAndFixSpans(current.getHtml(),
-					ssb.getSpanStart(current), ssb);
+			insertHTMLAndFixSpans(current.getHtml(), ssb.getSpanStart(current),
+					ssb);
 		}
 		for (int i = 0; i < imgs.length; i++) {
 			ImageEmbedSpan current = (ImageEmbedSpan) (imgs[i]);
-			insertImgsAndFixSpans(current.getSrc(), ssb
-					.getSpanStart(current), ssb);
+			insertImgsAndFixSpans(current.getSrc(), ssb.getSpanStart(current),
+					ssb);
 		}
-		Log.d(TAG, "SpannableToXHTML returns: " + ssb.toString());
+		// Log.d(TAG, "SpannableToXHTML returns: " + ssb.toString());
 		return ssb.toString();
 	}
 
@@ -258,7 +251,8 @@ public class SpannableBufferHelper {
 		try {
 			content = Base64.decode(contentBase64);
 		} catch (Base64DecoderException de) {
-			Log.e(TAG, "Failed to decode content from base 64 to byte array!");
+			// Log.e(TAG,
+			// "Failed to decode content from base 64 to byte array!");
 			return null;
 		}
 		String res = new String(content);
@@ -284,8 +278,8 @@ public class SpannableBufferHelper {
 							contentOfSpan = part;
 						}
 					} catch (NumberFormatException e) {
-						Log.d(TAG, "Exception when parsing spans at phase:"
-								+ count + "/" + item);
+						// Log.d(TAG, "Exception when parsing spans at phase:"+
+						// count + "/" + item);
 					}
 					count++;
 				}
@@ -293,35 +287,35 @@ public class SpannableBufferHelper {
 				if (style == IMG_SPAN_TYPE) {
 					currentSpan = new ImageEmbedSpan(contentOfSpan, c);
 					ssb.setSpan(currentSpan, start, end + 1, flags);
-					Log.d(TAG,
-							"Attached ImageEmbedSpan to buffer(start,end,flags):"
-									+ start + "," + end + "(+1)," + flags);
+					// Log.d(TAG,"Attached ImageEmbedSpan to buffer(start,end,flags):"+
+					// start + "," + end + "(+1)," + flags);
 				} else if (style == URL_SPAN_TYPE) {
 					currentSpan = new URLSpan(contentOfSpan);
 					ssb.setSpan(currentSpan, start, end, flags);
-					Log.d(TAG, "Attached UrlSpan to buffer(start,end,flags):"
-							+ start + "," + end + "," + flags);
+					// Log.d(TAG,
+					// "Attached UrlSpan to buffer(start,end,flags):"+ start +
+					// "," + end + "," + flags);
 				} else if (style == HTML_SPAN_TYPE) {
 					currentSpan = new HTMLEmbedSpan(contentOfSpan, c);
 					ssb.setSpan(currentSpan, start, end + 1, flags);
-					Log.d(TAG,
-							"Attached HTMLEmbedSpan to buffer(start,end,flags):"
-									+ start + "," + end + "(+1)," + flags);
+					// Log.d(TAG,"Attached HTMLEmbedSpan to buffer(start,end,flags):"+
+					// start + "," + end + "(+1)," + flags);
 				} else {
 					currentSpan = new StyleSpan(style);
 					ssb.setSpan(currentSpan, start, end, flags);
-					Log.d(TAG, "Attached StyleSpan to buffer(start,end,flags):"
-							+ start + "," + end + "," + flags);
+					// Log.d(TAG,
+					// "Attached StyleSpan to buffer(start,end,flags):"+ start +
+					// "," + end + "," + flags);
 				}
 				try {
 					istylestr = splits[++item];
 				} catch (ArrayIndexOutOfBoundsException e) {
-					Log.d(TAG, "End of parsing reached.");
+					// Log.d(TAG, "End of parsing reached.");
 					continue;
 				}
 			}
 		} else {
-			Log.d(TAG, "Entry does not contain styling information.");
+			// Log.d(TAG, "Entry does not contain styling information.");
 		}
 		return ssb;
 
