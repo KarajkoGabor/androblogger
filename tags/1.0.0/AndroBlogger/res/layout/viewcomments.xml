@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<LinearLayout android:id="@+id/MainLayout"
+		android:orientation="vertical" android:layout_height="fill_parent"
+		android:layout_width="fill_parent" android:paddingTop="10px">
+		<LinearLayout android:id="@+id/LayoutForButtons"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_gravity="center">
+			<Button android:id="@+id/BackToViewPost" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="Back"
+				android:drawableLeft="@drawable/revert">
+			</Button>
+
+			<Button android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:id="@+id/RefreshCommentsList"
+				android:text="Refresh" android:drawableLeft="@drawable/refresh"></Button>
+		</LinearLayout>
+		<LinearLayout android:layout_height="wrap_content"
+			android:id="@+id/LayoutForHeadline" android:layout_width="fill_parent">
+			<!--
+				<TextView android:id="@+id/TextView02"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="Title: "
+				android:layout_gravity="center" android:layout_marginLeft="5px">
+				</TextView>
+			-->
+			<TextView android:id="@+id/PostTitle" android:layout_height="wrap_content"
+				android:textColor="#FFFFFF" android:layout_gravity="center"
+				android:layout_width="fill_parent" android:background="@android:drawable/alert_dark_frame"
+				android:gravity="left|center" android:text="Title: &lt;Empty title&gt;"
+				android:paddingLeft="15px">
+			</TextView>
+		</LinearLayout>
+		<LinearLayout android:layout_width="wrap_content"
+			android:id="@+id/LayoutForComments" android:orientation="vertical"
+			android:minWidth="320px" android:layout_height="320px">
+			<ListView android:id="@id/android:list"
+				android:layout_width="fill_parent" android:drawSelectorOnTop="false"
+				android:background="@android:drawable/alert_dark_frame"
+				android:padding="15px" android:layout_height="fill_parent">
+			</ListView>
+			<TextView android:id="@id/android:empty"
+				android:layout_width="fill_parent" android:textColor="#FFFFFF"
+				android:background="@android:drawable/alert_dark_frame"
+				android:padding="20px" android:text="&lt;No comments&gt;"
+				android:layout_height="fill_parent" />
+		</LinearLayout>
+	</LinearLayout>
+</ScrollView>
