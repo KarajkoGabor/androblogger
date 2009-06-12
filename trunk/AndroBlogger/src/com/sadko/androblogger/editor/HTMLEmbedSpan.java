@@ -4,13 +4,12 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.text.style.ImageSpan;
-import android.util.Log;
+import android.text.style.ImageSpan; //import android.util.Log;
 import com.sadko.androblogger.R;
 
 public class HTMLEmbedSpan extends ImageSpan {
 
-	private static final String TAG = "HTMLEmbedSpan";
+	// private static final String TAG = "HTMLEmbedSpan";
 	private String myHtml = null;
 	private Context parentRef = null;
 
@@ -27,14 +26,15 @@ public class HTMLEmbedSpan extends ImageSpan {
 		if (context != null) {
 			resources = context.getResources();
 		} else {
-			Log.e(TAG, "Context is null, we're not able to access resources!");
+			// Log.e(TAG,
+			// "Context is null, we're not able to access resources!");
 			return null;
 		}
 		Drawable d = resources.getDrawable(R.drawable.html_icon);
-		Log.d(TAG, "Intrinsic height: " + d.getIntrinsicHeight());
-		Log.d(TAG, "Intrinsic width: " + d.getIntrinsicWidth());
-		Log.d(TAG, "Minimum height:" + d.getMinimumHeight());
-		Log.d(TAG, "Minumum width:" + d.getMinimumWidth());
+		// Log.d(TAG, "Intrinsic height: " + d.getIntrinsicHeight());
+		// Log.d(TAG, "Intrinsic width: " + d.getIntrinsicWidth());
+		// Log.d(TAG, "Minimum height:" + d.getMinimumHeight());
+		// Log.d(TAG, "Minumum width:" + d.getMinimumWidth());
 		d.setVisible(true, true);
 		d.setAlpha(255);
 		d.setBounds(new Rect(0, 0, d.getIntrinsicWidth(), d

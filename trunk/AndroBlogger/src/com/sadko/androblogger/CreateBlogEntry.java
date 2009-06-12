@@ -5,8 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.os.Bundle;
-import android.util.Log;
+import android.os.Bundle; //import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,7 +16,7 @@ import com.sadko.androblogger.db.DBTextAdapter;
 import com.sadko.androblogger.util.Alert;
 
 public class CreateBlogEntry extends Activity {
-	private static final String TAG = "CreateBlogEntry";
+	// private static final String TAG = "CreateBlogEntry";
 	private DBTextAdapter mDbTextHelper;
 	private static Cursor post = null;
 
@@ -28,7 +27,7 @@ public class CreateBlogEntry extends Activity {
 		try {
 			mDbTextHelper.open();
 		} catch (SQLException e) {
-			Log.e(TAG, "Database has not opened");
+			// Log.e(TAG, "Database has not opened");
 		}
 		post = mDbTextHelper.fetchPostdById(1);
 		startManagingCursor(post);
@@ -43,9 +42,9 @@ public class CreateBlogEntry extends Activity {
 								.getString(post
 										.getColumnIndexOrThrow(DBTextAdapter.KEY_CONTENT)));
 			} catch (IllegalArgumentException e) {
-				Log.e(TAG, "IllegalArgumentException (DataBase failed)");
+				// Log.e(TAG, "IllegalArgumentException (DataBase failed)");
 			} catch (Exception e) {
-				Log.e(TAG, "Exception (DataBase failed)");
+				// Log.e(TAG, "Exception (DataBase failed)");
 			}
 		}
 		if (this.getWindow().getWindowManager().getDefaultDisplay()
@@ -64,36 +63,28 @@ public class CreateBlogEntry extends Activity {
 						String strContent = "";
 						if (post.getCount() == 0) {
 							try {
-								/*********************************************************************/
 								strTitle = postTitle.getText().toString();
 								strContent = postContent.getText().toString();
 								mDbTextHelper.createPost(strTitle, strContent);
 								mDbTextHelper.close();
 								post.close();
-								/*********************************************************************/
-								Log.d(TAG, "Post saved to database.");
+								// Log.d(TAG, "Post saved to database.");
 							} catch (SQLException e) {
-								Log
-										.e(TAG,
-												"SQLException (createPost(title, content))");
+								// Log.e(TAG,"SQLException (createPost(title, content))");
 							} catch (Exception e) {
-								Log.e(TAG, "Exception: " + e.getMessage());
+								// Log.e(TAG, "Exception: " + e.getMessage());
 							}
 						} else {
 							try {
-								/*********************************************************************/
 								strTitle = postTitle.getText().toString();
 								strContent = postContent.getText().toString();
 								mDbTextHelper.updatePostById((long) 1,
 										strTitle, strContent);
 								mDbTextHelper.close();
 								post.close();
-								/*********************************************************************/
-								Log.d(TAG, "Post updated in database.");
+								// Log.d(TAG, "Post updated in database.");
 							} catch (SQLException e) {
-								Log
-										.e(TAG,
-												"SQLException (updatePostById(rowId, title, content))");
+								// Log.e(TAG,"SQLException (updatePostById(rowId, title, content))");
 							}
 						}
 						Intent i = new Intent(CreateBlogEntry.this,
@@ -132,35 +123,28 @@ public class CreateBlogEntry extends Activity {
 							String strContent = "";
 							if (post.getCount() == 0) {
 								try {
-									/*********************************************************************/
 									strTitle = postTitle.getText().toString();
 									strContent = postContent.getText()
 											.toString();
 									mDbTextHelper.createPost(strTitle,
 											strContent);
-									/*********************************************************************/
-									Log.d(TAG, "Post saved to database.");
+									// Log.d(TAG, "Post saved to database.");
 								} catch (SQLException e) {
-									Log
-											.e(TAG,
-													"SQLException (createPost(title, content))");
+									// Log.e(TAG,"SQLException (createPost(title, content))");
 								} catch (Exception e) {
-									Log.e(TAG, "Exception: " + e.getMessage());
+									// Log.e(TAG, "Exception: " +
+									// e.getMessage());
 								}
 							} else {
 								try {
-									/*********************************************************************/
 									strTitle = postTitle.getText().toString();
 									strContent = postContent.getText()
 											.toString();
 									mDbTextHelper.updatePostById((long) 1,
 											strTitle, strContent);
-									/*********************************************************************/
-									Log.d(TAG, "Post updated in database.");
+									// Log.d(TAG, "Post updated in database.");
 								} catch (SQLException e) {
-									Log
-											.e(TAG,
-													"SQLException (updatePostById(rowId, title, content))");
+									// Log.e(TAG,"SQLException (updatePostById(rowId, title, content))");
 								}
 							}
 							mDbTextHelper.close();
@@ -185,12 +169,12 @@ public class CreateBlogEntry extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		Log.i(TAG, "Method 'onPause()' launched");
+		// Log.i(TAG, "Method 'onPause()' launched");
 		mDbTextHelper = new DBTextAdapter(this);
 		try {
 			mDbTextHelper.open();
 		} catch (SQLException e) {
-			Log.e(TAG, "Database has not opened");
+			// Log.e(TAG, "Database has not opened");
 		}
 		post = mDbTextHelper.fetchPostdById(1);
 		startManagingCursor(post);
@@ -200,32 +184,27 @@ public class CreateBlogEntry extends Activity {
 		String strContent = "";
 		if (post.getCount() == 0) {
 			try {
-				/*********************************************************************/
 				strTitle = postTitle.getText().toString();
 				strContent = postContent.getText().toString();
 				mDbTextHelper.createPost(strTitle, strContent);
 				mDbTextHelper.close();
 				post.close();
-				/*********************************************************************/
-				Log.d(TAG, "Post saved to database.");
+				// Log.d(TAG, "Post saved to database.");
 			} catch (SQLException e) {
-				Log.e(TAG, "SQLException (createPost(title, content))");
+				// Log.e(TAG, "SQLException (createPost(title, content))");
 			} catch (Exception e) {
-				Log.e(TAG, "Exception: " + e.getMessage());
+				// Log.e(TAG, "Exception: " + e.getMessage());
 			}
 		} else {
 			try {
-				/*********************************************************************/
 				strTitle = postTitle.getText().toString();
 				strContent = postContent.getText().toString();
 				mDbTextHelper.updatePostById((long) 1, strTitle, strContent);
 				mDbTextHelper.close();
 				post.close();
-				/*********************************************************************/
-				Log.d(TAG, "Post updated in database.");
+				// Log.d(TAG, "Post updated in database.");
 			} catch (SQLException e) {
-				Log.e(TAG,
-						"SQLException (updatePostById(rowId, title, content))");
+				// Log.e(TAG,"SQLException (updatePostById(rowId, title, content))");
 			}
 		}
 	}
@@ -233,12 +212,12 @@ public class CreateBlogEntry extends Activity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		Log.i(TAG, "Method 'onDestroy()' launched");
+		// Log.i(TAG, "Method 'onDestroy()' launched");
 		mDbTextHelper = new DBTextAdapter(this);
 		try {
 			mDbTextHelper.open();
 		} catch (SQLException e) {
-			Log.e(TAG, "Database has not opened");
+			// Log.e(TAG, "Database has not opened");
 		}
 		post = mDbTextHelper.fetchPostdById(1);
 		startManagingCursor(post);
@@ -248,32 +227,27 @@ public class CreateBlogEntry extends Activity {
 		String strContent = "";
 		if (post.getCount() == 0) {
 			try {
-				/*********************************************************************/
 				strTitle = postTitle.getText().toString();
 				strContent = postContent.getText().toString();
 				mDbTextHelper.createPost(strTitle, strContent);
 				mDbTextHelper.close();
 				post.close();
-				/*********************************************************************/
-				Log.d(TAG, "Post saved to database.");
+				// Log.d(TAG, "Post saved to database.");
 			} catch (SQLException e) {
-				Log.e(TAG, "SQLException (createPost(title, content))");
+				// Log.e(TAG, "SQLException (createPost(title, content))");
 			} catch (Exception e) {
-				Log.e(TAG, "Exception: " + e.getMessage());
+				// Log.e(TAG, "Exception: " + e.getMessage());
 			}
 		} else {
 			try {
-				/*********************************************************************/
 				strTitle = postTitle.getText().toString();
 				strContent = postContent.getText().toString();
 				mDbTextHelper.updatePostById((long) 1, strTitle, strContent);
 				mDbTextHelper.close();
 				post.close();
-				/*********************************************************************/
-				Log.d(TAG, "Post updated in database.");
+				// Log.d(TAG, "Post updated in database.");
 			} catch (SQLException e) {
-				Log.e(TAG,
-						"SQLException (updatePostById(rowId, title, content))");
+				// Log.e(TAG,"SQLException (updatePostById(rowId, title, content))");
 			}
 		}
 	}
@@ -281,12 +255,12 @@ public class CreateBlogEntry extends Activity {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		Log.i(TAG, "Method 'onStop()' launched");
+		// Log.i(TAG, "Method 'onStop()' launched");
 		mDbTextHelper = new DBTextAdapter(this);
 		try {
 			mDbTextHelper.open();
 		} catch (SQLException e) {
-			Log.e(TAG, "Database has not opened");
+			// Log.e(TAG, "Database has not opened");
 		}
 		post = mDbTextHelper.fetchPostdById(1);
 		startManagingCursor(post);
@@ -296,32 +270,27 @@ public class CreateBlogEntry extends Activity {
 		String strContent = "";
 		if (post.getCount() == 0) {
 			try {
-				/*********************************************************************/
 				strTitle = postTitle.getText().toString();
 				strContent = postContent.getText().toString();
 				mDbTextHelper.createPost(strTitle, strContent);
 				mDbTextHelper.close();
 				post.close();
-				/*********************************************************************/
-				Log.d(TAG, "Post saved to database.");
+				// Log.d(TAG, "Post saved to database.");
 			} catch (SQLException e) {
-				Log.e(TAG, "SQLException (createPost(title, content))");
+				// Log.e(TAG, "SQLException (createPost(title, content))");
 			} catch (Exception e) {
-				Log.e(TAG, "Exception: " + e.getMessage());
+				// Log.e(TAG, "Exception: " + e.getMessage());
 			}
 		} else {
 			try {
-				/*********************************************************************/
 				strTitle = postTitle.getText().toString();
 				strContent = postContent.getText().toString();
 				mDbTextHelper.updatePostById((long) 1, strTitle, strContent);
 				mDbTextHelper.close();
 				post.close();
-				/*********************************************************************/
-				Log.d(TAG, "Post updated in database.");
+				// Log.d(TAG, "Post updated in database.");
 			} catch (SQLException e) {
-				Log.e(TAG,
-						"SQLException (updatePostById(rowId, title, content))");
+				// Log.e(TAG,"SQLException (updatePostById(rowId, title, content))");
 			}
 		}
 	}
@@ -334,34 +303,28 @@ public class CreateBlogEntry extends Activity {
 			String strContent = "";
 			if (post.getCount() == 0) {
 				try {
-					/*********************************************************************/
 					strTitle = postTitle.getText().toString();
 					strContent = postContent.getText().toString();
 					mDbTextHelper.createPost(strTitle, strContent);
 					mDbTextHelper.close();
 					post.close();
-					/*********************************************************************/
-					Log.d(TAG, "Post saved to database.");
+					// Log.d(TAG, "Post saved to database.");
 				} catch (SQLException e) {
-					Log.e(TAG, "SQLException (createPost(title, content))");
+					// Log.e(TAG, "SQLException (createPost(title, content))");
 				} catch (Exception e) {
-					Log.e(TAG, "Exception: " + e.getMessage());
+					// Log.e(TAG, "Exception: " + e.getMessage());
 				}
 			} else {
 				try {
-					/*********************************************************************/
 					strTitle = postTitle.getText().toString();
 					strContent = postContent.getText().toString();
 					mDbTextHelper
 							.updatePostById((long) 1, strTitle, strContent);
 					mDbTextHelper.close();
 					post.close();
-					/*********************************************************************/
-					Log.d(TAG, "Post updated in database.");
+					// Log.d(TAG, "Post updated in database.");
 				} catch (SQLException e) {
-					Log
-							.e(TAG,
-									"SQLException (updatePostById(rowId, title, content))");
+					// Log.e(TAG,"SQLException (updatePostById(rowId, title, content))");
 				}
 			}
 			Intent i = new Intent(CreateBlogEntry.this, MainActivity.class);
@@ -371,5 +334,4 @@ public class CreateBlogEntry extends Activity {
 		}
 		return false;
 	}
-
 }

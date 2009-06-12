@@ -18,8 +18,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.text.Spannable;
-import android.util.Log;
+import android.text.Spannable; //import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,7 +34,7 @@ import com.sadko.androblogger.util.Alert;
 
 public class PreviewAndPublish extends Activity implements View.OnClickListener {
 
-	private static final String TAG = "PreviewAndPublish";
+	// private static final String TAG = "PreviewAndPublish";
 	private String title;
 	private String content;
 	private BlogEntry myEntry = null;
@@ -83,7 +82,7 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 		try {
 			mDbTextHelper.open();
 		} catch (SQLException e) {
-			Log.e(TAG, "Database has not opened");
+			// Log.e(TAG, "Database has not opened");
 		}
 		post = mDbTextHelper.fetchPostdById(1);
 		startManagingCursor(post);
@@ -93,12 +92,12 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 						.getColumnIndexOrThrow(DBTextAdapter.KEY_TITLE));
 				content = post.getString(post
 						.getColumnIndexOrThrow(DBTextAdapter.KEY_CONTENT));
-				Log.i(TAG, "Title of post: " + title + ". Content of post: "
-						+ content);
+				// Log.i(TAG, "Title of post: " + title + ". Content of post: "+
+				// content);
 			} catch (IllegalArgumentException e) {
-				Log.e(TAG, "IllegalArgumentException (DataBase failed)");
+				// Log.e(TAG, "IllegalArgumentException (DataBase failed)");
 			} catch (Exception e) {
-				Log.e(TAG, "Exception (DataBase failed)");
+				// Log.e(TAG, "Exception (DataBase failed)");
 			}
 		}
 		mDbTextHelper.close();
@@ -180,7 +179,7 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 						.getInterfaceTypeByNumber(1);
 				BlogInterface blogapi = null;
 				blogapi = BlogInterfaceFactory.getInstance(typeEnum);
-				Log.d(TAG, "Using interface type: " + typeEnum);
+				// Log.d(TAG, "Using interface type: " + typeEnum);
 				blogapi.setInstanceConfig("");
 				status.putString(MSG_KEY, "2");
 				statusMsg = mHandler.obtainMessage();
@@ -196,7 +195,7 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 						try {
 							mDbHelper.open();
 						} catch (SQLException e) {
-							Log.e(TAG, "Database has not opened");
+							// Log.e(TAG, "Database has not opened");
 						}
 						setting = mDbHelper.fetchSettindById(1);
 						startManagingCursor(setting);
@@ -214,11 +213,12 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 						attempt = 0;
 					} catch (com.google.gdata.util.AuthenticationException e) {
 						attempt++;
-						Log.e(TAG, "AuthenticationException " + e.getMessage());
+						// Log.e(TAG, "AuthenticationException " +
+						// e.getMessage());
 					} catch (SQLException e) {
-						Log.e(TAG, "SQLException: " + e.getMessage());
+						// Log.e(TAG, "SQLException: " + e.getMessage());
 					} catch (Exception e) {
-						Log.e(TAG, "Exception: " + e.getMessage());
+						// Log.e(TAG, "Exception: " + e.getMessage());
 						Alert
 								.showAlert(PreviewAndPublish.this,
 										"Network connection failed",
@@ -228,7 +228,7 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 
 				}
 				publishStatus = 1;
-				Log.d(TAG, "Got auth token:" + auth_id);
+				// Log.d(TAG, "Got auth token:" + auth_id);
 				publishStatus = 2;
 				if (auth_id != null) {
 					status.putString(MSG_KEY, "3");
@@ -245,13 +245,13 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 							authFlag = true;
 							attempt = 0;
 						} catch (ServiceException e) {
-							Log.e(TAG, "ServiceException " + e.getMessage());
+							// Log.e(TAG, "ServiceException " + e.getMessage());
 							attempt++;
 						} catch (IOException e) {
-							Log.e(TAG, "IOException " + e.getMessage());
+							// Log.e(TAG, "IOException " + e.getMessage());
 							attempt++;
 						} catch (Exception e) {
-							Log.e(TAG, "Exception: " + e.getMessage());
+							// Log.e(TAG, "Exception: " + e.getMessage());
 							Alert
 									.showAlert(PreviewAndPublish.this,
 											"Network connection failed",
@@ -279,7 +279,7 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 							try {
 								mDbHelper.open();
 							} catch (SQLException e) {
-								Log.e(TAG, "Database has not opened");
+								// Log.e(TAG, "Database has not opened");
 							}
 							setting = mDbHelper.fetchSettindById(1);
 							startManagingCursor(setting);
@@ -304,12 +304,13 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 							authFlag = true;
 							attempt = 0;
 						} catch (ServiceException e) {
-							Log.e(TAG, "ServiceException " + e.getMessage());
+							// Log.e(TAG, "ServiceException: " +
+							// e.getMessage());
 							attempt++;
 						} catch (SQLException e) {
-							Log.e(TAG, "SQLException: " + e.getMessage());
+							// Log.e(TAG, "SQLException: " + e.getMessage());
 						} catch (Exception e) {
-							Log.e(TAG, "Exception: " + e.getMessage());
+							// Log.e(TAG, "Exception: " + e.getMessage());
 							Alert
 									.showAlert(PreviewAndPublish.this,
 											"Network connection failed",
@@ -329,10 +330,10 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 				statusMsg.setData(status);
 				mHandler.sendMessage(statusMsg);
 				if (publishOk) {
-					Log.d(TAG, "Post published successfully!");
+					// Log.d(TAG, "Post published successfully!");
 					publishStatus = 5;
 				} else {
-					Log.d(TAG, "Publishing of the post failed!");
+					// Log.d(TAG, "Publishing of the post failed!");
 					publishStatus = 4;
 				}
 				mHandler.post(mPublishResults);
@@ -349,7 +350,7 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 				try {
 					mDbTextHelper.open();
 				} catch (SQLException e) {
-					Log.e(TAG, "Database has not opened");
+					// Log.e(TAG, "Database has not opened");
 				}
 				post = mDbTextHelper.fetchPostdById(1);
 				startManagingCursor(post);
@@ -357,9 +358,9 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 				mDbTextHelper.close();
 				post.close();
 			} catch (SQLException e) {
-				Log.e(TAG, "SQLException: " + e.getMessage());
+				// Log.e(TAG, "SQLException: " + e.getMessage());
 			} catch (Exception e) {
-				Log.e(TAG, "Exception: " + e.getMessage());
+				// Log.e(TAG, "Exception: " + e.getMessage());
 			}
 			final Dialog dlg = new AlertDialog.Builder(PreviewAndPublish.this)
 					.setIcon(com.sadko.androblogger.R.drawable.ic_dialog_alert)

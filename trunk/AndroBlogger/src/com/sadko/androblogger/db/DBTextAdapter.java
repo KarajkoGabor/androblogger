@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
+//import android.util.Log;
 
 public class DBTextAdapter {
 
@@ -14,7 +14,7 @@ public class DBTextAdapter {
 	public static final String KEY_TITLE = "title";
 	public static final String KEY_CONTENT = "content";
 
-	private static final String TAG = "DBTextAdapter";
+	// private static final String TAG = "DBTextAdapter";
 	private DBTextHelper mDbHelper;
 	private SQLiteDatabase mDb;
 	private static final String DATABASE_NAME = "text.db";
@@ -33,13 +33,13 @@ public class DBTextAdapter {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(DATABASE_CREATE);
-			Log.i(TAG, "DB '" + DATABASE_NAME + "' successfuly created");
+			// Log.i(TAG, "DB '" + DATABASE_NAME + "' successfuly created");
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
-					+ newVersion + ", which will destroy all old data");
+			// Log.w(TAG, "Upgrading database from version " + oldVersion +
+			// " to "+ newVersion + ", which will destroy all old data");
 			db.execSQL("DROP TABLE IF EXISTS post");
 			onCreate(db);
 		}
@@ -59,13 +59,12 @@ public class DBTextAdapter {
 		mDbHelper.close();
 	}
 
-	public long createPost(String title, String content)
-			throws SQLException {
+	public long createPost(String title, String content) throws SQLException {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_TITLE, title);
 		initialValues.put(KEY_CONTENT, content);
-		Log.i(TAG, "Title: '" + title + "', content: '" + content
-				+ "' successfuly inserted");
+		// Log.i(TAG, "Title: '" + title + "', content: '" + content+
+		// "' successfuly inserted");
 		return mDb.insert(DATABASE_TABLE, null, initialValues);
 	}
 

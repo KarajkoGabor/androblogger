@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
+//import android.util.Log;
 
 public class DBAdapter {
 
@@ -14,7 +14,7 @@ public class DBAdapter {
 	public static final String KEY_LOGIN = "login";
 	public static final String KEY_PASSWORD = "password";
 
-	private static final String TAG = "DBAdapter";
+	// private static final String TAG = "DBAdapter";
 	private DatabaseHelper mDbHelper;
 	private SQLiteDatabase mDb;
 	private static final String DATABASE_NAME = "androblogger.db";
@@ -33,13 +33,13 @@ public class DBAdapter {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(DATABASE_CREATE);
-			Log.i(TAG, "DB '" + DATABASE_NAME + "' successfuly created");
+			// Log.i(TAG, "DB '" + DATABASE_NAME + "' successfuly created");
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
-					+ newVersion + ", which will destroy all old data");
+			// Log.w(TAG, "Upgrading database from version " + oldVersion +
+			// " to "+ newVersion + ", which will destroy all old data");
 			db.execSQL("DROP TABLE IF EXISTS settings");
 			onCreate(db);
 		}
@@ -64,8 +64,8 @@ public class DBAdapter {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_LOGIN, login);
 		initialValues.put(KEY_PASSWORD, password);
-		Log.i(TAG, "Login: '" + login + "', password: '" + password
-				+ "' successfuly inserted");
+		// Log.i(TAG, "Login: '" + login + "', password: '" + password+
+		// "' successfuly inserted");
 		return mDb.insert(DATABASE_TABLE, null, initialValues);
 	}
 

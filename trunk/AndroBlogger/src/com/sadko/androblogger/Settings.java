@@ -17,8 +17,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
+import android.os.Message; //import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,7 +35,7 @@ import com.sadko.androblogger.util.Alert;
 
 public class Settings extends Activity {
 	private EditText textUsername, textPassword;
-	private final String TAG = "CreateProfile";
+	// private final String TAG = "CreateProfile";
 	private final String MSG_KEY = "value";
 	private final String STATUS_KEY = "status";
 	private final String STATUS_RESPONSE_NULL = "1";
@@ -84,13 +83,13 @@ public class Settings extends Activity {
 					} else if (status.equals(STATUS_OK)) {
 						verifyProgress.setMessage("Displaying blog names...");
 						String names = content.getString(RESPONSE_NAMES_KEY);
-						Log.d(TAG, "names here: " + names);
+						// Log.d(TAG, "names here: " + names);
 						String ids = content.getString(RESPONSE_IDS_KEY);
-						Log.d(TAG, "ids here: " + ids);
+						// Log.d(TAG, "ids here: " + ids);
 						String[] namearr = names.split("\\|");
 						String[] idsarr = ids.split("\\|");
 						for (int i = 0; i < namearr.length; i++) {
-							Log.d(TAG, "namearr[" + i + "]=" + namearr[i]);
+							// Log.d(TAG, "namearr[" + i + "]=" + namearr[i]);
 						}
 						if (namearr == null || namearr.length < 1) {
 							verifyStatus = 8;
@@ -117,7 +116,7 @@ public class Settings extends Activity {
 				Button SaveProfile = (Button) (Settings.this
 						.findViewById(R.id.Save));
 				SaveProfile.setEnabled(true);
-				Log.d(TAG, "Button 'Save' is enable");
+				// Log.d(TAG, "Button 'Save' is enable");
 				EditText username = (EditText) Settings.this
 						.findViewById(R.id.Username);
 				EditText password = (EditText) Settings.this
@@ -163,7 +162,7 @@ public class Settings extends Activity {
 		try {
 			mDbHelper.open();
 		} catch (SQLException e) {
-			Log.e(TAG, "Database has not opened");
+			// Log.e(TAG, "Database has not opened");
 		}
 		setting = mDbHelper.fetchSettindById(1);
 		startManagingCursor(setting);
@@ -177,9 +176,9 @@ public class Settings extends Activity {
 								.getColumnIndexOrThrow(DBAdapter.KEY_PASSWORD)));
 				((Button) this.findViewById(R.id.Save)).setEnabled(false);
 			} catch (IllegalArgumentException e) {
-				Log.e(TAG, "IllegalArgumentException (DataBase failed)");
+				// Log.e(TAG, "IllegalArgumentException (DataBase failed)");
 			} catch (Exception e) {
-				Log.e(TAG, "Exception (DataBase failed)");
+				// Log.e(TAG, "Exception (DataBase failed)");
 			}
 		}
 		mDbHelper.close();
@@ -194,7 +193,7 @@ public class Settings extends Activity {
 						try {
 							mDbHelper.open();
 						} catch (SQLException e) {
-							Log.e(TAG, "Database has not opened");
+							// Log.e(TAG, "Database has not opened");
 						}
 						setting = mDbHelper.fetchSettindById(1);
 						startManagingCursor(setting);
@@ -217,7 +216,7 @@ public class Settings extends Activity {
 						try {
 							mDbHelper.open();
 						} catch (SQLException e) {
-							Log.e(TAG, "Database has not opened");
+							// Log.e(TAG, "Database has not opened");
 						}
 						setting = mDbHelper.fetchSettindById(1);
 						startManagingCursor(setting);
@@ -292,13 +291,11 @@ public class Settings extends Activity {
 									feedUrl = new URL(
 											"http://www.blogger.com/feeds/default/blogs");
 								} catch (MalformedURLException e) {
-									Log
-											.e(TAG,
-													"The default blog feed url is malformed!");
+									// Log.e(TAG,"The default blog feed url is malformed!");
 								}
-								Log.d(TAG, "Querying Blogger blog, URL:"
-										+ feedUrl + ", user: " + verifyUsername
-										+ ", pass:" + verifyPassword);
+								// Log.d(TAG, "Querying Blogger blog, URL:"+
+								// feedUrl + ", user: " + verifyUsername+
+								// ", pass:" + verifyPassword);
 								GoogleService myVerifyService = new GoogleService(
 										"blogger", BlogConfigBLOGGER.APPNAME);
 								statusMsg = mHandler.obtainMessage();
@@ -315,8 +312,9 @@ public class Settings extends Activity {
 										authFlag = true;
 										attempt = 0;
 									} catch (com.google.gdata.util.AuthenticationException e) {
-										Log.e(TAG, "Authentication exception! "
-												+ e.getMessage());
+										// Log.e(TAG,
+										// "Authentication exception! "+
+										// e.getMessage());
 										statusMsg = mHandler.obtainMessage();
 										status.putString(STATUS_KEY,
 												STATUS_BAD_AUTH);
@@ -327,8 +325,8 @@ public class Settings extends Activity {
 										attempt++;
 										return;
 									} catch (Exception e) {
-										Log.e(TAG, "Exception: "
-												+ e.getMessage());
+										// Log.e(TAG, "Exception: "+
+										// e.getMessage());
 										Alert
 												.showAlert(
 														Settings.this,
@@ -351,15 +349,15 @@ public class Settings extends Activity {
 										authFlag = true;
 										attempt = 0;
 									} catch (IOException e) {
-										Log.e(TAG, "IOExceprion (getFeed())");
+										// Log.e(TAG,
+										// "IOExceprion (getFeed())");
 										attempt++;
 									} catch (ServiceException e) {
-										Log.e(TAG,
-												"ServiceExceprion (getFeed())");
+										// Log.e(TAG,"ServiceExceprion (getFeed())");
 										attempt++;
 									} catch (Exception e) {
-										Log.e(TAG, "Exception: "
-												+ e.getMessage());
+										// Log.e(TAG, "Exception: "+
+										// e.getMessage());
 										Alert
 												.showAlert(
 														Settings.this,
@@ -395,8 +393,8 @@ public class Settings extends Activity {
 								mHandler.sendMessage(statusMsg);
 								StringBuffer titles = new StringBuffer();
 								StringBuffer ids = new StringBuffer();
-								Log.d(TAG, (resultFeed.getTitle()
-										.getPlainText()));
+								// Log.d(TAG,
+								// (resultFeed.getTitle().getPlainText()));
 								for (int i = 0; i < resultFeed.getEntries()
 										.size(); i++) {
 									Entry entry = resultFeed.getEntries()
@@ -406,16 +404,16 @@ public class Settings extends Activity {
 											+ "|");
 									List<Link> links = entry.getLinks();
 									Iterator<Link> iter = links.iterator();
-									Log.d(TAG, "This entry has links:");
+									// Log.d(TAG, "This entry has links:");
 									boolean postFound = false;
 									while (iter.hasNext()) {
 										Link link = iter.next();
 										String rel = link.getRel();
 										String href = link.getHref();
-										String type = link.getType();
-										Log.d(TAG, "<link rel ='" + rel
-												+ "' type = '" + type
-												+ "' href = '" + href + "'/>");
+										// String type = link.getType();
+										// Log.d(TAG, "<link rel ='" + rel+
+										// "' type = '" + type+ "' href = '" +
+										// href + "'/>");
 										if (rel.endsWith("#post")) {
 											postFound = true;
 											ids.append("" + href + "|");
@@ -448,15 +446,11 @@ public class Settings extends Activity {
 				textUsername = (EditText) findViewById(R.id.Username);
 				textPassword = (EditText) findViewById(R.id.Password);
 				if (textPassword == null || textPassword.getText() == null) {
-					Log
-							.d(TAG,
-									"password editor view is null when trying to read!");
+					// Log.d(TAG,"password editor view is null when trying to read!");
 					return;
 				}
 				if (textUsername == null || textUsername.getText() == null) {
-					Log
-							.d(TAG,
-									"username editor view is null when trying to read!");
+					// Log.d(TAG,"Username editor view is null when trying to read!");
 					return;
 				}
 				String usernameStr = textUsername.getText().toString();
@@ -476,7 +470,7 @@ public class Settings extends Activity {
 				try {
 					mDbHelper.open();
 				} catch (SQLException e) {
-					Log.e(TAG, "Database has not opened");
+					// Log.e(TAG, "Database has not opened");
 				}
 				setting = mDbHelper.fetchSettindById(1);
 				startManagingCursor(setting);
@@ -485,7 +479,7 @@ public class Settings extends Activity {
 						mDbHelper.createSetting(usernameStr, passwordStr);
 						mDbHelper.close();
 						setting.close();
-						Log.d(TAG, "Blog config saved to database.");
+						// Log.d(TAG, "Blog config saved to database.");
 						dlg = new AlertDialog.Builder(Settings.this)
 								.setIcon(
 										com.sadko.androblogger.R.drawable.ic_dialog_alert)
@@ -505,9 +499,7 @@ public class Settings extends Activity {
 						});
 						dlg.show();
 					} catch (SQLException e) {
-						Log
-								.e(TAG,
-										"SQLException (createSetting(username, password))");
+						// Log.e(TAG,"SQLException (createSetting(username, password))");
 					}
 				} else {
 					try {
@@ -515,7 +507,7 @@ public class Settings extends Activity {
 								passwordStr);
 						mDbHelper.close();
 						setting.close();
-						Log.d(TAG, "Blog config updated.");
+						// Log.d(TAG, "Blog config updated.");
 						dlg = new AlertDialog.Builder(Settings.this)
 								.setIcon(
 										com.sadko.androblogger.R.drawable.ic_dialog_alert)
@@ -535,9 +527,7 @@ public class Settings extends Activity {
 						});
 						dlg.show();
 					} catch (SQLException e) {
-						Log
-								.e(TAG,
-										"updateSettingById (updateSettingById(rowId, username, password))");
+						// Log.e(TAG,"UpdateSettingById (updateSettingById(rowId, username, password))");
 					}
 				}
 			}

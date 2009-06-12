@@ -12,8 +12,7 @@ import android.database.SQLException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
-import android.util.Log;
+import android.os.Message; //import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +25,7 @@ import com.sadko.androblogger.db.DBAdapter;
 import com.sadko.androblogger.util.Alert;
 
 public class MainActivity extends Activity {
-	final static String TAG = "MainActivity";
+	// final static String TAG = "MainActivity";
 	private ProgressDialog viewProgress = null;
 	private final String MSG_KEY = "value";
 	public static Feed resultFeed = null;
@@ -93,7 +92,7 @@ public class MainActivity extends Activity {
 						try {
 							mDbHelper.open();
 						} catch (SQLException e) {
-							Log.e(TAG, "Database has not opened");
+							// Log.e(TAG, "Database has not opened");
 						}
 						setting = mDbHelper.fetchSettindById(1);
 						startManagingCursor(setting);
@@ -122,7 +121,7 @@ public class MainActivity extends Activity {
 						try {
 							mDbHelper.open();
 						} catch (SQLException e) {
-							Log.e(TAG, "Database has not opened");
+							// Log.e(TAG, "Database has not opened");
 						}
 						setting = mDbHelper.fetchSettindById(1);
 						startManagingCursor(setting);
@@ -168,7 +167,7 @@ public class MainActivity extends Activity {
 				try {
 					mDbHelper.open();
 				} catch (SQLException e) {
-					Log.e(TAG, "Database has not opened");
+					// Log.e(TAG, "Database has not opened");
 				}
 				setting = mDbHelper.fetchSettindById(1);
 				startManagingCursor(setting);
@@ -182,7 +181,7 @@ public class MainActivity extends Activity {
 				BlogConfigBLOGGER.BlogInterfaceType typeEnum = BlogConfigBLOGGER
 						.getInterfaceTypeByNumber(1);
 				blogapi = BlogInterfaceFactory.getInstance(typeEnum);
-				Log.d(TAG, "Using interface type: " + typeEnum);
+				// Log.d(TAG, "Using interface type: " + typeEnum);
 				CharSequence postconfig = "";
 				blogapi.setInstanceConfig(postconfig);
 				status.putString(MSG_KEY, "2");
@@ -199,10 +198,11 @@ public class MainActivity extends Activity {
 						authFlag = true;
 						attempt = 0;
 					} catch (com.google.gdata.util.AuthenticationException e) {
-						Log.e(TAG, "AuthenticationException " + e.getMessage());
+						// Log.e(TAG, "AuthenticationException " +
+						// e.getMessage());
 						attempt++;
 					} catch (Exception e) {
-						Log.e(TAG, "Exception: " + e.getMessage());
+						// Log.e(TAG, "Exception: " + e.getMessage());
 						Alert
 								.showAlert(MainActivity.this,
 										"Network connection failed",
@@ -212,7 +212,7 @@ public class MainActivity extends Activity {
 
 				}
 				viewStatus = 1;
-				Log.d(TAG, "Got auth token:" + auth_id);
+				// Log.d(TAG, "Got auth token:" + auth_id);
 				viewStatus = 2;
 				if (auth_id != null) {
 					status.putString(MSG_KEY, "3");
@@ -226,22 +226,18 @@ public class MainActivity extends Activity {
 						try {
 							resultFeed = blogapi
 									.getAllPosts(username, password);
-							Log.i(TAG, "Blog entries successfully received");
+							// Log.i(TAG, "Blog entries successfully received");
 							viewOk = true;
 							authFlag = true;
 							attempt = 0;
 						} catch (ServiceException e) {
 							attempt++;
-							Log
-									.e(TAG,
-											"ServiceException (getAllPosts(username, password))");
+							// Log.e(TAG,"ServiceException (getAllPosts(username, password))");
 						} catch (IOException e) {
 							attempt++;
-							Log
-									.e(TAG,
-											"Exception (getAllPosts(username, password))");
+							// Log.e(TAG,"Exception (getAllPosts(username, password))");
 						} catch (Exception e) {
-							Log.e(TAG, "Exception: " + e.getMessage());
+							// Log.e(TAG, "Exception: " + e.getMessage());
 							Alert
 									.showAlert(MainActivity.this,
 											"Network connection failed",
@@ -257,10 +253,10 @@ public class MainActivity extends Activity {
 				statusMsg.setData(status);
 				mHandler.sendMessage(statusMsg);
 				if (viewOk) {
-					Log.d(TAG, "Success!");
+					// Log.d(TAG, "Success!");
 					viewStatus = 5;
 				} else {
-					Log.d(TAG, "Viewing of the blog failed!");
+					// Log.d(TAG, "Viewing of the blog failed!");
 					viewStatus = 4;
 				}
 				mHandler.post(mViewResults);
