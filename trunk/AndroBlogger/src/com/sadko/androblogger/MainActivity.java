@@ -13,14 +13,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message; //import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 
 import com.google.gdata.data.Feed;
 import com.google.gdata.util.ServiceException;
+import com.sadko.about.AboutActivity;
 import com.sadko.androblogger.db.DBAdapter;
 import com.sadko.androblogger.util.Alert;
 
@@ -98,17 +97,21 @@ public class MainActivity extends Activity {
 						startManagingCursor(setting);
 						if (setting.getCount() != 0) {
 							if ((setting
-									.getString(setting
-											.getColumnIndexOrThrow(DBAdapter.KEY_LOGIN)).length() == 0)
+									.getString(
+											setting
+													.getColumnIndexOrThrow(DBAdapter.KEY_LOGIN))
+									.length() == 0)
 									&& (setting
-											.getString(setting
-													.getColumnIndexOrThrow(DBAdapter.KEY_PASSWORD)).length() == 0)) {
+											.getString(
+													setting
+															.getColumnIndexOrThrow(DBAdapter.KEY_PASSWORD))
+											.length() == 0)) {
 								mDbHelper.close();
 								setting.close();
 								Alert
-								.showAlert(MainActivity.this,
-										"Profile is not created",
-										"Please, input 'login/password' in settings");
+										.showAlert(MainActivity.this,
+												"Profile is not created",
+												"Please, input 'login/password' in settings");
 							} else {
 								Intent i = new Intent(MainActivity.this,
 										CreateBlogEntry.class);
@@ -141,17 +144,21 @@ public class MainActivity extends Activity {
 						startManagingCursor(setting);
 						if (setting.getCount() != 0) {
 							if ((setting
-									.getString(setting
-											.getColumnIndexOrThrow(DBAdapter.KEY_LOGIN)).length() == 0)
+									.getString(
+											setting
+													.getColumnIndexOrThrow(DBAdapter.KEY_LOGIN))
+									.length() == 0)
 									&& (setting
-											.getString(setting
-													.getColumnIndexOrThrow(DBAdapter.KEY_PASSWORD)).length() == 0)) {
+											.getString(
+													setting
+															.getColumnIndexOrThrow(DBAdapter.KEY_PASSWORD))
+											.length() == 0)) {
 								mDbHelper.close();
 								setting.close();
 								Alert
-								.showAlert(MainActivity.this,
-										"Profile is not created",
-										"Please, input 'login/password' in settings");
+										.showAlert(MainActivity.this,
+												"Profile is not created",
+												"Please, input 'login/password' in settings");
 							} else {
 								mDbHelper.close();
 								setting.close();
@@ -168,6 +175,15 @@ public class MainActivity extends Activity {
 
 					}
 				});
+
+		this.findViewById(R.id.About).setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				final Intent intent = new Intent();
+				intent.setClass(MainActivity.this, AboutActivity.class);
+				startActivity(intent);
+				finish();
+			}
+		});
 
 		this.findViewById(R.id.Exit).setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -317,16 +333,5 @@ public class MainActivity extends Activity {
 						}
 					});
 		}
-	}
-
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		MenuItem item = menu.add("About");
-		item.setIcon(android.R.drawable.ic_menu_info_details);
-		return true;
-	}
-
-	public boolean onOptionsItemSelected(MenuItem item) {
-		return super.onOptionsItemSelected(item);
 	}
 }

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+	<!--
+		Copyright (C) 2009 Sadko Mobile www.sadko.mobi Licensed under the
+		Apache License, Version 2.0 (the "License"); you may not use this file
+		except in compliance with the License. You may obtain a copy of the
+		License at http://www.apache.org/licenses/LICENSE-2.0 Unless required
+		by applicable law or agreed to in writing, software distributed under
+		the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+	-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:orientation="vertical" android:gravity="center">
+
+	<LinearLayout android:orientation="horizontal"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:layout_weight="1" android:gravity="center_vertical">
+
+		<ImageView android:id="@+id/about_applogo_img"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:src="@drawable/androblogger" android:layout_marginLeft="20px"
+			android:layout_marginTop="5px" />
+
+		<TextView android:id="@+id/about_appname_txt"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:gravity="center" android:textAppearance="?android:attr/textAppearanceLarge"
+			android:layout_gravity="center" android:layout_marginTop="7px" />
+	</LinearLayout>
+
+	<!-- bottom text -->
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:layout_weight="0">
+
+		<LinearLayout android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:orientation="vertical"
+			android:gravity="left" android:layout_gravity="left"
+			android:layout_marginLeft="90px" android:id="@+id/LinearLayoutForDevelopers">
+			<LinearLayout android:id="@+id/LinearLayout01"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:orientation="vertical">
+				<TextView android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:layout_marginTop="5px"
+					android:layout_marginLeft="5px" android:textAppearance="?android:attr/textAppearanceMedium"
+					android:text="@string/about_authors" />
+				<TextView android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:layout_marginTop="2px"
+					android:layout_marginLeft="25px" android:layout_marginBottom="5px"
+					android:textAppearance="?android:attr/textAppearanceSmall"
+					android:text="@string/about_team" />
+			</LinearLayout>
+			<LinearLayout android:id="@+id/LinearLayout02"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:orientation="vertical">
+				<TextView android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:layout_marginTop="5px"
+					android:layout_marginLeft="5px" android:textAppearance="?android:attr/textAppearanceMedium"
+					android:text="@string/about_project_supervisors" />
+				<TextView android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:layout_marginTop="2px"
+					android:layout_marginLeft="25px" android:layout_marginBottom="5px"
+					android:textAppearance="?android:attr/textAppearanceSmall"
+					android:text="@string/about_supervisors" />
+			</LinearLayout>
+
+</LinearLayout>
+
+
+
+
+
+		<ListView android:id="@+id/about_actions_lst"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_marginLeft="10px" android:layout_marginRight="10px"
+			android:gravity="center"></ListView>
+
+		<TextView android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:layout_marginTop="5px"
+			android:gravity="center" android:textStyle="bold" android:textColor="#525152"
+			android:textSize="12sp" android:text="@string/about_copyright" />
+		<TextView android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:layout_marginBottom="5px"
+			android:gravity="center" android:textStyle="bold" android:textColor="#525152"
+			android:textSize="12sp" android:text="@string/about_published_by" />
+
+	</LinearLayout>
+</LinearLayout>

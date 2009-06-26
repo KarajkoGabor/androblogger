@@ -29,9 +29,13 @@
 				android:layout_width="fill_parent" android:id="@+id/Settings"
 				android:text="Settings" android:layout_marginTop="10px"
 				android:drawableLeft="@drawable/settings"></Button>
+			<Button android:id="@+id/About" android:layout_height="wrap_content"
+				android:width="300px" android:layout_marginTop="10px"
+				android:layout_width="fill_parent" android:text="About" android:drawableLeft="@drawable/about"></Button>	
 			<Button android:id="@+id/Exit" android:layout_height="wrap_content"
 				android:width="300px" android:text="Exit" android:layout_marginTop="10px"
 				android:layout_width="fill_parent" android:drawableLeft="@drawable/exit"></Button>
-		</LinearLayout>
+		
+</LinearLayout>
 	</LinearLayout>
 </ScrollView>
