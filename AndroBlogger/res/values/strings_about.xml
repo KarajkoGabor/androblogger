@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+	<!--
+		Copyright (C) 2009 Sadko Mobile www.sadko.mobi Licensed under the
+		Apache License, Version 2.0 (the "License"); you may not use this file
+		except in compliance with the License. You may obtain a copy of the
+		License at http://www.apache.org/licenses/LICENSE-2.0 Unless required
+		by applicable law or agreed to in writing, software distributed under
+		the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+	-->
+
+<resources>
+	<!-- ***************************************************** -->
+	<!-- **************** About Dialog *********************** -->
+	<string name="about_caption">About AndroBlogger</string>
+	<string name="about_app_name">AndroBlogger</string>
+	<string name="about_authors">Authors:</string>
+	<string name="about_team">
+		Maxim Otstavnov\nVictor Efimenko\nKonstantin Chernov\nVera Sementsova 
+    </string>
+	<string name="about_project_supervisors">Project supervisors:</string>
+	<string name="about_supervisors">Yuri Ammosov\nAnton Moiseev</string>
+
+	<string name="about_donate">Donate</string>
+	<string name="about_goto_project_page">Go to AndroBlogger web page</string>
+	<string name="about_more_content">Other software by Sadko Mobile</string>
+
+	<string name="about_copyright">© 2009 AndroBlogger Team</string>
+	<string name="about_published_by">published by Sadko Mobile, Inc</string>
+
+	<string name="about_project_page">http://code.google.com/p/androblogger</string>
+
+	<!-- ***************************************************** -->
+	<!-- **************** Get Bursaq Dialog ****************** -->
+	<string name="get_bursaq_caption">Get Bursaq</string>
+
+	<!-- ***************************************************** -->
+	<!-- **************** Bursaq service info **************** -->
+	<string name="bursaq_publisher">AndroBlogger</string>
+	<string name="bursaq_appname">AndroBlogger</string>
+	<string name="bursaq_donate1">donate1</string>
+	<string name="bursaq_donate2">donate2</string>
+
+</resources>
