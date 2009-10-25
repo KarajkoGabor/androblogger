@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.sadko.androblogger" android:versionCode="1"
+      package="com.sadko.androblogger"
+       android:versionCode="1"
 	android:versionName="1.0.3">
-	<application android:label="@string/app_name" android:icon="@drawable/iconandroblogger">
+    <application android:label="@string/app_name" android:icon="@drawable/iconandroblogger">
 		<activity android:name=".MainActivity" android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -28,6 +29,6 @@
 			android:label="@string/get_bursaq_caption">
 		</activity>
 	</application>
-	<uses-sdk android:minSdkVersion="2" />
+	<uses-sdk android:minSdkVersion="3" />
 	<uses-permission android:name="android.permission.INTERNET" />
 </manifest> 
