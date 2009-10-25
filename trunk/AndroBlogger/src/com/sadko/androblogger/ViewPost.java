@@ -138,8 +138,8 @@ public class ViewPost extends Activity {
 		postUpdateDate.setText(date + " " + time);
 
 		webview = (WebView) findViewById(R.id.webview);
-		webview.loadData(((HtmlTextConstruct) currentEntry.getTextContent()
-				.getContent()).getHtml(), "text/html", "UTF-8");
+		webview.loadDataWithBaseURL(null, ((HtmlTextConstruct) currentEntry.getTextContent()
+				.getContent()).getHtml(), "text/html", "UTF-8", "about:blank");
 		WebSettings websettings = webview.getSettings();
 		websettings.setJavaScriptEnabled(true);
 		websettings.setJavaScriptCanOpenWindowsAutomatically(true);
