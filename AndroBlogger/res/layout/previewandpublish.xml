@@ -20,11 +20,14 @@
 				android:layout_height="wrap_content" android:text="Content:"
 				android:textColor="#FFFFFF">
 			</TextView>
-			<EditText android:id="@+id/PreviewContent"
-				android:layout_height="wrap_content" android:width="300px"
-				android:lines="10" android:layout_width="fill_parent"
-				android:gravity="top">
-			</EditText>
+			<LinearLayout android:id="@+id/LayoutForWebWiew"
+				android:orientation="vertical" android:layout_width="fill_parent"
+				android:layout_height="300px" android:padding="5px" android:paddingBottom="10px">
+				<WebView android:id="@+id/PreviewContent"
+					android:layout_width="fill_parent"
+					android:layout_height="fill_parent">
+				</WebView>
+			</LinearLayout>	
 		</LinearLayout>
 		<LinearLayout android:id="@+id/LayoutForButtons"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"

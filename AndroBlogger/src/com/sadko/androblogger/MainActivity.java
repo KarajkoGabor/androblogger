@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.gdata.data.Feed;
 import com.google.gdata.util.ServiceException;
 import com.sadko.about.AboutActivity;
@@ -33,6 +34,7 @@ public class MainActivity extends Activity {
 	int viewStatus = 0;
 	public static final int AMOUNTOFATTEMPTS = 7;
 	private int attempt = 0;
+	GoogleAnalyticsTracker tracker;
 
 	final Handler mHandler = new Handler() {
 		@Override
@@ -63,6 +65,9 @@ public class MainActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		tracker = GoogleAnalyticsTracker.getInstance();
+		tracker.start("UA-11702470-1", this);
+
 		if (this.getWindow().getWindowManager().getDefaultDisplay()
 				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
 			((LinearLayout) this.findViewById(R.id.LayoutForLogo)).setPadding(
@@ -190,6 +195,12 @@ public class MainActivity extends Activity {
 				finish();
 			}
 		});
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		tracker.stop();
 	}
 
 	protected void viewBlogPosts() {

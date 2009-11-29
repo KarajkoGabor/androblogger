@@ -22,9 +22,15 @@ import android.text.Spannable; //import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import com.google.gdata.data.HtmlTextConstruct;
 import com.google.gdata.util.ServiceException;
 import com.sadko.androblogger.db.BlogEntry;
 import com.sadko.androblogger.db.DBAdapter;
@@ -46,6 +52,8 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 	private static Cursor setting = null;
 	private DBTextAdapter mDbTextHelper;
 	private static Cursor post = null;
+	WebView webview;
+	GoogleAnalyticsTracker tracker;
 
 	final Handler mHandler = new Handler() {
 		@Override
@@ -78,6 +86,9 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.previewandpublish);
+		tracker = GoogleAnalyticsTracker.getInstance();
+		tracker.start("UA-11702470-1", this);
+		
 		mDbTextHelper = new DBTextAdapter(this);
 		try {
 			mDbTextHelper.open();
@@ -106,21 +117,24 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 		textTitle.setText(title);
 		textTitle.setTextColor(Color.BLACK);
 		textTitle.setEnabled(false);
-		EditText textContent = (EditText) this
-				.findViewById(R.id.PreviewContent);
-		textContent.setText(content);
-		textContent.setTextColor(Color.BLACK);
-		textContent.setEnabled(false);
-
+		
+		webview = (WebView) findViewById(R.id.PreviewContent);
+		webview.loadDataWithBaseURL(null, content, "text/html", "UTF-8", "about:blank");
+		WebSettings websettings = webview.getSettings();
+		websettings.setJavaScriptEnabled(true);
+		websettings.setJavaScriptCanOpenWindowsAutomatically(true);
+		webview.setClickable(true);
+		websettings.setLightTouchEnabled(true);
+		
 		if (this.getWindow().getWindowManager().getDefaultDisplay()
 				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-			((EditText) this.findViewById(R.id.PreviewContent)).setHeight(105);
+			((LinearLayout) this.findViewById(R.id.LayoutForWebWiew)).setLayoutParams(
+					new LayoutParams(LayoutParams.FILL_PARENT,105));
 		} else if (this.getWindow().getWindowManager().getDefaultDisplay()
 				.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-			((EditText) this.findViewById(R.id.PreviewContent)).setHeight(265);
+			((LinearLayout) this.findViewById(R.id.LayoutForWebWiew)).setLayoutParams(
+					new LayoutParams(LayoutParams.FILL_PARENT,262));;
 		}
-
-		Button publishButton = (Button) findViewById(R.id.Publish);
 
 		int w = this.getWindow().getWindowManager().getDefaultDisplay()
 				.getWidth() - 12;
@@ -128,6 +142,7 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 				.setWidth(w / 2);
 		((Button) this.findViewById(R.id.Publish)).setWidth(w / 2);
 
+		Button publishButton = (Button) findViewById(R.id.Publish);
 		publishButton.setOnClickListener(this);
 		this.findViewById(R.id.BackToCreateBlogEntry).setOnClickListener(
 				new OnClickListener() {
@@ -138,15 +153,23 @@ public class PreviewAndPublish extends Activity implements View.OnClickListener 
 						finish();
 					}
 				});
+				
 		myEntry = new BlogEntry();
 		myEntry.setBlogEntry(content);
 		myEntry.setTitle(title);
 		myEntry.setCreated(new Date(System.currentTimeMillis()));
+		publishButton.requestFocus();
 	}
 
 	@Override
 	public void onClick(View v) {
 		this.publishBlogEntry();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		tracker.stop();
 	}
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {

@@ -20,7 +20,8 @@
 		<LinearLayout android:id="@+id/LayoutForHeadline"
 			android:layout_height="wrap_content" android:orientation="vertical"
 			android:layout_width="fill_parent" android:background="@android:drawable/alert_dark_frame"
-			android:layout_gravity="center" android:padding="20px">
+			android:layout_gravity="center" android:padding="20px"
+			android:clickable="true" android:visibility="visible">
 			<LinearLayout android:id="@+id/LinearLayout03"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:orientation="horizontal">

@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+
 import com.google.gdata.data.DateTime;
 import com.google.gdata.data.Entry;
 import com.google.gdata.data.Feed;
@@ -46,6 +48,7 @@ public class ViewBlog extends ListActivity {
 	private static Cursor setting = null;
 	int viewStatus = 0;
 	private int attempt = 0;
+	GoogleAnalyticsTracker tracker;
 
 	final Handler mHandler = new Handler() {
 		@Override
@@ -76,6 +79,9 @@ public class ViewBlog extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.viewblog);
+		tracker = GoogleAnalyticsTracker.getInstance();
+		tracker.start("UA-11702470-1", this);
+		
 		mDbHelper = new DBAdapter(this);
 		try {
 			mDbHelper.open();
@@ -175,6 +181,12 @@ public class ViewBlog extends ListActivity {
 				});
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		tracker.stop();
+	}
+	
 	private void showViewStatus() {
 		viewProgress.dismiss();
 		if (viewStatus != 5) {

@@ -3,6 +3,8 @@ package com.sadko.androblogger;
 import java.io.IOException;
 import java.util.TimeZone;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+
 import com.google.gdata.data.DateTime;
 import com.google.gdata.data.Entry;
 import com.google.gdata.data.Feed;
@@ -44,6 +46,7 @@ public class ViewPost extends Activity {
 	private static Cursor setting = null;
 	private static boolean viewOk = false;
 	WebView webview;
+	GoogleAnalyticsTracker tracker;
 
 	final Handler mHandler = new Handler() {
 		@Override
@@ -74,6 +77,8 @@ public class ViewPost extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.viewpost);
+		tracker = GoogleAnalyticsTracker.getInstance();
+		tracker.start("UA-11702470-1", this);
 
 		mDbHelper = new DBAdapter(this);
 		try {
@@ -168,7 +173,24 @@ public class ViewPost extends Activity {
 					.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 							260));
 		}
-
+		
+		this.findViewById(R.id.LayoutForHeadline).setOnClickListener(
+				new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						System.out.println("click");
+						LinearLayout layoutForHeadline = (LinearLayout) v.findViewById(R.id.LayoutForHeadline);
+						if (layoutForHeadline.getVisibility() == 1)
+						{
+							layoutForHeadline.setVisibility(0);
+						}
+						else
+						{
+							layoutForHeadline.setVisibility(1);
+						}
+					}
+				});
+		
 		this.findViewById(R.id.BackToViewBlog).setOnClickListener(
 				new OnClickListener() {
 					@Override
@@ -189,6 +211,12 @@ public class ViewPost extends Activity {
 				});
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		tracker.stop();
+	}
+	
 	protected void viewPostComments() {
 		viewProgress = ProgressDialog.show(ViewPost.this,
 				"Viewing post comments", "Starting to view post comments...");
