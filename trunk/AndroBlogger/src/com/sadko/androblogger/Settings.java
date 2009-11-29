@@ -25,6 +25,7 @@ import android.view.View.OnKeyListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.gdata.client.GoogleService;
 import com.google.gdata.data.Entry;
 import com.google.gdata.data.Feed;
@@ -51,6 +52,7 @@ public class Settings extends Activity {
 	private ProgressDialog verifyProgress = null;
 	private int verifyStatus = 0;
 	private int attempt = 0;
+	GoogleAnalyticsTracker tracker;
 
 	final Handler mHandler = new Handler() {
 		@Override
@@ -165,6 +167,9 @@ public class Settings extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
+		tracker = GoogleAnalyticsTracker.getInstance();
+		tracker.start("UA-11702470-1", this);
+		
 		mDbHelper = new DBAdapter(this);
 		try {
 			mDbHelper.open();
@@ -535,6 +540,12 @@ public class Settings extends Activity {
 				}
 			}
 		});
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		tracker.stop();
 	}
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {

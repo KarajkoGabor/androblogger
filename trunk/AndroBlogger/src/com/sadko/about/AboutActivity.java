@@ -32,7 +32,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.graphics.drawable.GradientDrawable.Orientation;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -44,6 +43,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.sadko.androblogger.MainActivity;
 import com.sadko.androblogger.R;
 import com.sadko.androblogger.util.Alert;
@@ -61,13 +61,15 @@ public class AboutActivity extends Activity {
 	private static final String SEARCH_MARKET_COMPONENT_NAMESPACE = "com.android.vending";
 	private static final String SEARCH_MARKET_COMPONENT_CLASS = "com.android.vending.SearchAssetListActivity";
 	private static final String SEARCH_QUERY_PUBLISHER = "pub:\"Sadko Mobile\"";
+	GoogleAnalyticsTracker tracker;
 
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-
 		setContentView(R.layout.about);
-
+		tracker = GoogleAnalyticsTracker.getInstance();
+		tracker.start("UA-11702470-1", this);
+		
 		final TextView appNameTxt = (TextView) findViewById(R.id.about_appname_txt);
 		appNameTxt.setText(" " + getPackageVersion());
 
@@ -135,6 +137,12 @@ public class AboutActivity extends Activity {
 						}
 					}
 				});
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		tracker.stop();
 	}
 
 	/**

@@ -45,7 +45,7 @@
 				android:layout_width="fill_parent" android:textColor="#FFFFFF"
 				android:background="@android:drawable/alert_dark_frame"
 				android:padding="20px" android:text="&lt;No comments&gt;"
-				android:layout_height="fill_parent" />
+				android:layout_height="wrap_content"/>
 		</LinearLayout>
 	</LinearLayout>
 </ScrollView>

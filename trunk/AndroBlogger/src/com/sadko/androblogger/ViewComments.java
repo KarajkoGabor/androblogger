@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+
 import com.google.gdata.data.Entry;
 import com.google.gdata.data.Feed;
 import com.google.gdata.data.TextContent;
@@ -45,6 +47,7 @@ public class ViewComments extends ListActivity {
 	private static boolean viewOk = false;
 	private ProgressDialog viewProgress = null;
 	int viewStatus = 0;
+	GoogleAnalyticsTracker tracker;
 
 	final Handler mHandler = new Handler() {
 		@Override
@@ -75,7 +78,9 @@ public class ViewComments extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.viewcomments);
-
+		tracker = GoogleAnalyticsTracker.getInstance();
+		tracker.start("UA-11702470-1", this);
+		
 		mDbHelper = new DBAdapter(this);
 		try {
 			mDbHelper.open();
@@ -173,6 +178,12 @@ public class ViewComments extends ListActivity {
 				});
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		tracker.stop();
+	}
+	
 	protected void viewPostComments() {
 		viewProgress = ProgressDialog.show(ViewComments.this,
 				"Viewing post comments", "Starting to view post comments...");
